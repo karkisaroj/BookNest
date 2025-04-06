@@ -49,7 +49,7 @@
                 <button type="submit" class="btn-create">Create Account</button>
                 
                 <div class="login-link">
-                    Already Have an Account? <a href="#">Login</a>
+                    Already Have an Account? <a href="${pageContext.request.contextPath}/login">Login</a>
                 </div>
             </form>
         </div>
