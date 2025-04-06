@@ -38,8 +38,8 @@
                 
                 <button type="submit" class="btn-create">Login</button>
                 <div class="bottom-links">
-                    <a href="#">Don't have an account? <span>Register</span> </a>
-                    <a href="#"><span>Forgot Password?</span></a>
+                    <a href="${pageContext.request.contextPath}/register">Don't have an account? <span>Register</span> </a>
+                    
                 </div>
 
             </form>
