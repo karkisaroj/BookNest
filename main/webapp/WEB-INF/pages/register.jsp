@@ -46,6 +46,19 @@
                     <label for="password">Password</label>
                 </div>
                 
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="text" id="password" name="address">
+                        <label for="address">Address</label>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" id="password" name="phoneNumber">
+                        <label for="phoneNumber">Phone Number</label>
+                    </div>
+
+                </div>
+                
                 <button type="submit" class="btn-create">Create Account</button>
                 
                 <div class="login-link">
