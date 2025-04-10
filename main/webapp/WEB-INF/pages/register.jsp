@@ -35,11 +35,19 @@
                         <label for="lastName">Last Name</label>
                     </div>
                 </div>
-                
-                <div class="form-group">
-                    <input type="email" id="email" name="email">
-                    <label for="email">Email</label>
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="text" id="userName" name="userName">
+                        <label for="userName">User Name</label>
+                    </div>
+                    
+                    <div class="form-group">
+                    	<input type="email" id="email" name="email">
+                    	<label for="email">Email</label>
+                	</div>
                 </div>
+                
+                
                 
                 <div class="form-group">
                     <input type="password" id="password" name="password">
