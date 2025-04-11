@@ -25,27 +25,27 @@
 				<h1 class="registration-title">Login</h1>
 
 				<form method="Post">
-					<!-- Error message display -->
-					<%
-					if (request.getAttribute("error") != null) {
-					%>
-					<div class="error-message">${error}</div>
-					<%
-					}
-					%>
+
 					<div class="form-group">
-						<input type="text" id="firstName" name="userName"> <label
-							for="firstName">User Name</label>
+						<input type="text" id="userName" name="userName"> <label
+							for="userName">User Name</label>
 					</div>
-
-
 
 
 					<div class="form-group">
 						<input type="password" id="password" name="password"> <label
 							for="password">Password</label>
 					</div>
-
+					<!-- Error message display -->
+					<%
+					if (request.getAttribute("error") != null) {
+					%>
+					<div class="error-message">
+						<span class="error-icon"></span> ${error}
+					</div>
+					<%
+					}
+					%>
 					<button type="submit" class="btn-create">Login</button>
 					<div class="bottom-links">
 						<a href="${pageContext.request.contextPath}/register">Don't
