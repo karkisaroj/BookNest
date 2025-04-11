@@ -162,5 +162,25 @@ body {
     text-decoration: none;
     font-weight: bold;
 }
+.error-message {
+  display: flex;
+  align-items: center;
+  color: #d32f2f;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 4px;
+  padding: 4px 0;
+}
 
+.error-icon {
+  color: #d32f2f;
+  margin-right: 8px;
+  display: inline-flex;
+}
 
+.error-icon::before {
+  content: "⚠️";
+  font-size: 16px;
+  
+  
+}
