@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>BookNext - Your Cart</title>
+<title>Your Cart</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/cart-styles.css" />
 
 </head>
