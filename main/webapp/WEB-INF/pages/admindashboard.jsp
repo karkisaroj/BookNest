@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>BookNest</title>
+<title>Admin DashBoard</title>
 </head>
 <body>
- home here
+Admin Dashboard Here
 </body>
 </html>
