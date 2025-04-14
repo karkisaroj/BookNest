@@ -18,16 +18,16 @@
                 <ul class="navigation flex">
                     <li><a href="${pageContext.request.contextPath}/home">Home</a></li>
                     <li><a href="#">Books</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="${pageContext.request.contextPath}/aboutus">About</a></li>
+                    <li><a href="${pageContext.request.contextPath}/cart">Contact Us</a></li>
                 </ul>
             </nav>
             <div class="utils">
                 <ul class="utils-lists flex">
                     <li><a href="#"><img class="head-img" src="${pageContext.request.contextPath}/resources/images/system/search.png" alt="search button"></a></li>
-                    <li><a href="#"><img class="head-img" src="${pageContext.request.contextPath}/resources/images/system/cart.png" alt="cart button"></a></li>
+                    <li><a href="${pageContext.request.contextPath}/cart"><img class="head-img" src="${pageContext.request.contextPath}/resources/images/system/cart.png" alt="cart button"></a></li>
                     
-                    <li><a href="#"><img class="head-img" src="${pageContext.request.contextPath}/resources/images/system/person.png" alt="myaccount button" height="25px"></a></li>
+                    <li><a href="${pageContext.request.contextPath}/myaccount"><img class="head-img" src="${pageContext.request.contextPath}/resources/images/system/person.png" alt="myaccount button" height="25px"></a></li>
                     
                 </ul>
             </div>
