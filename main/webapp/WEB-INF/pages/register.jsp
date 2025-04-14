@@ -23,7 +23,7 @@
         <div class="registration-container">
             <h1 class="registration-title">Create Account</h1>
             
-            <form>
+            <form method="Post">
                 <div class="form-row">
                     <div class="form-group">
                         <input type="text" id="firstName" name="firstName">
@@ -40,37 +40,47 @@
                         <input type="text" id="userName" name="userName">
                         <label for="userName">User Name</label>
                     </div>
+
                     
                     <div class="form-group">
-                    	<input type="email" id="email" name="email">
-                    	<label for="email">Email</label>
+                    	<input type="text" id="email" name="email">
+                    	<label for="text">Email</label>
                 	</div>
                 </div>
                 
                 
                 
                 <div class="form-group">
-                    <input type="password" id="password" name="password">
+                    <input type="password" id="password" name="password" >
                     <label for="password">Password</label>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <input type="text" id="password" name="address">
+                        <input type="text" id="address" name="address">
                         <label for="address">Address</label>
                     </div>
 
                     <div class="form-group">
-                        <input type="text" id="password" name="phoneNumber">
+                        <input type="text" id="phoneNumber" name="phoneNumber">
                         <label for="phoneNumber">Phone Number</label>
                     </div>
 
                 </div>
-                
-                <button type="submit" class="btn-create">Create Account</button>
+                <!-- Error message display -->
+					<%
+					if (request.getAttribute("error") != null) {
+					%>
+					<div class="error-message">
+						<span class="error-icon"></span> ${error}
+					</div>
+					<%
+					}
+					%>
+                <button type="submit" class="btn-create" >Create Account</button>
                 
                 <div class="login-link">
-                    Already Have an Account? <a href="#">Login</a>
+                    Already Have an Account? <a href="${pageContext.request.contextPath}/login">Login</a>
                 </div>
             </form>
         </div>

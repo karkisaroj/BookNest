@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Noble Nepal
+ * @author Noble Nepal
  */
 @WebServlet(asyncSupported=true, urlPatterns= { "/home","/"})
 public class HomeController extends HttpServlet {
@@ -20,5 +20,8 @@ public class HomeController extends HttpServlet {
 		request.getRequestDispatcher("/WEB-INF/pages/home.jsp").forward(request, response);
 
 	}
-
+	
+	protected void doPost(HttpServletRequest request,HttpServletResponse response) throws ServletException,IOException{
+		
+	}
 }

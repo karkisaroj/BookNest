@@ -1,0 +1,134 @@
+@charset "UTF-8";
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.footer {
+    background-color: #183B4E; 
+    color: white;
+    padding: 2rem 0;
+    width: 100%;
+}
+
+.footer-container {
+    width: 85%;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative; /* For centered copyright */
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.logo {
+    background-color: white;
+    border-radius: 25px;
+    padding: 0.5rem 1.5rem;
+    display: inline-block;
+    color: #183B4E;
+}
+
+.copyright {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    top: 10px; /* Align with logo vertically */
+}
+
+.footer-divider {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin: 1rem 0 2rem;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer-links {
+    display: flex;
+    flex-basis: 70%;
+    justify-content: space-between;
+}
+
+.footer-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Match the spacing in the image */
+}
+
+.column-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.column-link {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+}
+
+.column-link:hover {
+    color: white;
+}
+
+.payment-social {
+    flex-basis: 25%; /* Adjust to match image proportion */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2rem;
+}
+
+.payment-methods {
+    background-color: #f5f5e0;
+    border-radius: 8px;
+    padding: 1rem;
+    width: 100%;
+    max-width: 280px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.payment-methods img {
+    height: 30px;
+}
+
+.social-links {
+    display: flex;
+    gap: 2.5rem; /* Increased gap to match the image */
+    justify-content: flex-end; /* Align to the right */
+    margin-right: 0.5rem; /* Small right margin to match image */
+}
+
+.social-icon {
+    font-size: 1.5rem;
+}
+
+.social-icon.facebook {
+    color: #4267B2;
+}
+
+.social-icon.instagram {
+    color: #E1306C;
+}
+
+.social-icon.whatsapp {
+    color: #25D366;
+}
+
+.img-size {
+    width: 42px; /* Increased from 10px to be more visible */
+    height: auto;
+}
