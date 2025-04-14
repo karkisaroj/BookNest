@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/cart-styles.css" />
 
 </head>
-
+<body>
 <header>
         <div class="logo">
             <img src="images/system/booknext-logo.png" alt="BookNext">

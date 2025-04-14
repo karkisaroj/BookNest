@@ -8,7 +8,7 @@
 }
 
 body {
-    background-color: #f5f5f5;
+    background-color: #ffffff; 
 }
 
 /* Header Section */
@@ -20,6 +20,10 @@ header {
     align-items: center;
     padding: 10px 50px;
 }
+html, body {
+    background-color: #ffffff;
+}
+
 
 .logo {
     background-color: #f2e6e6;
