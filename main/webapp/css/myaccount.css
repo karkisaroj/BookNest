@@ -101,6 +101,10 @@ body {
 	font-size: 14px;
 	text-transform: uppercase;
 }
+.info-section h3{
+	margin-top:100px;
+	
+}
 
 /* Information sections */
 .info-section {
