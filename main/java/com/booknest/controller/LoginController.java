@@ -17,18 +17,19 @@ import com.booknest.util.ValidationUtil;
 public class LoginController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final String emptyMessage = "Empty Fields. Fill all the fields before logging in ";
-	private final String alphanumericmessage = "User Name should start from alphabet and should contain alleast one number";
-	private final String passwordvaliditymessage = "Password should start from alphabet and should contain alleast one number";
-	private final String adminpass="Admin@123";
+	private final String alphanumericmessage = "User Name should start from alphabet and can contain only letters and numbers";
+	private final String passwordvaliditymessage = "Password should contain alleast a capital letter, a number and a symbol";
+
 
 	private final String loginpagepath = "/WEB-INF/pages/login.jsp";
 //	private final String homepagepath = "/WEB-INF/pages/home.jsp";
-	private final String adminpagepath = "/WEB-INF/pages/admindashboard.jsp";
+//	private final String adminpagepath = "/WEB-INF/pages/admindashboard.jsp";
 	private RedirectionUtil redirectionUtil;
-
+	private ValidationUtil validationUtil;
 	@Override
 	public void init() throws ServletException {
 		this.redirectionUtil = new RedirectionUtil();
+		this.validationUtil = new ValidationUtil();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -43,28 +44,24 @@ public class LoginController extends HttpServlet {
 		String userName = req.getParameter("userName");
 		String password = req.getParameter("password");
 		
-	    if (ValidationUtil.isNullOrEmpty(userName) || ValidationUtil.isNullOrEmpty(password)) {
+	    if (validationUtil.isNullOrEmpty(userName) || validationUtil.isNullOrEmpty(password)) {
 	        redirectionUtil.setMsgAndRedirect(req, resp, loginpagepath, "error", emptyMessage);
 	        return;
 	    }
 	    
-	    //  Checking username format (must start with letter and contain alphanumeric characters)
-	    if (!ValidationUtil.isAlphanumericStartingWithLetter(userName)) {
+	    //  Checking userName format (must start with letter and contain alphanumeric characters)
+	    if (!validationUtil.isAlphanumericStartingWithLetter(userName)) {
 	        redirectionUtil.setMsgAndRedirect(req, resp, loginpagepath, "error", alphanumericmessage);
 	        return;
 	    }
 	    
 	    //  Checking password format (if you want to enforce the password pattern)
-	    if (!ValidationUtil.isValidPassword(password)) {
+	    if (!validationUtil.isValidPassword(password)) {
 	        redirectionUtil.setMsgAndRedirect(req, resp, loginpagepath, "error", passwordvaliditymessage);
 	        return;
 	    }
 	    
-	    // Checking Process valid login attempt in the case of admin
-	    if (userName.equals("adminNo1") && password.equals(adminpass)) {
-	        redirectionUtil.redirectToPage(req, resp, adminpagepath);
-	        return;
-	    }
+
 	    
 		
 	}
