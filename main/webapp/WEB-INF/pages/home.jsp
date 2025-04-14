@@ -4,19 +4,14 @@
 <html lang="en">
 
 <head>
-<<<<<<< HEAD
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BookNest</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/home.css">
-=======
-<meta charset="UTF-8">
-<title>BookNest</title>
->>>>>>> a6b306a3f0ba5fd78f7d1fcb004b2bde8213823b
 </head>
 
 <body>
-<<<<<<< HEAD
+	<jsp:include page="header.jsp" />
     
     <section class="sec-1">
         <div class="container flex">
@@ -182,10 +177,8 @@
             </div>
         </div>
     </section>
+    <jsp:include page="footer.jsp" />
 
-=======
- home here
->>>>>>> a6b306a3f0ba5fd78f7d1fcb004b2bde8213823b
 </body>
 
 </html>
