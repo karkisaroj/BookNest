@@ -19,7 +19,7 @@
                     <li><a href="${pageContext.request.contextPath}/home">Home</a></li>
                     <li><a href="#">Books</a></li>
                     <li><a href="${pageContext.request.contextPath}/aboutus">About</a></li>
-                    <li><a href="${pageContext.request.contextPath}/cart">Contact Us</a></li>
+                    <li><a href="#">Contact Us</a></li>
                 </ul>
             </nav>
             <div class="utils">
