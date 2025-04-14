@@ -27,7 +27,7 @@
                     <li><a href="#"><img class="head-img" src="${pageContext.request.contextPath}/resources/images/system/search.png" alt="search button"></a></li>
                     <li><a href="#"><img class="head-img" src="${pageContext.request.contextPath}/resources/images/system/cart.png" alt="cart button"></a></li>
                     
-                    <li><a href="#"><img class="" src="" alt="" height="25px"></a></li>
+                    <li><a href="#"><img class="head-img" src="${pageContext.request.contextPath}/resources/images/system/person.png" alt="myaccount button" height="25px"></a></li>
                     
                 </ul>
             </div>
