@@ -16,7 +16,7 @@
         <p>Our goal is to connect people to books that spark curiosity, joy, and knowledge. Dive into our collection and discover the stories waiting for you. Happy reading!</p>
     </section>
     <section class="image-section">
-        <img src="resources/images/system/about-us-placeholder.png" alt="About Us Image">
+        <img src="${pageContext.request.contextPath}/resources/images/system/Nandela-book.jpg" alt="About Us Image">
     </section>
 </div>
 <jsp:include page="footer.jsp" />
