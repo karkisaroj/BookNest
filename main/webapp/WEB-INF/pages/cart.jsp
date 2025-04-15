@@ -4,7 +4,7 @@
 <html>
 <head>
 <title>Your Cart</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/cart-styles.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/cart.css" />
 
 </head>
 <body>
@@ -84,7 +84,7 @@
     </div>
     
     <!-- Font Awesome for icons -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script> -->
     <jsp:include page="footer.jsp" />
 </body>
 </html>
