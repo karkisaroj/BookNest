@@ -9,7 +9,7 @@
 </head>
 <body>
     <jsp:include page="header.jsp" />
-    <div class="container">
+    <div class="container1">
         <div class="cart-heading">
             <h1>Your cart</h1>
         </div>

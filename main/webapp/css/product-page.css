@@ -1,18 +1,18 @@
 @charset "UTF-8";
 
-{
+*{
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
 
-.container {
+.container1 {
     width: 100%;
     min-height: 100vh;
-    / background-color: ; */
     display: flex;
     align-items: center;
     justify-content: center;
+ 
 }
 
 .product{
