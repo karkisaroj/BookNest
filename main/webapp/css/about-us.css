@@ -1,20 +1,13 @@
 @charset "UTF-8";
 
-body {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-    
->>>>>>> 092eeee58823b92486b0e2548df237f175a351c3
-=======
-
->>>>>>> e1409056cfed38bd25d71160d22f89a6dd2ebd35
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     font-family: Arial, sans-serif;
-    
 }
 
-.container {
+.container1 {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -45,7 +38,8 @@ body {
     font-size: 16px;
     font-weight: bold;
     text-align: center;
-    border-radius: 10prgb(255, 255, 255)}
+    border-radius: 10prgb(255, 255, 255)
+    }
 
 .image-section img {
     width: 100%;

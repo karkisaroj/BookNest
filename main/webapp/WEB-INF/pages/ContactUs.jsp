@@ -8,11 +8,10 @@
     <title>Contact Us | BookNest</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/ContactUs.css">
 </head>
-<jsp:include page="header.jsp" />
+
 <body>
-	
-    <div class="container1">
-    
+	<jsp:include page="header.jsp" />
+    <div class="container2">
         <section class="contact-form">
             <h1>Contact Us</h1>
             <p>We’re here to help! Whether you have questions about our books, your orders, or anything else, feel free to reach out to us. Fill in the form below, and we’ll get back to you as soon as possible.</p>
@@ -31,7 +30,7 @@
         </section>
         
     </div>
-    
+    <jsp:include page="footer.jsp" />
 </body>
-<jsp:include page="footer.jsp" />
+
 </html>

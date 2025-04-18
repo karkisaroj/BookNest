@@ -9,7 +9,7 @@
     <title>About Us | BookNest</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/about-us.css">
 </head>
-<div class="container">
+<div class="container1">
     <section class="about-us">
         <h1>About Us</h1>
         <p>Welcome to BookNest, your ultimate destination for book lovers! We specialize in selling new and popular books to cater to readers of all interests and genres. Whether you’re searching for the latest bestseller, a timeless classic, or hidden gems, BookNest offers a wide selection to inspire your reading journey.</p>
