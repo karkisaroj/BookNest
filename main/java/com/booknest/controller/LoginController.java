@@ -61,8 +61,11 @@ public class LoginController extends HttpServlet {
 	        return;
 	    }
 	    
+	    if (!validationUtil.isValidPassword(password)) {
+	        redirectionUtil.setMsgAndRedirect(req, resp, loginpagepath, "error", passwordvaliditymessage);
+	        return;
+	    }
 
-	    
 		
 	}
 }
