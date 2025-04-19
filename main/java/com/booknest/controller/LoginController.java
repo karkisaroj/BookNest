@@ -89,7 +89,7 @@ public class LoginController extends HttpServlet {
 
 
 	    if (loginStatus) {
-	        // Use request dispatcher instead of sendRedirect for WEB-INF resources
+
 	        req.getRequestDispatcher(homepagepath).forward(req, resp);
 	    } else {
 	        // Redirect back to login page with failure message

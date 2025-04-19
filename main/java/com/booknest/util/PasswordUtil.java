@@ -1,6 +1,5 @@
 package com.booknest.util;
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -20,8 +19,6 @@ public class PasswordUtil {
     private static final int SALT_LENGTH_BYTE = 16;
     private static final int HASH_LENGTH_BYTE = 32; // 256 bits
     private static final int ITERATIONS = 65536;
-    private static final Charset UTF_8 = StandardCharsets.UTF_8;
-
     /**
      * Generates a random salt.
      */

@@ -11,7 +11,7 @@ public class UserModel {
 	private String user_img_url;
 	
 	public UserModel(String first_name, String last_name,String user_name, String password, String email, String phone_number,
-			String address, String user_img_url) {
+			String address) {
 		super();
 		this.first_name = first_name;
 		this.last_name = last_name;
@@ -20,7 +20,7 @@ public class UserModel {
 		this.email = email;
 		this.phone_number = phone_number;
 		this.address = address;
-		this.user_img_url = user_img_url;
+//		this.user_img_url = user_img_url;
 	}
 	
 	public UserModel(String user_name,String password) {
