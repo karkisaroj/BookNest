@@ -79,6 +79,15 @@ public class LoginController extends HttpServlet {
 	        return;
 	    }
 
+	    
+	    if (!validationUtil.isValidPassword(password)) {
+	        redirectionUtil.setMsgAndRedirect(req, resp, loginpagepath, "error", passwordvaliditymessage);
+	        return;
+	    }
+
+		
+
+
 	    if (loginStatus) {
 	        // Use request dispatcher instead of sendRedirect for WEB-INF resources
 	        req.getRequestDispatcher(homepagepath).forward(req, resp);
@@ -86,5 +95,6 @@ public class LoginController extends HttpServlet {
 	        // Redirect back to login page with failure message
 	        redirectionUtil.setMsgAndRedirect(req, resp, loginpagepath, "error", loginFailedMessage);
 	    }
+
 	}
 }
