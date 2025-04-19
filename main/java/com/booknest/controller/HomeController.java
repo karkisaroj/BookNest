@@ -9,6 +9,7 @@ import java.io.IOException;
 
 /**
  * @author Noble Nepal
+ * @author Hrita Dutta
  */
 @WebServlet(asyncSupported=true, urlPatterns= { "/home","/"})
 public class HomeController extends HttpServlet {
