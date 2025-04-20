@@ -20,7 +20,7 @@ public class LoginController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final String emptyMessage = "Empty Fields. Fill all the fields before logging in ";
 	private final String alphanumericmessage = "User Name should start from alphabet and can contain only letters and numbers";
-	//private final String passwordvaliditymessage = "Password should contain alleast a capital letter, a number and a symbol";
+	private final String passwordvaliditymessage = "Password should contain alleast a capital letter, a number and a symbol";
 	private final String loginFailedMessage = "Invalid credentials. Please try again.";
     private final String connectionErrorMessage = "Connection error. Please try again later.";
 
