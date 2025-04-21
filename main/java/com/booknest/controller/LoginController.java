@@ -23,7 +23,15 @@ public class LoginController extends HttpServlet {
 	private final String emptyMessage = "Empty Fields. Fill all the fields before logging in ";
 	private final String alphanumericmessage = "User Name should start from alphabet and can contain only letters and numbers";
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
 
+
+>>>>>>> 827ca3b3381c4ab5d60bfeeb531ea2d8be5320bc
+=======
+
+>>>>>>> 2f438729b59e3a9d379b22e8b60e1a4065ca344e
 	private final String passwordvaliditymessage = "Password should contain alleast a capital letter, a number and a symbol";
 
 //private final String passwordvaliditymessage = "Password should contain alleast a capital letter, a number and a symbol";
