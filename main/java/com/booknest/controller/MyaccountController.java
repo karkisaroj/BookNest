@@ -24,4 +24,10 @@ public class MyaccountController extends HttpServlet {
 		request.getRequestDispatcher("/WEB-INF/pages/myaccount.jsp").forward(request, response);
 
 	}
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		request.getRequestDispatcher("/WEB-INF/pages/home.jsp").forward(request, response);
+
+	}
 }
