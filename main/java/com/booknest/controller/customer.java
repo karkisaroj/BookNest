@@ -11,7 +11,7 @@ import java.io.IOException;
  * @author Piyush Chand
  */
 @WebServlet(asyncSupported = true, urlPatterns = { "/customer" })
-public class customer extends HttpServlet {
+public class Customer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
