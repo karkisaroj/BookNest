@@ -63,8 +63,61 @@ public class LoginService {
 
         return false; // User not found in the database
     }
+    /**
+     * Retrieves the role ID for a given username.
+     *
+     * @param username the username to look up
+     * @return the role ID as an integer, or 1 (default user role) if not found or error occurs
+     */
 
+    public UserModel getUserInfoWithRole(String userName) {
+        if (isConnectionError) {
+            System.out.println("Connection Error!");
+            return null;
+        }
+
+        String query = "SELECT u.first_name, u.last_name, u.user_name, u.password, u.email, u.phone_number, " +
+                       "u.address, u.user_img_url, u.roleID, r.user_role " +
+                       "FROM user u " +
+                       "JOIN role r ON u.roleID = r.roleID " +
+                       "WHERE u.user_name = ?";
+        try (PreparedStatement stmt = dbConn.prepareStatement(query)) {
+            stmt.setString(1, userName);
+            try (ResultSet result = stmt.executeQuery()) {
+                if (result.next()) {
+                    // Populate UserModel object
+                    UserModel userModel = new UserModel(
+                        result.getString("first_name"),
+                        result.getString("last_name"),
+                        result.getString("user_name"),
+                        result.getString("password"),
+                        result.getString("email"),
+                        result.getString("phone_number"),
+                        result.getString("address")
+                    );
+
+                    
+                    userModel.setRoleId(result.getInt("roleID"));
+                    
+                    
+                    String userRole = result.getString("user_role");
+                     
+                    userModel.setRoleName(userRole);
+                    
+                    return userModel;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    
+
+}
+    
 
     
-}
+
 
