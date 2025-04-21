@@ -18,7 +18,7 @@
             <div class="sec-right">
                 <h4>BookNest</h4>
                 <h2>This is Book Heaven</h2>
-                <p>Where this is what is is just a simple sample note for the reference for the book and all that</p>
+                <p>Where this is what is is just a simple sample note for the reference for the book and all that about it.</p>
                 <button class="exp-btn">Explore More Books</button>
                 <img src="${pageContext.request.contextPath}/resources/images/system/bookstack.png" alt="" class="img-right">
             </div>
@@ -34,7 +34,7 @@
         <div class="container">
             <h3 class="topic">Books</h3>
             <div class="divider"></div>
-            <span class="see_more"><a href="">See More</a></span>
+            <span class="see_more"><a href="${pageContext.request.contextPath}/books">See More</a></span>
             <div class="cards"> <!--Products-->
                 <div class="card"> <!--product-->
                     <div class="card-img"> <!--image-->

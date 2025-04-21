@@ -13,7 +13,7 @@ body {
     flex-direction: column;
 }
 
-.container {
+.container1 {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
@@ -47,7 +47,7 @@ main {
     padding: 30px 0;
 }
 
-main.container {
+main .container1 {
     padding-left: 0;
     padding-right: 0; 
 }
@@ -85,7 +85,7 @@ h1 {
     font-size: 18px; 
 }
 
-.sidebar li.active a {
+.sidebar li .active a {
     font-weight: bold;
     color: #2c4e7e;
     font-size: 19px; 
