@@ -10,17 +10,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="header-right">
-                <button class="icon-button search-button"><i class="fas fa-search"></i></button>
-                <button class="icon-button cart-button"><i class="fas fa-shopping-cart"></i></button>
-                <button class="icon-button user-button"><i class="fas fa-user"></i></button>
-            </div>
-        </div>
-    </header>
+    <jsp:include page="header.jsp" />
 
-    <main class="container">
+    <main class="container1">
         <h1>Customers</h1>
         
         <div class="content-wrapper">
@@ -161,58 +153,6 @@
         </div>
     </main>
 
-    <footer>
-        <div class="container">
-            <div class="footer-top">
-                <div class="logo-container">
-                    <img src="logo.png" alt="BookNest Logo" class="logo">
-                </div>
-                <div class="copyright">
-                    © 2025 - 2026 BookNest
-                </div>
-            </div>
-            
-            <div class="footer-middle">
-                <div class="footer-column">
-                    <h3>Head</h3>
-                    <ul>
-                        <li><a href="#">Links</a></li>
-                        <li><a href="#">Links</a></li>
-                        <li><a href="#">Links</a></li>
-                        <li><a href="#">Links</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Head</h3>
-                    <ul>
-                        <li><a href="#">Links</a></li>
-                        <li><a href="#">Links</a></li>
-                        <li><a href="#">Links</a></li>
-                        <li><a href="#">Links</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Head</h3>
-                    <ul>
-                        <li><a href="#">Links</a></li>
-                        <li><a href="#">Links</a></li>
-                        <li><a href="#">Links</a></li>
-                        <li><a href="#">Links</a></li>
-                    </ul>
-                </div>
-                <div class="payment-methods">
-                    <img src="/api/placeholder/150/40" alt="Payment methods">
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <div class="social-icons">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-whatsapp"></i></a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <jsp:include page="footer.jsp" />
 </body>
 </html>

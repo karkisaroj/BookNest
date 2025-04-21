@@ -17,7 +17,7 @@
             <nav>
                 <ul class="navigation flex">
                     <li><a href="${pageContext.request.contextPath}/home">Home</a></li>
-                    <li><a href="#">Books</a></li>
+                    <li><a href="${pageContext.request.contextPath}/books">Books</a></li>
                     <li><a href="${pageContext.request.contextPath}/aboutus">About</a></li>
                     <li><a href="${pageContext.request.contextPath}/contactus">Contact Us</a></li>
                 </ul>
