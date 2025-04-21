@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/books.css">
 </head>
 <body>
+	<jsp:include page="header.jsp" />
     <section class="sec-2">
         <div class="container">
             <h3 class="topic">Popular Books</h3>
@@ -227,5 +228,6 @@
             </div>
         </div>
     </section>
+    <jsp:include page="footer.jsp" />
 </body>
 </html>
