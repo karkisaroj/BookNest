@@ -38,7 +38,7 @@ public class LoginController extends HttpServlet {
 	private ValidationUtil validationUtil;
 	private LoginService loginService;
 
-	@Override
+	@Override3
 	public void init() throws ServletException {
 		this.redirectionUtil = new RedirectionUtil();
 		this.validationUtil = new ValidationUtil();
