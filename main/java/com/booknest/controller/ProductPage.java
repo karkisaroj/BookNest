@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * Servlet implementation class ProductPage
  */
-@WebServlet(asyncSupported = true, urlPatterns = { "/productPage" })
+@WebServlet(asyncSupported = true, urlPatterns = { "/productpage" })
 public class ProductPage extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final String productPagePath = "/WEB-INF/pages/product-page.jsp";

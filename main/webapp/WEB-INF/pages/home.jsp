@@ -38,7 +38,10 @@
             <div class="cards"> <!--Products-->
                 <div class="card"> <!--product-->
                     <div class="card-img"> <!--image-->
-                        <img src="${pageContext.request.contextPath}/resources/images/system/book-cover-1.jpg" alt="">
+                    	<a href="${pageContext.request.contextPath}/productpage">
+                    		<img src="${pageContext.request.contextPath}/resources/images/system/book-cover-1.jpg" alt="">
+                    	</a>
+                        
                     </div>
                     <h3>Book1</h3>
                     <div class="price-name">

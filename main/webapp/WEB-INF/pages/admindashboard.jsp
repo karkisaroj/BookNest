@@ -13,16 +13,7 @@
    <jsp:include page="header.jsp" />
 	<div class=container1>
 	    <!-- Sidebar -->
-	    <div>
-	    	<aside class="sidebar">
-	        <ul>
-	            <li><a href="#">Dashboard</a></li>
-	            <li><a href="#">Customers</a></li>
-	            <li><a href="#">Products</a></li>
-	            <li><a href="#">Orders</a></li>
-	        </ul>
-	    </aside>
-	    </div>
+	    <jsp:include page="dashboard.jsp" />
 	    
 	    <div>
 	    	<!-- Main Content -->
