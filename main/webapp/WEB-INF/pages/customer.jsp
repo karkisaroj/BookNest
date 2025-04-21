@@ -2,157 +2,128 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BookNest - Customers</title>
+    <title>BookNest Admin - Customers</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/customer.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
-    <jsp:include page="header.jsp" />
 
-    <main class="container1">
-        <h1>Customers</h1>
-        
-        <div class="content-wrapper">
-            <aside class="sidebar">
-                <nav>
-                    <ul>
-                        <li><a href="#">Dashboard</a></li>
-                        <li class="active"><a href="#">Customers</a></li>
-                        <li><a href="#">Products</a></li>
-                        <li><a href="#">Order</a></li>
-                    </ul>
-                </nav>
-            </aside>
-            
-            <div class="main-content">
-                <table class="customers-table">
+<body>
+	<jsp:include page="header.jsp" />
+    <!-- You can add your header here -->
+
+    <div class="admin-dashboard-container">
+        <jsp:include page="dashboard.jsp" />
+
+        <div class="main-content">
+            <div class="header">
+                <h1>Customers</h1>
+            </div>
+
+
+            <div class="customers-table-container">
+                <h2>Customer List</h2>
+                <table>
                     <thead>
                         <tr>
-                            <th><input type="checkbox"></th>
+                            <th class="checkbox-column"><input type="checkbox"></th>
                             <th>Name</th>
-                            <th>ID</th>
+                            <th class="id-column">ID</th>
                             <th>Address</th>
-                            <th>Email</th>
-                            <th>Actions</th>
+                            <th class="email-column">Email</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        
                         <tr>
                             <td><input type="checkbox"></td>
                             <td>Roshan Karki</td>
-                            <td>101</td>
+                            <td>01</td>
                             <td>Lalitpur</td>
                             <td>roshan@gmail.com</td>
-                            <td><button class="edit-button"><i class="fas fa-edit"></i> Edit</button></td>
+                            <td><button class="edit-btn">Edit</button></td>
                         </tr>
-
                         <tr>
                             <td><input type="checkbox"></td>
                             <td>Roshan Karki</td>
-                            <td>101</td>
+                            <td>02</td>
                             <td>Lalitpur</td>
                             <td>roshan@gmail.com</td>
-                            <td><button class="edit-button"><i class="fas fa-edit"></i> Edit</button></td>
+                            <td><button class="edit-btn">Edit</button></td>
                         </tr>
-                        
                         <tr>
                             <td><input type="checkbox"></td>
                             <td>Roshan Karki</td>
-                            <td>101</td>
+                            <td>03</td>
                             <td>Lalitpur</td>
                             <td>roshan@gmail.com</td>
-                            <td><button class="edit-button"><i class="fas fa-edit"></i> Edit</button></td>
+                            <td><button class="edit-btn">Edit</button></td>
                         </tr>
-                        
                         <tr>
                             <td><input type="checkbox"></td>
                             <td>Roshan Karki</td>
-                            <td>101</td>
+                            <td>04</td>
                             <td>Lalitpur</td>
                             <td>roshan@gmail.com</td>
-                            <td><button class="edit-button"><i class="fas fa-edit"></i> Edit</button></td>
+                            <td><button class="edit-btn">Edit</button></td>
                         </tr>
-                        
                         <tr>
                             <td><input type="checkbox"></td>
                             <td>Roshan Karki</td>
-                            <td>101</td>
+                            <td>05</td>
                             <td>Lalitpur</td>
                             <td>roshan@gmail.com</td>
-                            <td><button class="edit-button"><i class="fas fa-edit"></i> Edit</button></td>
+                            <td><button class="edit-btn">Edit</button></td>
                         </tr>
-                        
                         <tr>
                             <td><input type="checkbox"></td>
                             <td>Roshan Karki</td>
-                            <td>101</td>
+                            <td>06</td>
                             <td>Lalitpur</td>
                             <td>roshan@gmail.com</td>
-                            <td><button class="edit-button"><i class="fas fa-edit"></i> Edit</button></td>
+                            <td><button class="edit-btn">Edit</button></td>
                         </tr>
-                        
-
                         <tr>
                             <td><input type="checkbox"></td>
                             <td>Roshan Karki</td>
-                            <td>101</td>
+                            <td>07</td>
                             <td>Lalitpur</td>
                             <td>roshan@gmail.com</td>
-                            <td><button class="edit-button"><i class="fas fa-edit"></i> Edit</button></td>
+                            <td><button class="edit-btn">Edit</button></td>
                         </tr>
-
                         <tr>
                             <td><input type="checkbox"></td>
                             <td>Roshan Karki</td>
-                            <td>101</td>
+                            <td>08</td>
                             <td>Lalitpur</td>
                             <td>roshan@gmail.com</td>
-                            <td><button class="edit-button"><i class="fas fa-edit"></i> Edit</button></td>
+                            <td><button class="edit-btn">Edit</button></td>
                         </tr>
-                        
-
                         <tr>
                             <td><input type="checkbox"></td>
                             <td>Roshan Karki</td>
-                            <td>101</td>
+                            <td>09</td>
                             <td>Lalitpur</td>
                             <td>roshan@gmail.com</td>
-                            <td><button class="edit-button"><i class="fas fa-edit"></i> Edit</button></td>
+                            <td><button class="edit-btn">Edit</button></td>
                         </tr>
-                        
-
                         <tr>
                             <td><input type="checkbox"></td>
                             <td>Roshan Karki</td>
-                            <td>101</td>
+                            <td>10</td>
                             <td>Lalitpur</td>
                             <td>roshan@gmail.com</td>
-                            <td><button class="edit-button"><i class="fas fa-edit"></i> Edit</button></td>
+                            <td><button class="edit-btn">Edit</button></td>
                         </tr>
-                        
-
-
-                        
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>Roshan Karki</td>
-                            <td>101</td>
-                            <td>Lalitpur</td>
-                            <td>roshan@gmail.com</td>
-                            <td><button class="edit-button"><i class="fas fa-edit"></i> Edit</button></td>
-                        </tr>
-                        <!-- Repeat rows 17 more times -->
-                        <!-- Rows 3-19 omitted for brevity but would be identical -->
                     </tbody>
                 </table>
             </div>
         </div>
-    </main>
-
-    <jsp:include page="footer.jsp" />
+    </div>
+	<jsp:include page="footer.jsp" />
+    <!-- You can add your footer here -->
 </body>
+
 </html>
