@@ -5,7 +5,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
@@ -23,11 +22,13 @@ public class LoginController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final String emptyMessage = "Empty Fields. Fill all the fields before logging in ";
 	private final String alphanumericmessage = "User Name should start from alphabet and can contain only letters and numbers";
-<<<<<<< HEAD
+
+
+
 	private final String passwordvaliditymessage = "Password should contain alleast a capital letter, a number and a symbol";
-=======
+
 //private final String passwordvaliditymessage = "Password should contain alleast a capital letter, a number and a symbol";
->>>>>>> 9a7df1d566194196e103af91f1b45b440509cf72
+
 	private final String loginFailedMessage = "Invalid credentials. Please try again.";
 	private final String connectionErrorMessage = "Connection error. Please try again later.";
 
@@ -38,7 +39,7 @@ public class LoginController extends HttpServlet {
 	private ValidationUtil validationUtil;
 	private LoginService loginService;
 
-	@Override3
+	@Override
 	public void init() throws ServletException {
 		this.redirectionUtil = new RedirectionUtil();
 		this.validationUtil = new ValidationUtil();
@@ -68,28 +69,44 @@ public class LoginController extends HttpServlet {
 			return;
 		}
 
-		// Create a UserModel with the user-provided username and password
+		// Creating a UserModel with the user-provided username and password
 		UserModel userModel = new UserModel(userName, password);
 
-		// Validate user credentials using LoginService
+		// Validating user credentials using LoginService
 		Boolean loginStatus = loginService.loginUser(userModel);
 
 		if (loginStatus == null) {
-			// Connection error occurred
+			// Connecting error occurred
 			redirectionUtil.setMsgAndRedirect(req, resp, loginpagepath, "error", connectionErrorMessage);
 			return;
 		}
 
 		if (loginStatus) {
-			
-			
-			// Use request dispatcher instead of sendRedirect for WEB-INF resources
-			req.getRequestDispatcher(homepagepath).forward(req, resp);
-			SessionUtil.setAttribute(req,"user",userName);
-			
+			// Fetching user information with role using the service method
+			UserModel userInfo = loginService.getUserInfoWithRole(userName);
+			System.out.println(userInfo.getRoleName());
+
+
+			if (userInfo != null) {
+				// Adding user details to the session created 
+				SessionUtil.setAttribute(req, "firstName", userInfo.getFirst_name());
+				SessionUtil.setAttribute(req, "lastName", userInfo.getLast_name());
+				SessionUtil.setAttribute(req, "userName", userInfo.getUser_name());
+				SessionUtil.setAttribute(req, "email", userInfo.getEmail());
+				SessionUtil.setAttribute(req, "phoneNumber", userInfo.getPhone_number());
+				SessionUtil.setAttribute(req, "address", userInfo.getAddress());
+
+				SessionUtil.setAttribute(req, "rolename", userInfo.getRoleName());
+				System.out.println(userInfo.getRoleName());
+			}
+			if ("Admin".equals(userInfo.getRoleName())) {
+				redirectionUtil.redirectToPage(req, resp, adminpagepath);
+			} else {
+				redirectionUtil.redirectToPage(req, resp, homepagepath);
+			}
 
 		} else {
-			// Redirect back to login page with failure message
+			// Redirecting back to login page with failure message
 			redirectionUtil.setMsgAndRedirect(req, resp, loginpagepath, "error", loginFailedMessage);
 		}
 

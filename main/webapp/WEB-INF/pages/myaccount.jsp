@@ -10,10 +10,16 @@
 </head>
 <body>
 	<jsp:include page="header.jsp" />
+	<%@ page import="com.booknest.util.SessionUtil" %>
 
-	<%
+<%
 	// Retrieve user information from session
-	String userName = (String) session.getAttribute("user");
+	String userName = (String) session.getAttribute("userName");
+	String firstName = (String) session.getAttribute("firstName");
+	String lastName = (String) session.getAttribute("lastName");
+	String email = (String) session.getAttribute("email");
+	String phoneNumber = (String) session.getAttribute("phoneNumber");
+	String address = (String) session.getAttribute("address");
 
 	// Check if user is logged in
 	if (userName == null) {
@@ -21,8 +27,6 @@
 		response.sendRedirect(request.getContextPath() + "/login");
 		return;
 	}
-
-
 	%>
 
 	<div class="account-container">
@@ -56,6 +60,8 @@
 					<h3>
 						Welcome,
 						<%=userName%>!
+						
+						
 					</h3>
 					<p>
 						Session ID:
@@ -78,22 +84,22 @@
 
 					<div class="info-row">
 						<div class="info-label">First name:</div>
-						<div class="info-value">Saroj</div>
+						<div class="info-value"><%=firstName%>!</div>
 					</div>
 
 					<div class="info-row">
 						<div class="info-label">Last name:</div>
-						<div class="info-value">Karki</div>
+						<div class="info-value"><%=lastName%>!</div>
 					</div>
 
 					<div class="info-row">
 						<div class="info-label">Phone Number:</div>
-						<div class="info-value">9812345678</div>
+						<div class="info-value"><%=phoneNumber%>!</div>
 					</div>
 
 					<div class="info-row">
 						<div class="info-label">Address:</div>
-						<div class="info-value">9812345678</div>
+						<div class="info-value"><%=address%>!</div>
 					</div>
 				</div>
 
@@ -103,7 +109,7 @@
 
 					<div class="info-row">
 						<div class="info-label">Email Address</div>
-						<div class="info-value">saroj@gmail.com</div>
+						<div class="info-value"><%=email%>!</div>
 					</div>
 				</div>
 
@@ -114,9 +120,11 @@
 
 				<!-- Logout button -->
 				<div class="edit-button-container">
-						<button type="submit" class="logout-btn">Logout</button>
-					</form>
+				    <form method="post">
+				        <button type="submit" name="logout" class="logout-btn">Logout</button>
+				    </form>
 				</div>
+
 
 			</div>
 		</div>
