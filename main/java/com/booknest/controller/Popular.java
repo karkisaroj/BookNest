@@ -8,23 +8,18 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Servlet implementation class ProductPage
+ * Servlet implementation class Popular
  */
-@WebServlet(asyncSupported = true, urlPatterns = { "/productPage" })
-public class ProductPage extends HttpServlet {
+@WebServlet(asyncSupported = true, urlPatterns = { "/popular" })
+public class Popular extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private final String productPagePath = "/WEB-INF/pages/product-page.jsp";
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		request.getRequestDispatcher(productPagePath).forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/pages/popular.jsp").forward(request, response);
 	}
 
 }
