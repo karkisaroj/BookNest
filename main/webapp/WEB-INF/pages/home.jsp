@@ -91,7 +91,7 @@
         <div class="container">
             <h3 class="topic">Popular</h3>
             <div class="divider"></div>
-            <span class="see_more"><a href="">See More</a></span>
+            <span class="see_more"><a href="${pageContext.request.contextPath}/popular">See More</a></span>
             <div class="cards"> <!--Products-->
                 <div class="card"> <!--product-->
                     <div class="card-img"> <!--image-->
