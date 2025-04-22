@@ -39,6 +39,10 @@ body {
 	list-style: none;
 }
 
+.sidebar-menu li a{
+	color:#2b5797;
+}
+
 .sidebar-item {
 	display: flex;
 	align-items: center;
@@ -48,7 +52,7 @@ body {
 	cursor: pointer;
 }
 
-.sidebar-item.active {
+.sidebar-item .active {
 	background-color: #f0f0f0;
 }
 
