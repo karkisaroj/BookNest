@@ -37,11 +37,11 @@
 			<nav class="account-sidebar">
 				<ul class="sidebar-menu">
 					<li class="sidebar-item active"><span class="sidebar-icon">👤</span>
-						<span>My Details</span></li>
+						<span><a>My Details</a></span></li>
 					<li class="sidebar-item"><span class="sidebar-icon">📦</span>
-						<span>My Orders</span></li>
+						<span><a>My Orders</a></span></li>
 					<li class="sidebar-item"><span class="sidebar-icon">⚙️</span>
-						<span>Account Setting</span></li>
+						<span><a>Account Setting</a></span></li>
 				</ul>
 			</nav>
 
