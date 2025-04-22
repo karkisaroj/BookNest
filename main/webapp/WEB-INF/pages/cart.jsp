@@ -12,13 +12,18 @@
 </head>
 <body>
 	<jsp:include page="header.jsp" />
-	<%
+<%
 	// Retrieve user information from session
-	String userName = (String) SessionUtil.getAttribute(request, "user");
+	String userName = (String) session.getAttribute("userName");
+	String firstName = (String) session.getAttribute("firstName");
+	String lastName = (String) session.getAttribute("lastName");
+	String email = (String) session.getAttribute("email");
+	String phoneNumber = (String) session.getAttribute("phoneNumber");
+	String address = (String) session.getAttribute("address");
 
-	// Check if user is logged in
+	// Checking if user is logged in
 	if (userName == null) {
-		// If not logged in, redirect to login page
+		// If not logged in, redirecting to login page
 		response.sendRedirect(request.getContextPath() + "/login");
 		return;
 	}
