@@ -37,11 +37,11 @@
 			<nav class="account-sidebar">
 				<ul class="sidebar-menu">
 					<li class="sidebar-item active"><span class="sidebar-icon">👤</span>
-						<span><a>My Details</a></span></li>
+						<span><a href="${pageContext.request.contextPath}/myaccount">My Details</a></span></li>
 					<li class="sidebar-item"><span class="sidebar-icon">📦</span>
-						<span><a>My Orders</a></span></li>
+						<span><a href="${pageContext.request.contextPath}/cart">My Orders</a></span></li>
 					<li class="sidebar-item"><span class="sidebar-icon">⚙️</span>
-						<span><a>Account Setting</a></span></li>
+						<span><a href="${pageContext.request.contextPath}/accountsetting">Account Setting</a></span></li>
 				</ul>
 			</nav>
 

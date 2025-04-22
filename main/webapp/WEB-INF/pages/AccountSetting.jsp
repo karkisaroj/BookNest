@@ -14,9 +14,9 @@
     <main>
         <aside class="sidebar">
             <ul>
-                <li><a href="#">My Details</a></li>
-                <li><a href="#">My Orders</a></li>
-                <li><a href="#">Account Settings</a></li>
+                <li><a href="${pageContext.request.contextPath}/myaccount">My Details</a></li>
+                <li><a href="${pageContext.request.contextPath}/cart">My Orders</a></li>
+                <li><a href="${pageContext.request.contextPath}/accountsetting">Account Settings</a></li>
             </ul>
         </aside>
 

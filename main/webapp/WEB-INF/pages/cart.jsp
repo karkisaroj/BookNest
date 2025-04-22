@@ -104,7 +104,7 @@
 			</div>
 			<div class="taxes">Taxes, discounts and shipping calculated at
 				checkout.</div>
-			<button class="checkout-btn">Check Out</button>
+			<a href="${pageContext.request.contextPath}/checkout"><button class="checkout-btn">Check Out</button></a>
 		</div>
 	</div>
 

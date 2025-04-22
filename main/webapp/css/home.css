@@ -60,7 +60,11 @@
     color: #F5EEDC;
     transition: 0.3s ease-in ;
     margin-top: 50px;
-    z-index: 99;
+    z-index: 100;
+}
+
+.exp-btn a{
+	color: #F5EEDC;
 }
 
 .exp-btn:hover{
