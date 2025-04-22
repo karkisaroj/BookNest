@@ -12,7 +12,13 @@
     <jsp:include page="header.jsp" />
 
     <main>
-        <jsp:include page="dashboard.jsp" />
+        <aside class="sidebar">
+            <ul>
+                <li><a href="#">My Details</a></li>
+                <li><a href="#">My Orders</a></li>
+                <li><a href="#">Account Settings</a></li>
+            </ul>
+        </aside>
 
         <section class="account-settings">
             <h1>Account Settings</h1>
