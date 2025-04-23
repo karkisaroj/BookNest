@@ -11,14 +11,22 @@
 <body>
 	<jsp:include page="header.jsp" />
 	<%
-	String errorMessage = (String) request.getAttribute("errorMessage");
-	if (errorMessage != null) {
-	%>
-	<script>
-        alert('<%=errorMessage%>
-		');
-	</script>
-	<%
+	// Retrieve user information from session
+	String userName = (String) session.getAttribute("userName");
+	String firstName = (String) session.getAttribute("firstName");
+	String lastName = (String) session.getAttribute("lastName");
+	String email = (String) session.getAttribute("email");
+	String phoneNumber = (String) session.getAttribute("phoneNumber");
+	String address = (String) session.getAttribute("address");
+
+
+
+	// Checking if user is logged in
+	if (userName == null) {
+		// If not logged in, redirecting to login page
+
+		response.sendRedirect(request.getContextPath() + "/login");
+		return;
 	}
 	%>
 	<div class="account-container">
@@ -53,8 +61,47 @@
 					</form>
 				</div>
 			</div>
+			
+			<!-- Personal Information -->
+				<div class="info-section">
+					<h3 class="info-section-title">Personal Information</h3>
+					<div class="info-row">
+						<div class="info-label">Username:</div>
+						<div class="info-value"><%=userName%></div>
+					</div>
+					<div class="info-row">
+						<div class="info-label">First Name:</div>
+						<div class="info-value"><%=firstName%></div>
+					</div>
+					<div class="info-row">
+						<div class="info-label">Last Name:</div>
+						<div class="info-value"><%=lastName%></div>
+					</div>
+					<div class="info-row">
+						<div class="info-label">Phone Number:</div>
+						<div class="info-value"><%=phoneNumber%></div>
+					</div>
+					<div class="info-row">
+						<div class="info-label">Address:</div>
+						<div class="info-value"><%=address%></div>
+					</div>
+				</div>
+				<!-- Email Information -->
+				<div class="info-section">
+					<h3 class="info-section-title">Email Information</h3>
+					<div class="info-row">
+						<div class="info-label">Email Address:</div>
+						<div class="info-value"><%=email%></div>
+					</div>
+				</div>
+				<!-- Action Buttons -->
+				<div class="edit-button-container">
+					<button class="edit-btn" onclick="location.href='editAccount.jsp'">EDIT
+						Details</button>
+				</div>
+			</div>
 		</div>
-	</div>
+
 	<jsp:include page="footer.jsp" />
 </body>
 <jsp:include page="footer.jsp" />
