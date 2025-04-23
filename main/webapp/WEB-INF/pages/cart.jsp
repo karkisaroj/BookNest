@@ -12,13 +12,22 @@
 </head>
 <body>
 	<jsp:include page="header.jsp" />
-	<%
+<%
 	// Retrieve user information from session
+
 	String userName = (String) SessionUtil.getAttribute(request, "userName");
 
-	// Check if user is logged in
+	String username = (String) session.getAttribute("userName");
+	String firstName = (String) session.getAttribute("firstName");
+	String lastName = (String) session.getAttribute("lastName");
+	String email = (String) session.getAttribute("email");
+	String phoneNumber = (String) session.getAttribute("phoneNumber");
+	String address = (String) session.getAttribute("address");
+
+
+	// Checking if user is logged in
 	if (userName == null) {
-		// If not logged in, redirect to login page
+		// If not logged in, redirecting to login page
 		response.sendRedirect(request.getContextPath() + "/login");
 		return;
 	}
@@ -99,7 +108,7 @@
 			</div>
 			<div class="taxes">Taxes, discounts and shipping calculated at
 				checkout.</div>
-			<button class="checkout-btn">Check Out</button>
+			<a href="${pageContext.request.contextPath}/checkout"><button class="checkout-btn">Check Out</button></a>
 		</div>
 	</div>
 

@@ -46,6 +46,10 @@ body {
     list-style: none;
 }
 
+.sidebar-menu li a{
+	color:#2b5797;
+}
+
 .sidebar-item {
     display: flex;
     align-items: center;
@@ -60,9 +64,14 @@ body {
     background-color: #e0e0e0;
 }
 
+
 .sidebar-item.active {
     background-color: #ccc;
     font-weight: bold;
+
+.sidebar-item .active {
+	background-color: #f0f0f0;
+
 }
 
 .sidebar-icon {

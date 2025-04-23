@@ -21,8 +21,12 @@
 
 
 
+
+
+
 	// Checking if user is logged in
 	if (userName == null) {
+
 		// If not logged in, redirecting to login page
 
 		response.sendRedirect(request.getContextPath() + "/login");
@@ -36,11 +40,19 @@
 			<div class="account-sidebar">
 				<ul class="sidebar-menu">
 					<li class="sidebar-item active"><span class="sidebar-icon">👤</span>
+
 						My Details</li>
 					<li class="sidebar-item"><span class="sidebar-icon">📦</span>
 						My Orders</li>
 					<li class="sidebar-item"><span class="sidebar-icon">⚙️</span>
 						Account Setting</li>
+
+						<span><a href="${pageContext.request.contextPath}/myaccount">My Details</a></span></li>
+					<li class="sidebar-item"><span class="sidebar-icon">📦</span>
+						<span><a href="${pageContext.request.contextPath}/cart">My Orders</a></span></li>
+					<li class="sidebar-item"><span class="sidebar-icon">⚙️</span>
+						<span><a href="${pageContext.request.contextPath}/accountsetting">Account Setting</a></span></li>
+
 				</ul>
 			</div>
 			<!-- Details Panel -->

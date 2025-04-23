@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * Servlet implementation class OrderDashboard
  */
-@WebServlet(asyncSupported = true, urlPatterns = { "/orderdashboard" })
+@WebServlet(asyncSupported = true, urlPatterns = { "/adminorder" })
 public class OrderDashboard extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
