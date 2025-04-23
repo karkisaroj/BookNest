@@ -12,7 +12,13 @@
     <jsp:include page="header.jsp" />
 
     <main>
-        <jsp:include page="dashboard.jsp" />
+        <aside class="sidebar">
+            <ul>
+                <li><a href="${pageContext.request.contextPath}/myaccount">My Details</a></li>
+                <li><a href="${pageContext.request.contextPath}/cart">My Orders</a></li>
+                <li><a href="${pageContext.request.contextPath}/accountsetting">Account Settings</a></li>
+            </ul>
+        </aside>
 
         <section class="account-settings">
             <h1>Account Settings</h1>

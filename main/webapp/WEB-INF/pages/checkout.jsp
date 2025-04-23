@@ -10,21 +10,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/checkout.css">
 </head>
 <body>
-    <header class="header">
-        <div class="logo-container">
-            <div class="logo">BookNest</div>
-        </div>
-        <nav class="nav-links">
-            <div>New Arrivals</div>
-            <div>Books</div>
-            <div>Kids</div>
-        </nav>
-        <div class="nav-icons">
-            <div>🔍</div>
-            <div>🛒</div>
-            <div>👤</div>
-        </div>
-    </header>
+    <jsp:include page="header.jsp" />
 
     <div class="main-content">
         <div class="shipping-section">
@@ -105,53 +91,6 @@
         </div>
     </div>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-info">
-                <div class="footer-logo">BookNest</div>
-                <div class="footer-copyright">© 2025 - 2026 BookNest</div>
-            </div>
-            
-            <div class="footer-links">
-                <div class="footer-column">
-                    <h3>Head</h3>
-                    <ul>
-                        <li>Links</li>
-                        <li>Links</li>
-                        <li>Links</li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Head</h3>
-                    <ul>
-                        <li>Links</li>
-                        <li>Links</li>
-                        <li>Links</li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Head</h3>
-                    <ul>
-                        <li>Links</li>
-                        <li>Links</li>
-                        <li>Links</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="payment-methods">
-                <div class="payment-icons">
-                    <img src="fonepay.png" alt="FonePay">
-                    <img src="khalti.png" alt="Khalti">
-                    <img src="esewa.png" alt="eSewa">
-                </div>
-                <div class="social-icons">
-                    <a href="#"><i class="facebook-icon"></i></a>
-                    <a href="#"><i class="instagram-icon"></i></a>
-                    <a href="#"><i class="whatsapp-icon"></i></a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <jsp:include page="footer.jsp" />
 </body>
 </html>
