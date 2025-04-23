@@ -1,5 +1,5 @@
 
-<%@page import="com.booknest.util.SessionUtil"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -13,9 +13,6 @@
 <body>
 	<jsp:include page="header.jsp" />
 <%
-	// Retrieve user information from session
-
-	String userName = (String) SessionUtil.getAttribute(request, "userName");
 
 	String username = (String) session.getAttribute("userName");
 	String firstName = (String) session.getAttribute("firstName");
@@ -26,7 +23,7 @@
 
 
 	// Checking if user is logged in
-	if (userName == null) {
+	if (username == null) {
 		// If not logged in, redirecting to login page
 		response.sendRedirect(request.getContextPath() + "/login");
 		return;
