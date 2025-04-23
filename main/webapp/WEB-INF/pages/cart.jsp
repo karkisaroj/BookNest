@@ -14,7 +14,7 @@
 	<jsp:include page="header.jsp" />
 	<%
 	// Retrieve user information from session
-	String userName = (String) SessionUtil.getAttribute(request, "user");
+	String userName = (String) SessionUtil.getAttribute(request, "userName");
 
 	// Check if user is logged in
 	if (userName == null) {
