@@ -30,7 +30,7 @@ public class DbConfiguration {
 		}
 		public static void main(String[] args) throws ClassNotFoundException, SQLException {
 			getDbConnection();
-			System.out.print("Connected");
+			System.out.print("null");
 		}
 
 
