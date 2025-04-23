@@ -14,12 +14,16 @@
 	<jsp:include page="header.jsp" />
 <%
 	// Retrieve user information from session
+
+	String userName = (String) SessionUtil.getAttribute(request, "userName");
+
 	String userName = (String) session.getAttribute("userName");
 	String firstName = (String) session.getAttribute("firstName");
 	String lastName = (String) session.getAttribute("lastName");
 	String email = (String) session.getAttribute("email");
 	String phoneNumber = (String) session.getAttribute("phoneNumber");
 	String address = (String) session.getAttribute("address");
+
 
 	// Checking if user is logged in
 	if (userName == null) {

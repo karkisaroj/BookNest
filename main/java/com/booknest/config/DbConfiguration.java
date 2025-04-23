@@ -24,7 +24,7 @@ public class DbConfiguration {
 		 * @throws ClassNotFoundException if the JDBC driver class is not found
 		 */
 		public static Connection getDbConnection() throws SQLException, ClassNotFoundException {
-			Class.forName("com.mysql.cj.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver"); //Register the JDBC driver
 			
 			return DriverManager.getConnection(URL, USERNAME, PASSWORD);
 		}
