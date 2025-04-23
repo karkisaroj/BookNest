@@ -24,9 +24,9 @@ public class LoginController extends HttpServlet {
 	private final String alphanumericmessage = "User Name should start from alphabet and can contain only letters and numbers";
 
 
-	private final String passwordvaliditymessage = "Password should contain alleast a capital letter, a number and a symbol";
+	
 
-//private final String passwordvaliditymessage = "Password should contain alleast a capital letter, a number and a symbol";
+//private final String passwordvaliditymessage = "Password should contain minimum a capital letter, a number and a symbol";
 
 	private final String loginFailedMessage = "Invalid credentials. Please try again.";
 	private final String connectionErrorMessage = "Connection error. Please try again later.";
@@ -68,7 +68,7 @@ public class LoginController extends HttpServlet {
 			return;
 		}
 
-		// Creating a UserModel with the user-provided username and password
+		// Creating a UserModel with the user-provided user name and password
 		UserModel userModel = new UserModel(userName, password);
 
 		// Validating user credentials using LoginService
