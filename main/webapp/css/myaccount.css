@@ -18,14 +18,16 @@ body {
     padding: 20px;
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Account title */
 .account-title {
     font-size: 28px;
     font-weight: bold;
     margin-bottom: 20px;
     text-align: center;
+    color: #2b5797;
 }
 
 /* Flexbox layout for the account section */
@@ -36,42 +38,45 @@ body {
 
 /* Sidebar navigation */
 .account-sidebar {
-    flex: 0 0 200px;
-    padding: 10px;
+    flex: 0 0 220px;
+    padding: 15px;
     background-color: #EDF0F2;
     border-radius: 6px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar-menu {
     list-style: none;
-}
-
-.sidebar-menu li a{
-	color:#2b5797;
+    padding: 0;
+    margin: 0;
 }
 
 .sidebar-item {
     display: flex;
     align-items: center;
-    padding: 12px 10px;
+    padding: 12px;
     margin-bottom: 10px;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-.sidebar-item:hover {
-    background-color: #e0e0e0;
+.sidebar-item.active {
+    background-color: #2b5797;
+    color: #fff;
+    font-weight: bold;
 }
 
+.sidebar-item a {
+    text-decoration: none;
+    color: #2b5797;
+    flex-grow: 1;
+    display: block;
+}
 
-.sidebar-item.active {
-    background-color: #ccc;
-    font-weight: bold;
-
-.sidebar-item .active {
-	background-color: #f0f0f0;
-
+.sidebar-item:hover {
+    background-color: #1f3a70;
+    color: white;
 }
 
 .sidebar-icon {
@@ -89,9 +94,8 @@ body {
     background-color: #EDF0F2;
     border-radius: 6px;
     padding: 25px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
 }
-
-
 
 /* Profile section */
 .profile-section {
@@ -108,6 +112,7 @@ body {
     border-radius: 50%;
     overflow: hidden;
     margin-bottom: 10px;
+    border: 2px solid #2b5797;
 }
 
 .profile-image img {
@@ -143,6 +148,7 @@ body {
     margin-bottom: 15px;
     padding-bottom: 8px;
     border-bottom: 1px solid #ccc;
+    color: #2b5797;
 }
 
 /* Info rows using flexbox */
@@ -154,6 +160,7 @@ body {
 .info-label {
     flex: 0 0 150px;
     font-weight: bold;
+    color: #2b5797;
 }
 
 .info-value {

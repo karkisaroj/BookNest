@@ -14,10 +14,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 
 @WebServlet("/myaccount")
-@MultipartConfig(fileSizeThreshold = 1024 * 1024, // 1 MB
-        maxFileSize = 1024 * 1024 * 3, // 3 MB
-        maxRequestSize = 1024 * 1024 * 5 // 5 MB
-)
+@MultipartConfig(
+	    fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+	    maxFileSize = 1024 * 1024 * 10,      // 10MB
+	    maxRequestSize = 1024 * 1024 * 50 )   // 50MB
+
 public class MyAccountController extends HttpServlet {
     /**
 	 * 
@@ -29,6 +30,7 @@ public class MyAccountController extends HttpServlet {
             throws ServletException, IOException {
         // Retrieve user information (e.g., username) from the session
         String userName = (String) request.getSession().getAttribute("userName");
+        
 
         if (userName == null) {
             // Redirect to login if user is not logged in
@@ -80,6 +82,7 @@ public class MyAccountController extends HttpServlet {
         // File upload logic
         try {
             Part filePart = request.getPart("image");
+            
             if (filePart.getSize() > 3 * 1024 * 1024) { // 3 MB size limit
                 request.setAttribute("errorMessage", "File size exceeds the maximum allowed size of 3 MB.");
                 request.getRequestDispatcher("/WEB-INF/pages/myaccount.jsp").forward(request, response);
@@ -93,6 +96,7 @@ public class MyAccountController extends HttpServlet {
 
             if (uploaded) {
                 String imageName = util.getImageNameFromPart(filePart);
+     
                 String relativePath = "resources/images/system/profile/" + imageName;
 
                 // Update the database with the new image URL
