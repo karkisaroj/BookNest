@@ -1,0 +1,43 @@
+@charset "UTF-8";
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+
+.admin-dashboard-container {
+    display: flex;
+    flex: 1;
+    /* This makes the container take all available space */
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #2c3e50;
+    color: white;
+    padding: 20px 0;
+}
+
+.sidebar-menu {
+    list-style: none;
+}
+
+.sidebar-menu li {
+    padding: 15px 30px;
+    cursor: pointer;
+}
+
+.sidebar-menu li:hover {
+    background-color: #34495e;
+}
+
+.sidebar-menu li.active {
+    border-left: 4px solid #3498db;
+    background-color: #34495e;
+}
+
+.sidebar-menu li a {
+    color: #fff;
+}

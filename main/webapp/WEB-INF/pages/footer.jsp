@@ -23,27 +23,25 @@
             <div class="footer-content">
                 <div class="footer-links">
                     <div class="footer-column">
-                        <div class="column-title">Head</div>
-                        <a href="#" class="column-link">Links</a>
-                        <a href="#" class="column-link">Links</a>
-                        <a href="#" class="column-link">Links</a>
-                        <a href="#" class="column-link">Links</a>
+                        <div class="column-title">Links</div>
+                        <a href="${pageContext.request.contextPath}/home" class="column-link">Home</a>
+                        <a href="${pageContext.request.contextPath}/books" class="column-link">Books</a>
+                        <a href="${pageContext.request.contextPath}/aboutus" class="column-link">About</a>
+                        <a href="${pageContext.request.contextPath}/contactus" class="column-link">Contact Us</a>
+                 
                     </div>
-                    
+
                     <div class="footer-column">
-                        <div class="column-title">Head</div>
-                        <a href="#" class="column-link">Links</a>
-                        <a href="#" class="column-link">Links</a>
-                        <a href="#" class="column-link">Links</a>
-                        <a href="#" class="column-link">Links</a>
+                        <div class="column-title">Books Section</div>
+                        <a href="${pageContext.request.contextPath}/books" class="column-link">Books</a>
+                        <a href="${pageContext.request.contextPath}/popular" class="column-link">Popular Books</a>
                     </div>
-                    
+
                     <div class="footer-column">
-                        <div class="column-title">Head</div>
-                        <a href="#" class="column-link">Links</a>
-                        <a href="#" class="column-link">Links</a>
-                        <a href="#" class="column-link">Links</a>
-                        <a href="#" class="column-link">Links</a>
+                        <div class="column-title">About Us</div>
+                        <a href="${pageContext.request.contextPath}/aboutus" class="column-link">Our Story</a>
+                        <a href="${pageContext.request.contextPath}/aboutus" class="column-link">Provide Feedback</a>
+                        <a href="${pageContext.request.contextPath}/aboutus" class="column-link">Our Team</a>
                     </div>
                 </div>
                 

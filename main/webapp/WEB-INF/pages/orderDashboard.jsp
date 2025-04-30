@@ -7,24 +7,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BookNest Admin - Customers</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/customer.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/orderDashboard.css">
 </head>
 
 <body>
-	<jsp:include page="header.jsp" />
-    <!-- You can add your header here -->
+<jsp:include page="header.jsp" />
+    <!-- Example header -->
+
 
     <div class="admin-dashboard-container">
         <jsp:include page="dashboard.jsp" />
 
         <div class="main-content">
             <div class="header">
-                <h1>Customers</h1>
+                <h1>Orders</h1>
             </div>
 
 
+
             <div class="customers-table-container">
-                <h2>Customer List</h2>
+                <h2>Orders List</h2>
                 <table>
                     <thead>
                         <tr>
@@ -43,7 +45,7 @@
                             <td>01</td>
                             <td>Lalitpur</td>
                             <td>roshan@gmail.com</td>
-                            <td><button class="edit-btn">Edit</button></td>
+                            <td><button class="delete-btn">Delete</button></td>
                         </tr>
                         <tr>
                             <td><input type="checkbox"></td>
@@ -51,7 +53,7 @@
                             <td>02</td>
                             <td>Lalitpur</td>
                             <td>roshan@gmail.com</td>
-                            <td><button class="edit-btn">Edit</button></td>
+                            <td><button class="delete-btn">Delete</button></td>
                         </tr>
                         <tr>
                             <td><input type="checkbox"></td>
@@ -59,7 +61,7 @@
                             <td>03</td>
                             <td>Lalitpur</td>
                             <td>roshan@gmail.com</td>
-                            <td><button class="edit-btn">Edit</button></td>
+                            <td><button class="delete-btn">Delete</button></td>
                         </tr>
                         <tr>
                             <td><input type="checkbox"></td>
@@ -67,7 +69,7 @@
                             <td>04</td>
                             <td>Lalitpur</td>
                             <td>roshan@gmail.com</td>
-                            <td><button class="edit-btn">Edit</button></td>
+                            <td><button class="delete-btn">Delete</button></td>
                         </tr>
                         <tr>
                             <td><input type="checkbox"></td>
@@ -75,7 +77,7 @@
                             <td>05</td>
                             <td>Lalitpur</td>
                             <td>roshan@gmail.com</td>
-                            <td><button class="edit-btn">Edit</button></td>
+                            <td><button class="delete-btn">Delete</button></td>
                         </tr>
                         <tr>
                             <td><input type="checkbox"></td>
@@ -83,7 +85,7 @@
                             <td>06</td>
                             <td>Lalitpur</td>
                             <td>roshan@gmail.com</td>
-                            <td><button class="edit-btn">Edit</button></td>
+                            <td><button class="delete-btn">Delete</button></td>
                         </tr>
                         <tr>
                             <td><input type="checkbox"></td>
@@ -91,7 +93,7 @@
                             <td>07</td>
                             <td>Lalitpur</td>
                             <td>roshan@gmail.com</td>
-                            <td><button class="edit-btn">Edit</button></td>
+                            <td><button class="delete-btn">Delete</button></td>
                         </tr>
                         <tr>
                             <td><input type="checkbox"></td>
@@ -99,7 +101,7 @@
                             <td>08</td>
                             <td>Lalitpur</td>
                             <td>roshan@gmail.com</td>
-                            <td><button class="edit-btn">Edit</button></td>
+                            <td><button class="delete-btn">Delete</button></td>
                         </tr>
                         <tr>
                             <td><input type="checkbox"></td>
@@ -107,7 +109,7 @@
                             <td>09</td>
                             <td>Lalitpur</td>
                             <td>roshan@gmail.com</td>
-                            <td><button class="edit-btn">Edit</button></td>
+                            <td><button class="delete-btn">Delete</button></td>
                         </tr>
                         <tr>
                             <td><input type="checkbox"></td>
@@ -115,7 +117,7 @@
                             <td>10</td>
                             <td>Lalitpur</td>
                             <td>roshan@gmail.com</td>
-                            <td><button class="edit-btn">Edit</button></td>
+                            <td><button class="delete-btn">Delete</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -123,7 +125,8 @@
         </div>
     </div>
 	<jsp:include page="footer.jsp" />
-    <!-- You can add your footer here -->
+    <!-- Example footer -->
+
 </body>
 
 </html>
