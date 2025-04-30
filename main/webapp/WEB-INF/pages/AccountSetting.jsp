@@ -3,36 +3,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BookNext - Account Settings</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/account-styles.css">
-
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/account-styles.css">
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <img src="${pageContext.request.contextPath}/resources/images/system/booknext-logo.png" alt="BookNext">
-        </div>
-        <nav class="nav-links">
-            <a href="#">New Arrivals</a>
-            <a href="#">Books</a>
-            <a href="#">Kids</a>
-            <div class="icons">
-                <a href="#"><i class="fa fa-search"></i></a>
-                <a href="#"><i class="fa fa-shopping-cart"></i></a>
-                <a href="#"><i class="fa fa-user"></i></a>
-            </div>
-        </nav>
-    </header>d
+    <jsp:include page="header.jsp" />
 
     <main>
         <aside class="sidebar">
             <ul>
-                <li><a href="#">My Details</a></li>
-                <li><a href="#">My Orders</a></li>
-                <li><a href="#">Account Settings</a></li>
+                <li><a href="${pageContext.request.contextPath}/myaccount">My Details</a></li>
+                <li><a href="${pageContext.request.contextPath}/cart">My Orders</a></li>
+                <li><a href="${pageContext.request.contextPath}/accountsetting">Account Settings</a></li>
             </ul>
         </aside>
 
@@ -86,46 +70,8 @@
             </form>
         </section>
     </main>
-
-    <footer>
-        <div class="footer-container">
-            <div class="footer-logo">
-                <img src="${pageContext.request.contextPath}/resources/images/system/booknext-logo.png" alt="BookNext">
-            </div>
-
-            <div class="footer-links">
-                <div class="footer-column">
-                    <h4>Read</h4>
-                    <a href="#">Links</a>
-                    <a href="#">Links</a>
-                    <a href="#">Links</a>
-                    <a href="#">Links</a>
-                </div>
-                <div class="footer-column">
-                    <h4>Explore</h4>
-                    <a href="#">Links</a>
-                    <a href="#">Links</a>
-                    <a href="#">Links</a>
-                    <a href="#">Links</a>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <div class="copyright">© 2015 - 2025 BookNext</div>
-                <div class="payment-methods">
-                    <img src="${pageContext.request.contextPath}/resources/images/system/visa.png" alt="Visa">
-                    <img src="${pageContext.request.contextPath}/resources/images/system/mastercard.png" alt="MasterCard">
-                    <img src="${pageContext.request.contextPath}/resources/images/system/paypal.png" alt="PayPal">
-                </div>
-                <div class="social-icons">
-                    <a href="#"><i class="fa fa-facebook"></i></a>
-                    <a href="#"><i class="fa fa-instagram"></i></a>
-                    <a href="#"><i class="fa fa-whatsapp"></i></a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
+	<jsp:include page="footer.jsp" />
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 </body>
 </html>

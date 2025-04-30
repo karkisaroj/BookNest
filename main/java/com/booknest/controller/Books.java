@@ -8,26 +8,17 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @author Piyush Chand
+ * Servlet implementation class Books
  */
-<<<<<<< HEAD
-@WebServlet(asyncSupported = true, urlPatterns = { "/customer" })
-public class Customer extends HttpServlet {
-=======
-@WebServlet(asyncSupported = true, urlPatterns = { "/admincustomer" })
-public class customer extends HttpServlet {
->>>>>>> 8d4643d10df7e36983fb3d8b7f94064895fc0102
+@WebServlet(asyncSupported = true, urlPatterns = { "/books" })
+public class Books extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		request.getRequestDispatcher("/WEB-INF/pages/customer.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/pages/books.jsp").forward(request, response);
 	}
-
 }
