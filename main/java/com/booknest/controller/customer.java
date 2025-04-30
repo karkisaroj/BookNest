@@ -11,12 +11,22 @@ import java.io.IOException;
  * @author Piyush Chand
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 @WebServlet(asyncSupported = true, urlPatterns = { "/customer" })
 public class Customer extends HttpServlet {
 =======
 @WebServlet(asyncSupported = true, urlPatterns = { "/admincustomer" })
 public class customer extends HttpServlet {
 >>>>>>> 8d4643d10df7e36983fb3d8b7f94064895fc0102
+=======
+
+@WebServlet(asyncSupported = true, urlPatterns = { "/customer" })
+public class Customer extends HttpServlet {
+
+@WebServlet(asyncSupported = true, urlPatterns = { "/admincustomer" })
+public class customer extends HttpServlet {
+
+>>>>>>> 885d1dc3eb3e72562596d19da0526cbdf10e4f62
 	private static final long serialVersionUID = 1L;
        
     /**

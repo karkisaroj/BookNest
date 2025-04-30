@@ -24,6 +24,7 @@ public class LoginController extends HttpServlet {
 	private final String alphanumericmessage = "User Name should start from alphabet and can contain only letters and numbers";
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	private final String passwordvaliditymessage = "Password should contain alleast a capital letter, a number and a symbol";
 	
 //private final String passwordvaliditymessage = "Password should contain alleast a capital letter, a number and a symbol";
@@ -37,6 +38,14 @@ public class LoginController extends HttpServlet {
 //private final String passwordvaliditymessage = "Password should contain minimum a capital letter, a number and a symbol";
 >>>>>>> 8d4643d10df7e36983fb3d8b7f94064895fc0102
 
+=======
+
+	private final String passwordvaliditymessage = "Password should contain alleast a capital letter, a number and a symbol";
+	
+
+
+
+>>>>>>> 885d1dc3eb3e72562596d19da0526cbdf10e4f62
 	private final String loginFailedMessage = "Invalid credentials. Please try again.";
 	private final String connectionErrorMessage = "Connection error. Please try again later.";
 
