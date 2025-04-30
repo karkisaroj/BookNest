@@ -19,7 +19,7 @@ import jakarta.servlet.http.Part;
 	    maxFileSize = 1024 * 1024 * 10,      // 10MB
 	    maxRequestSize = 1024 * 1024 * 50 )   // 50MB
 
-public class MyAccountController extends HttpServlet {
+public class MyaccountController extends HttpServlet {
     /**
 	 * 
 	 */
