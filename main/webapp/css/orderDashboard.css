@@ -1,142 +1,100 @@
-@charset "UTF-8";
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
+		/* Styling for the Orders page */
+		.main-content {
+			padding: 20px;
+		}
 
-body {
-    background-color: #f5f5f5;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
+		.header {
+			margin-bottom: 20px; /* Reduced space below the header */
+			padding-bottom: 10px;
+			border-bottom: 3px solid #3498db;
+		}
 
-.admin-dashboard-container {
-    display: flex;
-    flex: 1;
-    /* This makes the container take all available space */
-}
+		.header h1 {
+			color: #2c3e50;
+			font-size: 28px;
+		}
 
-.sidebar {
-    width: 250px;
-    background-color: #2c3e50;
-    color: white;
-    padding: 20px 0;
-}
+		.orders-table-container {
+			background: white;
+			padding: 20px;
+			border-radius: 5px;
+			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+			margin: 30px auto 270px; /* Added triple space below the table */
+		}
 
-.sidebar-menu {
-    list-style: none;
-}
+		.orders-table-container h2 {
+			margin-bottom: 20px;
+			color: #2c3e50;
+		}
 
-.sidebar-menu li {
-    padding: 15px 30px;
-    cursor: pointer;
-}
+		table {
+			width: 100%;
+			border-collapse: collapse;
+		}
 
-.sidebar-menu li:hover {
-    background-color: #34495e;
-}
+		th {
+			background-color: #ecf0f1;
+			padding: 10px;
+			text-align: left;
+			border-bottom: 2px solid #dcdcdc;
+		}
 
-.sidebar-menu li.active {
-    border-left: 4px solid #3498db;
-    background-color: #34495e;
-}
+		td {
+			padding: 10px;
+			border-bottom: 1px solid #ecf0f1;
+		}
 
-.main-content {
-    flex: 1;
-    padding: 20px;
-    background-color: #f5f5f5;
-}
+		.status-btn {
+			background-color: #3498db;
+			color: white;
+			border: none;
+			padding: 5px 12px;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: background-color 0.2s ease;
+		}
 
-.header {
-    margin-bottom: 30px;
-    padding-bottom: 10px;
-    border-bottom: 3px solid #3498db;
-}
+		.status-btn:hover {
+			background-color: #2980b9;
+		}
 
-.header h1 {
-    color: #2c3e50;
-    font-size: 28px;
-}
+		.checkbox-column {
+			width: 30px;
+		}
 
-.customers-table-container {
-    background: white;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-}
+		.id-column {
+			width: 50px;
+		}
 
-.customers-table-container h2 {
-    margin-bottom: 20px;
-    color: #2c3e50;
-}
+		.message-container {
+			margin: 20px auto; /* Consistent spacing for messages */
+			padding: 10px;
+			width: 80%;
+			text-align: center;
+			border-radius: 5px;
+			font-size: 16px;
+			font-weight: bold;
+		}
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
+		.success-message {
+			background-color: #d4edda;
+			color: #155724;
+			border: 1px solid #c3e6cb;
+		}
 
-th {
-    background-color: #ecf0f1;
-    padding: 10px;
-    text-align: left;
-}
+		.error-message {
+			background-color: #f8d7da;
+			color: #721c24;
+			border: 1px solid #f5c6cb;
+		}
 
-td {
-    padding: 10px;
-    border-bottom: 1px solid #ecf0f1;
-}
+		/* Styling for status colors */
+		.status-in-progress {
+			color: orange;
+			font-weight: bold;
+		}
 
-.delete-btn {
-    background-color: #ff4c4c;
-    color: white;
-    border: none;
-    padding: 5px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.checkbox-column {
-    width: 30px;
-}
-
-.id-column {
-    width: 50px;
-}
-
-.email-column {
-    width: 250px;
-}
-
-.links-container {
-    margin-bottom: 20px;
-}
-
-.links-container h3 {
-    margin-bottom: 10px;
-    color: #2c3e50;
-}
-
-.links-container ul {
-    list-style: none;
-    display: flex;
-    gap: 15px;
-}
-
-.links-container ul li {
-    margin-bottom: 5px;
-}
-
-.links-container ul li a {
-    text-decoration: none;
-    color: #2c3e50;
-}
-
-.links-container ul li a.active {
-    color: #3498db;
-    font-weight: bold;
-}
-        
+		.status-completed {
+			color: green;
+			font-weight: bold;
+		}
