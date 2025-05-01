@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
+    
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,9 +28,9 @@
                 <ul class="utils-lists flex">
                     <li><a href="#"><img class="head-img" src="${pageContext.request.contextPath}/resources/images/system/search.png" alt="search button"></a></li>
                     <li><a href="${pageContext.request.contextPath}/cart"><img class="head-img" src="${pageContext.request.contextPath}/resources/images/system/cart.png" alt="cart button"></a></li>
-                    
+
                     <li><a href="${pageContext.request.contextPath}/myaccount"><img class="head-img" src="${pageContext.request.contextPath}/resources/images/system/person.png" alt="myaccount button" height="25px"></a></li>
-                    
+
                 </ul>
             </div>
         </div>

@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 
-@WebServlet("/myaccount")
+@WebServlet(asyncSupported = true, urlPatterns = { "/myaccount" })
 @MultipartConfig(
 	    fileSizeThreshold = 1024 * 1024 * 2, // 2MB
 	    maxFileSize = 1024 * 1024 * 10,      // 10MB

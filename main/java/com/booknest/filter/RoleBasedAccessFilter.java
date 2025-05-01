@@ -17,6 +17,7 @@ import java.io.IOException;
  * Role-based access filter to restrict Admins and Users from accessing
  * unauthorized pages.
  */
+
 @WebFilter(urlPatterns = { "/home", "/admindashboard", "/login", "/productpage" })
 public class RoleBasedAccessFilter implements Filter {
 
@@ -69,4 +70,5 @@ public class RoleBasedAccessFilter implements Filter {
 	public void destroy() {
 
 	}
+	
 }
