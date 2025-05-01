@@ -26,7 +26,7 @@ public class LoginController extends HttpServlet {
 
 
 
-	private final String passwordvaliditymessage = "Password should contain alleast a capital letter, a number and a symbol";
+//	private final String passwordvaliditymessage = "Password should contain alleast a capital letter, a number and a symbol";
 
 
 //private final String passwordvaliditymessage = "Password should contain minimum a capital letter, a number and a symbol";
