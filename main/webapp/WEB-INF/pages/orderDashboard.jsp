@@ -40,7 +40,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            
+                            <td><input type="checkbox"></td>
                             <td>Roshan Karki</td>
                             <td>01</td>
                             <td>Lalitpur</td>
