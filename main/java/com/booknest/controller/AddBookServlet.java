@@ -1,6 +1,6 @@
 package com.booknest.controller;
 
-import com.booknest.model.BookModel;
+import com.booknest.model.BookCartModel;
 import com.booknest.service.BookService;
 import com.booknest.service.BookServiceImpl;
 
@@ -84,7 +84,7 @@ public class AddBookServlet extends HttpServlet {
 			return;
 		}
 
-		BookModel newBook = new BookModel();
+		BookCartModel newBook = new BookCartModel();
 		try {
 			// 3. Type Conversion and Population
 			newBook.setBook_title(title.trim());

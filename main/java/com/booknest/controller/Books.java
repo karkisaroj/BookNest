@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-import com.booknest.model.BookModel;
+import com.booknest.model.BookCartModel;
 import com.booknest.service.BookService;
 import com.booknest.service.BookServiceImpl;
 
@@ -31,7 +31,7 @@ public class Books extends HttpServlet {
 
 		try {
 			// Add debug print to see what's happening
-			List<BookModel> books = bookService.getAllBooks();
+			List<BookCartModel> books = bookService.getAllBooks();
 			System.out.println("Books Controller - Books fetched: " + (books != null ? books.size() : "null"));
 
 			// Set the books attribute for the JSP

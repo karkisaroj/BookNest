@@ -8,7 +8,7 @@ public class CartItem {
 	private int bookId; // Foreign key to BookModel
 	private int quantity;
 	private Timestamp updatedAt;
-	private BookModel bookModel; // Holds associated Book details
+	private BookCartModel bookModel; // Holds associated Book details
 
 	public CartItem() {
 	}
@@ -54,11 +54,11 @@ public class CartItem {
 		this.updatedAt = updatedAt;
 	}
 
-	public BookModel getBookModel() {
+	public BookCartModel getBookModel() {
 		return bookModel;
 	}
 
-	public void setBookModel(BookModel bookModel) {
+	public void setBookModel(BookCartModel bookModel) {
 		this.bookModel = bookModel;
 	}
 	// --- End Getters and Setters ---

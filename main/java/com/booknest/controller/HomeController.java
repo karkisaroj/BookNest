@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import com.booknest.model.BookModel;
+import com.booknest.model.BookCartModel;
 import com.booknest.service.BookService;
 import com.booknest.service.BookServiceImpl;
 
@@ -30,8 +30,8 @@ public class HomeController extends HttpServlet {
 			throws ServletException, IOException {
 		System.out.println("HomeController doGet called.");
 
-		List<BookModel> booksForBookSection = Collections.emptyList();
-		List<BookModel> booksForPopularSection = Collections.emptyList();
+		List<BookCartModel> booksForBookSection = Collections.emptyList();
+		List<BookCartModel> booksForPopularSection = Collections.emptyList();
 		boolean errorOccurred = false;
 		String errorMessage = null;
 
@@ -50,7 +50,7 @@ public class HomeController extends HttpServlet {
 
 		// 2. Fetch Popular Books (most added to cart)
 		try {
-			List<BookModel> popularResult = bookService.getTopAddedToCartBooks(4);
+			List<BookCartModel> popularResult = bookService.getTopAddedToCartBooks(4);
 			System.out.println("HomeController: Fetched " + popularResult.size() + " popular books initially.");
 
 			// 3. Implement Fallback Logic for "Popular" section

@@ -4,7 +4,7 @@ package com.booknest.service;
 import java.sql.*;
 import java.util.*;
 import com.booknest.config.DbConfiguration;
-import com.booknest.model.BookModel;
+import com.booknest.model.BookCartModel;
 import com.booknest.model.CartItem;
 
 public class CartServiceImpl implements CartService {
@@ -26,7 +26,7 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public CartItem addItemToCart(int uId, int bId, int q) throws CartServiceException {
 		try {
-			BookModel book;
+			BookCartModel book;
 			try {
 				// Ensure getBookById fetches necessary details if not already done
 				book = bookService.getBookById(bId);
@@ -136,7 +136,7 @@ public class CartServiceImpl implements CartService {
 				cartItem.setUpdatedAt(rs.getTimestamp("updated_at"));
 				cartItem.setBookId(rs.getInt("bookID")); // Set bookId on CartItem as well
 
-				BookModel book = new BookModel();
+				BookCartModel book = new BookCartModel();
 				book.setBookID(rs.getInt("bookID"));
 				book.setBook_title(rs.getString("book_title")); // Ensure BookModel has setBook_title
 				book.setPrice(rs.getBigDecimal("price")); // Ensure BookModel has setPrice

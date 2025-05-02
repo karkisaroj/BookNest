@@ -3,7 +3,7 @@ package com.booknest.model;
 import java.math.BigDecimal;
 import java.util.Date; // If using Date for publication_date
 
-public class BookModel {
+public class BookCartModel {
 	private int bookID; // Or long if needed
 	private String book_title;
 	private String isbn;
@@ -15,8 +15,7 @@ public class BookModel {
 	private int publisherID; // Or a PublisherModel object
 	private String authorName; // Added field for author names
 
-	// Constructors (default and potentially parameterized)
-	public BookModel() {
+	public BookCartModel() {
 	}
 
 	// Getters and Setters for all fields...
