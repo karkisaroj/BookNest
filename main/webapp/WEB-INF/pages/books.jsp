@@ -11,7 +11,7 @@
 <body>
 	<jsp:include page="header.jsp" />
     <section class="sec-2">
-        <div class="container">
+        <div class="container1">
             <h3 class="topic">Books available in BookNest</h3>
             <div class="divider"></div>
             <div class="cards"> <!--Products-->
@@ -67,7 +67,7 @@
         </div>
     </section>
     <section class="sec-2">
-        <div class="container">
+        <div class="container1">
             <div class="cards"> <!--Products-->
                 <div class="card"> <!--product-->
                     <div class="card-img"> <!--image-->
@@ -121,7 +121,7 @@
         </div>
     </section>
     <section class="sec-2">
-        <div class="container">
+        <div class="container1">
             <div class="cards"> <!--Products-->
                 <div class="card"> <!--product-->
                     <div class="card-img"> <!--image-->
@@ -175,7 +175,7 @@
         </div>
     </section>
     <section class="sec-2">
-        <div class="container">
+        <div class="container1">
             <div class="cards"> <!--Products-->
                 <div class="card"> <!--product-->
                     <div class="card-img"> <!--image-->
