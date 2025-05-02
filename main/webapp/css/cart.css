@@ -121,11 +121,30 @@ body {
 }
 
 
-/* Responsive Design */
-@media (max-width: 768px) {
+/* Message styles */
+#message-container {
+    margin-bottom: 15px;
+}
 
-    .book-item {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+.success-message {
+    padding: 10px;
+    background-color: #d4edda;
+    color: #155724;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.error-message {
+    padding: 10px;
+    background-color: #f8d7da;
+    color: #721c24;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.empty-cart {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-style: italic;
 }

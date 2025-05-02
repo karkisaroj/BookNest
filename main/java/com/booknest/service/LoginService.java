@@ -20,14 +20,12 @@ public class LoginService {
      */
     public LoginService() {
         try {
-        	
-        	dbConn = DbConfiguration.getDbConnection();
-            
-        } catch (SQLException | ClassNotFoundException ex) {
-            ex.printStackTrace();
+            dbConn = DbConfiguration.getDbConnection();
+        } catch (SQLException | ClassNotFoundException ex) { 
+            System.err.println("FATAL: Database connection failed in LoginService constructor: " + ex.getMessage());
+            ex.printStackTrace(); 
             isConnectionError = true;
         }
-        
     }
 
  
@@ -76,7 +74,7 @@ public class LoginService {
             return null;
         }
 
-        String query = "SELECT u.first_name, u.last_name, u.user_name, u.password, u.email, u.phone_number, " +
+        String query = "SELECT u.userID,u.first_name, u.last_name, u.user_name, u.password, u.email, u.phone_number, " +
                        "u.address, u.user_img_url, u.roleID, r.user_role " +
                        "FROM user u " +
                        "JOIN role r ON u.roleID = r.roleID " +
@@ -96,6 +94,7 @@ public class LoginService {
                         result.getString("address")
                     );
 
+                    userModel.setId(result.getInt("userID"));
                     
                     userModel.setRoleId(result.getInt("roleID"));
                     
