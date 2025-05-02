@@ -11,9 +11,9 @@
         <div class="sidebar">
             <ul class="sidebar-menu">
                 <li><a href="${pageContext.request.contextPath}/admindashboard">Dashboard</a></li>
-                <li><a href="${pageContext.request.contextPath}/customer">Customers</a></li>
-                <li><a href="${pageContext.request.contextPath}/admindashboard">Products</a></li>
-                <li><a href="${pageContext.request.contextPath}/orderdashboard">Orders</a></li>
+                <li><a href="${pageContext.request.contextPath}/admincustomer">Customers</a></li>
+                <li><a href="${pageContext.request.contextPath}/adminproduct">Products</a></li>
+                <li><a href="${pageContext.request.contextPath}/adminorder">Orders</a></li>
             </ul>
         </div>
 </body>

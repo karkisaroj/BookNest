@@ -116,5 +116,5 @@
 
 	<jsp:include page="footer.jsp" />
 </body>
-<jsp:include page="footer.jsp" />
+
 </html>

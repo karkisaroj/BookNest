@@ -96,6 +96,8 @@ public class imageUtil {
 	}
 
 	public String getSavePath(String saveFolder) {
-		return "C:\\Users\\noble\\NewWorkSpaceCoursework\\BookNest\\src\\main\\webapp\\resources\\images\\system\\profile" + saveFolder + "/";
+		return "C:\\\\Users\\\\noble\\\\NewWorkSpaceCoursework\\\\BookNest\\\\src\\\\main\\\\webapp\\\\resources\\" + saveFolder + "/";
+		
 	}
+	
 }

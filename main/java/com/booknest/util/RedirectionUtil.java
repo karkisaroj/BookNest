@@ -22,4 +22,5 @@ public class RedirectionUtil {
 		setMsgAttribute(req, msgType, msg);
 		redirectToPage(req, resp, page);
 	}
+
 }
