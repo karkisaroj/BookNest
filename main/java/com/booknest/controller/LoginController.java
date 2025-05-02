@@ -26,10 +26,12 @@ public class LoginController extends HttpServlet {
 
 
 
+
 //	private final String passwordvaliditymessage = "Password should contain alleast a capital letter, a number and a symbol";
 
 
 //private final String passwordvaliditymessage = "Password should contain minimum a capital letter, a number and a symbol";
+
 
 	private final String loginFailedMessage = "Invalid credentials. Please try again.";
 	private final String connectionErrorMessage = "Connection error. Please try again later.";
@@ -91,6 +93,7 @@ public class LoginController extends HttpServlet {
 
 			if (userInfo != null) {
 				// Adding user details to the session created 
+				SessionUtil.setAttribute(req, "userID", userInfo.getId());
 				SessionUtil.setAttribute(req, "firstName", userInfo.getFirst_name());
 				SessionUtil.setAttribute(req, "lastName", userInfo.getLast_name());
 				SessionUtil.setAttribute(req, "userName", userInfo.getUser_name());

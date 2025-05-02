@@ -13,7 +13,7 @@ public class DbConfiguration {
 	// Database configuration information
 		private static final String DB_NAME = "booknest";
 		private static final String URL = "jdbc:mysql://localhost:3306/" + DB_NAME;
-		private static final String USERNAME = "root";
+		private static final String USERNAME = "root";	
 		private static final String PASSWORD = "";
 
 		/**
