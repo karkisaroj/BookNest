@@ -54,7 +54,7 @@ public class RegistrationSerivce {
 			String hashedPassword = passwordUtil.hashPassword(userModel.getPassword());
 			if (hashedPassword == null) {
 				throw new Exception("Password hashing failed.");
-
+					
 			}
 
 			insertStmt.setString(1, userModel.getFirst_name());

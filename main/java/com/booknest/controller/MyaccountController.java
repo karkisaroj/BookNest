@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 // No longer need direct HttpSession import
 import jakarta.servlet.http.Part;
 
+
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -28,6 +29,26 @@ public class MyaccountController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+@WebServlet(asyncSupported = true, urlPatterns = { "/myaccount" })
+@MultipartConfig(
+	    fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+	    maxFileSize = 1024 * 1024 * 10,      // 10MB
+	    maxRequestSize = 1024 * 1024 * 50 )   // 50MB
+
+public class MyaccountController extends HttpServlet {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Retrieve user information (e.g., username) from the session
+        String userName = (String) request.getSession().getAttribute("userName");
+        
+
 
         if (!SessionUtil.isLoggedIn(request, USERNAME_SESSION_KEY)) {
             response.sendRedirect(request.getContextPath() + "/login");
@@ -82,6 +103,7 @@ public class MyaccountController extends HttpServlet {
 
         try {
             Part filePart = request.getPart("image");
+
             userService.validateProfileImage(filePart);
             String relativeDbPath = userService.saveProfileImage(filePart);
             System.out.println(">>> MyaccountController saved image to relative path: " + relativeDbPath);
@@ -91,6 +113,43 @@ public class MyaccountController extends HttpServlet {
                 successFlashMessage = "Profile picture updated successfully!"; // Prepare flash message
             } else {
                 errorMessage = "Failed to update profile picture information in the database.";
+
+            
+            if (filePart.getSize() > 3 * 1024 * 1024) { // 3 MB size limit
+                request.setAttribute("errorMessage", "File size exceeds the maximum allowed size of 3 MB.");
+                request.getRequestDispatcher("/WEB-INF/pages/myaccount.jsp").forward(request, response);
+                return;
+            }
+
+            // Save the file using imageUtil
+            imageUtil util = new imageUtil();
+            String saveFolder = "/profile";
+            boolean uploaded = util.uploadImage(filePart, "", saveFolder);
+
+            if (uploaded) {
+                String imageName = util.getImageNameFromPart(filePart);
+     
+                String relativePath = "resources/images/system/profile/" + imageName;
+
+                // Update the database with the new image URL
+                Connection conn = null;
+                PreparedStatement ps = null;
+                try {
+                    conn = DbConfiguration.getDbConnection();
+                    String sql = "UPDATE user SET user_img_url = ? WHERE user_name = ?";
+                    ps = conn.prepareStatement(sql);
+                    ps.setString(1, relativePath);
+                    ps.setString(2, userName);
+                    ps.executeUpdate();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (ps != null) ps.close();
+                        if (conn != null) conn.close();
+                    } catch (Exception ignore) {}
+                }
+
             }
         } catch (IllegalArgumentException e) {
              System.err.println("User: " + userName + " - Invalid image upload: " + e.getMessage());

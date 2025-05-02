@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -12,13 +13,22 @@
 </head>
 <body>
 	<jsp:include page="header.jsp" />
+
 	<%
 	// Retrieve user information from session
 	// Integer userId = (Integer) session.getAttribute("userID"); // Better to check userID
+
+<%
+
+
 	String username = (String) session.getAttribute("userName");
 
 	// Checking if user is logged in
+
 	if (username == null) { // Or check if userId == null
+
+	if (username == null) {
+
 		// If not logged in, redirecting to login page
 		response.sendRedirect(request.getContextPath() + "/login");
 		return; // Important to stop further processing
