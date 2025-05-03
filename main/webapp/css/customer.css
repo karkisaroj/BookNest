@@ -4,11 +4,13 @@
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
-	font-family: Arial, sans-serif;
+	font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
 }
 
 body {
 	background-color: #f5f5f5;
+	color: #333;
+	line-height: 1.6;
 }
 
 .admin-dashboard-container {
@@ -18,55 +20,108 @@ body {
 
 .main-content {
 	flex: 1;
-	padding: 20px;
+	padding: 30px;
 }
 
+/* Enhanced Header Styling */
 .header {
-	margin-bottom: 30px;
-	padding-bottom: 10px;
-	border-bottom: 3px solid #3498db;
+	margin-bottom: 40px;
+	position: relative;
 }
 
 .header h1 {
-	color: #2c3e50;
-	font-size: 28px;
+	color: #183B4E;
+	font-size: 2.2rem;
+	margin-bottom: 15px;
+	font-weight: 600;
+	display: inline-block;
+}
+
+/* Enhanced underline with gradient */
+.header::after {
+	content: "";
+	display: block;
+	width: 100%;
+	height: 3px;
+	background: linear-gradient(90deg, #183B4E 0%, rgba(52, 152, 219, 0.5)
+		100%);
+	border-radius: 2px;
+	margin-top: 10px;
 }
 
 .customers-table-container {
 	background: white;
-	padding: 20px;
-	border-radius: 5px;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	padding: 25px;
+	border-radius: 8px;
+	box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
 }
 
 .customers-table-container h2 {
-	margin-bottom: 20px;
-	color: #2c3e50;
+	margin-bottom: 25px;
+	color: #183B4E;
+	font-size: 1.6rem;
+	position: relative;
+	display: inline-block;
+	padding-bottom: 10px;
 }
 
+/* Add underline to the Customer List heading */
+.customers-table-container h2::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 60px;
+	height: 3px;
+	background-color: #183B4E;
+	border-radius: 2px;
+}
+
+/* Enhanced Table Styling */
 table {
 	width: 100%;
 	border-collapse: collapse;
+	margin-top: 15px;
+	border-radius: 5px;
+	overflow: hidden;
 }
 
 th {
-	background-color: #ecf0f1;
-	padding: 10px;
+	background-color: #183B4E;
+	padding: 12px 15px;
 	text-align: left;
+	color: #ffffff;
+	font-weight: 500;
 }
 
 td {
-	padding: 10px;
+	padding: 12px 15px;
 	border-bottom: 1px solid #ecf0f1;
+	color: #333;
+}
+
+tr:nth-child(even) {
+	background-color: #f9f9f9;
+}
+
+tr:hover {
+	background-color: #f0f7fc;
 }
 
 .edit-btn {
 	background-color: #c44d4d;
 	color: white;
 	border: none;
-	padding: 5px 10px;
-	border-radius: 3px;
+	padding: 8px 15px;
+	border-radius: 50px;
 	cursor: pointer;
+	transition: background-color 0.3s, transform 0.2s;
+	font-weight: 500;
+}
+
+.edit-btn:hover {
+	background-color: #b53535;
+	transform: translateY(-2px);
 }
 
 .checkbox-column {
@@ -82,52 +137,103 @@ td {
 }
 
 .links-container {
-	margin-bottom: 20px;
+	margin-bottom: 25px;
+	background-color: #fff;
+	padding: 15px 20px;
+	border-radius: 8px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .links-container h3 {
-	margin-bottom: 10px;
-	color: #2c3e50;
+	margin-bottom: 12px;
+	color: #183B4E;
 }
 
 .links-container ul {
 	list-style: none;
 	display: flex;
-	gap: 15px;
+	gap: 20px;
 }
 
 .links-container ul li {
-	margin-bottom: 5px;
+	margin-bottom: 0;
 }
 
 .links-container ul li a {
 	text-decoration: none;
-	color: #2c3e50;
+	color: #333;
+	transition: color 0.3s;
+	font-weight: 500;
+}
+
+.links-container ul li a:hover {
+	color: #3498db;
 }
 
 .links-container ul li a.active {
-	color: #3498db;
-	font-weight: bold;
+	color: #183B4E;
+	font-weight: 600;
+	position: relative;
 }
-/* Styling for Messages */
+
+.links-container ul li a.active::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: -5px;
+	width: 100%;
+	height: 2px;
+	background-color: #183B4E;
+}
+
+/* Improved Message Styling */
 .message-container {
-	margin: 20px auto;
-	padding: 10px;
-	width: 80%;
-	text-align: center;
-	border-radius: 5px;
-	font-size: 16px;
-	font-weight: bold;
+	margin: 0 0 25px 0;
+	padding: 0;
+	width: 100%;
 }
 
 .success-message {
 	background-color: #d4edda;
 	color: #155724;
 	border: 1px solid #c3e6cb;
+	padding: 12px 15px;
+	border-radius: 5px;
+	font-size: 15px;
+	font-weight: 500;
+	text-align: center;
 }
 
 .error-message {
 	background-color: #f8d7da;
 	color: #721c24;
 	border: 1px solid #f5c6cb;
+	padding: 12px 15px;
+	border-radius: 5px;
+	font-size: 15px;
+	font-weight: 500;
+	text-align: center;
+}
+
+/* Responsive adjustments */
+@media ( max-width : 992px) {
+	.admin-dashboard-container {
+		flex-direction: column;
+	}
+	table {
+		display: block;
+		overflow-x: auto;
+	}
+}
+
+@media ( max-width : 576px) {
+	.main-content {
+		padding: 15px;
+	}
+	.header h1 {
+		font-size: 1.8rem;
+	}
+	.links-container ul {
+		flex-wrap: wrap;
+	}
 }

@@ -340,6 +340,9 @@ body {
 /* ==========================================================================
    Why Choose Us Section
    ========================================================================== */
+/* ==========================================================================
+   Why Choose Us Section
+   ========================================================================== */
 .sec-4 {
 	padding: 5rem 0;
 	background-color: white;
@@ -352,6 +355,7 @@ body {
 	text-align: center;
 	margin-bottom: 3rem;
 	position: relative;
+	color: #183B4E; /* Explicit color declaration for the heading */
 }
 
 .choose-us::after {
@@ -390,7 +394,7 @@ body {
 .abt-head {
 	font-size: 1.2rem;
 	margin-bottom: 1rem;
-	color: #183B4E;
+	color: #183B4E; /* Explicit color declaration for feature headings */
 	display: flex;
 	align-items: center;
 	gap: 0.5rem;
@@ -410,7 +414,7 @@ body {
 }
 
 .abt-fit p {
-	color: var(--gray);
+	color: #333333; 
 	line-height: 1.6;
 }
 
@@ -422,58 +426,6 @@ body {
 	opacity: 0.1;
 	z-index: 1;
 }
-
-
-
-keyframes fadeIn {from { opacity:0;
-	transform: translateY(20px);
-}
-
-to {
-	opacity: 1;
-	transform: translateY(0);
-}
-
-}
-
-
-@media ( max-width : 1024px) {
-	.cards {
-		grid-template-columns: repeat(3, 1fr);
-	}
-}
-
-@media ( max-width : 768px) {
-	.container {
-		padding: 0 1rem;
-	}
-
-	/* Hero section */
-	.sec-1 .container.flex {
-		flex-direction: column;
-	}
-	.sec-right {
-		text-align: center;
-		padding-right: 0;
-	}
-	.sec-right p {
-		max-width: 100%;
-	}
-	.sec-left {
-		height: 400px;
-		width: 100%;
-		margin-top: 2rem;
-	}
-
-	/* Cards */
-	.cards {
-		grid-template-columns: repeat(2, 1fr);
-	}
-	.flex-abt {
-		grid-template-columns: 1fr;
-	}
-}
-
 @media ( max-width : 576px) {
 	.sec-right h2 {
 		font-size: 2.5rem;
