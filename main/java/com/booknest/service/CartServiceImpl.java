@@ -1,6 +1,5 @@
 package com.booknest.service;
 
-
 import java.sql.*;
 import java.util.*;
 import com.booknest.config.DbConfiguration;
@@ -20,8 +19,6 @@ public class CartServiceImpl implements CartService {
 	public CartServiceImpl(BookService bookService) {
 		this.bookService = bookService;
 	}
-
-
 
 	@Override
 	public CartItem addItemToCart(int uId, int bId, int q) throws CartServiceException {
@@ -56,7 +53,7 @@ public class CartServiceImpl implements CartService {
 					result.setQuantity(q);
 				}
 			}
-			result.setBookModel(book); 
+			result.setBookModel(book);
 			return result;
 		} catch (SQLException e) {
 			System.err.println("SQL Error in addItemToCart: " + e.getMessage());
@@ -116,8 +113,7 @@ public class CartServiceImpl implements CartService {
 				"FROM cart_item ci " + "JOIN book b ON ci.bookID = b.bookID "
 				+ "LEFT JOIN book_author ba ON b.bookID = ba.bookID " + // LEFT JOIN in case a book has no author linked
 				"LEFT JOIN author a ON ba.authorID = a.authorID " + // LEFT JOIN for the same reason
-				"WHERE ci.userID = ? " + "GROUP BY ci.cart_itemID, b.bookID " + 
-				"ORDER BY ci.updated_at DESC"; 
+				"WHERE ci.userID = ? " + "GROUP BY ci.cart_itemID, b.bookID " + "ORDER BY ci.updated_at DESC";
 
 		Connection conn = null;
 		PreparedStatement ps = null;

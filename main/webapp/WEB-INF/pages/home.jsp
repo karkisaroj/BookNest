@@ -2,10 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
-<%-- Make sure your HomeController sets 'randomBooks' and 'popularBooks' attributes --%>
-<%-- Also ensure your login process sets 'loggedInUser' in the session --%>
-<%-- Ensure your CartServlet exists and handles POST requests to /cart --%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -56,54 +54,55 @@
 	<section class="sec-2">
 		<div class="container">
 			<h3 class="topic">Books</h3>
-			<%-- Title changed from "Featured Books" --%>
 			<div class="divider"></div>
 			<span class="see_more"><a
 				href="${pageContext.request.contextPath}/books">See More</a></span>
 			<div class="cards">
 				<c:choose>
-					<%-- Check if the randomBooks list is not empty --%>
 					<c:when test="${not empty randomBooks}">
-						<%-- Loop through each book in the randomBooks list --%>
 						<c:forEach var="book" items="${randomBooks}">
 							<div class="card">
 								<div class="card-img">
-									<%-- Link to a potential product page (adjust URL as needed) --%>
 									<a
 										href="${pageContext.request.contextPath}/product?id=${book.bookID}">
 										<c:choose>
 											<c:when test="${not empty book.book_img_url}">
-												<%-- Use context path for image source --%>
-												<img
-													src="${pageContext.request.contextPath}${book.book_img_url}"
-													alt="<c:out value='${book.book_title}'/>">
+												<c:choose>
+													<c:when
+														test="${book.book_img_url.startsWith('resources/')}">
+														<img
+															src="${pageContext.request.contextPath}/${book.book_img_url}"
+															alt="<c:out value='${book.book_title}'/>" />
+													</c:when>
+													<c:otherwise>
+														<img
+															src="${pageContext.request.contextPath}${book.book_img_url}"
+															alt="<c:out value='${book.book_title}'/>" />
+													</c:otherwise>
+												</c:choose>
 											</c:when>
 											<c:otherwise>
-												<%-- Placeholder image if book_img_url is empty --%>
+												<!-- STANDARDIZED: Same placeholder for all sections -->
 												<img
 													src="${pageContext.request.contextPath}/resources/images/system/placeholder.png"
-													alt="No image available">
+													alt="No image available" />
 											</c:otherwise>
 										</c:choose>
 									</a>
 								</div>
-								<%-- Display Book Title --%>
 								<h3>
 									<c:out value="${book.book_title}" />
 								</h3>
 								<div class="price-name">
-									<%-- Display Formatted Price --%>
 									<span><fmt:formatNumber value="${book.price}"
 											type="currency" currencySymbol="Rs. " /></span>
 								</div>
 								<div class="cart">
-									<%-- Form submits to CartServlet --%>
 									<form action="<c:url value='/cart'/>" method="POST"
 										style="display: inline;">
 										<input type="hidden" name="action" value="add"> <input
-											type="hidden" name="bookId" value="${book.bookID}">
-										<%-- Redirect back to the current page (home) after adding --%>
-										<input type="hidden" name="sourceUrl"
+											type="hidden" name="bookId" value="${book.bookID}"> <input
+											type="hidden" name="sourceUrl"
 											value="${pageContext.request.requestURI}">
 										<button type="submit">Add To Cart</button>
 									</form>
@@ -112,18 +111,15 @@
 						</c:forEach>
 					</c:when>
 					<c:otherwise>
-						<%-- Message shown only if list is empty AND no general loading error occurred --%>
 						<c:if test="${empty homeErrorMessage}">
 							<p style="width: 100%; text-align: center;">No books
 								available right now.</p>
 						</c:if>
 					</c:otherwise>
 				</c:choose>
-				<%-- General loading error message already handled above flash messages --%>
 			</div>
 		</div>
 	</section>
-
 	<%-- Section 3 - Popular (Uses popularBooks from HomeController) --%>
 	<section class="sec-3">
 		<div class="container">
@@ -141,14 +137,24 @@
 										href="${pageContext.request.contextPath}/product?id=${book.bookID}">
 										<c:choose>
 											<c:when test="${not empty book.book_img_url}">
-												<img
-													src="${pageContext.request.contextPath}${book.book_img_url}"
-													alt="<c:out value='${book.book_title}'/>">
+												<c:choose>
+													<c:when
+														test="${book.book_img_url.startsWith('resources/')}">
+														<img
+															src="${pageContext.request.contextPath}/${book.book_img_url}"
+															alt="<c:out value='${book.book_title}'/>" />
+													</c:when>
+													<c:otherwise>
+														<img
+															src="${pageContext.request.contextPath}${book.book_img_url}"
+															alt="<c:out value='${book.book_title}'/>" />
+													</c:otherwise>
+												</c:choose>
 											</c:when>
 											<c:otherwise>
 												<img
 													src="${pageContext.request.contextPath}/resources/images/system/placeholder.png"
-													alt="No image available">
+													alt="No image available" />
 											</c:otherwise>
 										</c:choose>
 									</a>
@@ -161,16 +167,12 @@
 											type="currency" currencySymbol="Rs. " /></span>
 								</div>
 								<div class="cart">
-									<%-- Form submits to CartServlet --%>
 									<form action="<c:url value='/cart'/>" method="POST"
 										style="display: inline;">
-										<%-- **** ENSURE THIS LINE IS PRESENT AND CORRECT **** --%>
-										<input type="hidden" name="action" value="add">
-										<%-- **** ---------------------------------------- **** --%>
-										<input type="hidden" name="bookId" value="${book.bookID}">
-										<input type="hidden" name="sourceUrl"
+										<input type="hidden" name="action" value="add"> <input
+											type="hidden" name="bookId" value="${book.bookID}"> <input
+											type="hidden" name="sourceUrl"
 											value="${pageContext.request.contextPath}/home">
-										<%-- Use mapped URL --%>
 										<button type="submit">Add To Cart</button>
 									</form>
 								</div>
@@ -184,7 +186,6 @@
 						</c:if>
 					</c:otherwise>
 				</c:choose>
-				<%-- Error message already shown above if needed --%>
 			</div>
 		</div>
 	</section>
@@ -228,6 +229,7 @@
 	<script>
         // Your existing JavaScript for animations
         document.addEventListener('DOMContentLoaded', function() {
+          const heroImages = document.querySelectorAll('.sec-left img');
           heroImages.forEach((img, index) => {
             img.style.animation = `float ${3 + index * 0.5}s ease-in-out infinite`;
             img.style.animationDelay = `${index * 0.2}s`;
