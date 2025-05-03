@@ -99,9 +99,10 @@ public class LoginController extends HttpServlet {
 				System.out.println(userInfo.getRoleName());
 			}
 			if ("Admin".equals(userInfo.getRoleName())) {
-				resp.sendRedirect(req.getContextPath() + "/admindashboard");
+
+				resp.sendRedirect(req.getContextPath()+"/admindashboard");
 			} else {
-				resp.sendRedirect(req.getContextPath() + "/home");
+				resp.sendRedirect(req.getContextPath()+"/home");
 			}
 
 		} else {

@@ -99,7 +99,37 @@
 	padding: 15px;
 }
 
+/* Styled heading like "Why Choose Us" */
 h1 {
+	font-size: 2.2rem;
 	text-align: center;
-	margin-bottom: 30px;
+	margin-bottom: 3rem;
+	position: relative;
+	color: #183B4E; /* Match the blue color used in the header */
+}
+
+h1::after {
+	content: "";
+	position: absolute;
+	bottom: -0.8rem;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 80px;
+	height: 3px;
+	background-color: #183B4E;
+}
+
+/* Add this to handle any other text that might be white on white */
+body {
+	color: #333; /* Default text color for the page */
+}
+
+p {
+	color: #333; /* Ensure paragraphs are visible */
+}
+
+/* Make sure the "No books available" message is visible */
+.book-list p {
+	color: #333;
+	font-size: 1.1em;
 }
