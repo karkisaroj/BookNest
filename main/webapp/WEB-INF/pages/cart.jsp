@@ -1,4 +1,3 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -13,22 +12,12 @@
 </head>
 <body>
 	<jsp:include page="header.jsp" />
-
 	<%
 	// Retrieve user information from session
-	// Integer userId = (Integer) session.getAttribute("userID"); // Better to check userID
-
-<%
-
-
 	String username = (String) session.getAttribute("userName");
 
 	// Checking if user is logged in
-
-	if (username == null) { // Or check if userId == null
-
 	if (username == null) {
-
 		// If not logged in, redirecting to login page
 		response.sendRedirect(request.getContextPath() + "/login");
 		return; // Important to stop further processing
@@ -70,10 +59,8 @@
 				<tr>
 					<th>Product</th>
 					<th>Quantity</th>
-					<%-- Consider adding update quantity controls here later --%>
 					<th>Total</th>
 					<th>Action</th>
-					<%-- Added column for remove button --%>
 				</tr>
 			</thead>
 			<tbody id="cart-items">
@@ -81,7 +68,6 @@
 					<c:when test="${empty cartItems}">
 						<tr>
 							<td colspan="4" class="empty-cart">Your cart is empty</td>
-							<%-- Increased colspan --%>
 						</tr>
 					</c:when>
 					<c:otherwise>
@@ -89,15 +75,26 @@
 							<%-- Check if bookModel is not null before accessing its properties --%>
 							<c:if test="${not empty item.bookModel}">
 								<tr id="item-${item.cartItemId}">
-									<%-- Use cartItemId for unique ID --%>
 									<td>
 										<div class="book-item">
-											<%-- Use direct URL from database --%>
+											<%-- UPDATED: Use the same image path handling logic as in home.jsp --%>
 											<c:choose>
 												<c:when test="${not empty item.bookModel.book_img_url}">
-													<img
-														src="${pageContext.request.contextPath}${item.bookModel.book_img_url}"
-														alt="${item.bookModel.book_title}" class="book-image">
+													<c:choose>
+														<c:when
+															test="${item.bookModel.book_img_url.startsWith('resources/')}">
+															<img
+																src="${pageContext.request.contextPath}/${item.bookModel.book_img_url}"
+																alt="<c:out value='${item.bookModel.book_title}'/>"
+																class="book-image">
+														</c:when>
+														<c:otherwise>
+															<img
+																src="${pageContext.request.contextPath}${item.bookModel.book_img_url}"
+																alt="<c:out value='${item.bookModel.book_title}'/>"
+																class="book-image">
+														</c:otherwise>
+													</c:choose>
 												</c:when>
 												<c:otherwise>
 													<img
@@ -167,5 +164,22 @@
 	</div>
 
 	<jsp:include page="footer.jsp" />
+
+	<!-- Added debugging JavaScript to help identify image loading issues -->
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			// Debug image paths
+			console.log('--- Cart Image Path Debugging ---');
+			document.querySelectorAll('.book-item img').forEach(
+					function(img, index) {
+						console.log('Cart item ' + index + ' image path: '
+								+ img.src);
+						// Add error handler
+						img.onerror = function() {
+							console.error('Failed to load image: ' + this.src);
+						};
+					});
+		});
+	</script>
 </body>
 </html>

@@ -19,7 +19,7 @@ import java.util.Date;
 
 @WebServlet("/addBook")
 public class AddBookServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L; 
+	private static final long serialVersionUID = 1L;
 
 	private BookService bookService;
 
@@ -56,7 +56,7 @@ public class AddBookServlet extends HttpServlet {
 		// 1. Retrieve form parameters
 		String title = request.getParameter("bookTitle");
 		String isbn = request.getParameter("isbn");
-		String pubDateStr = request.getParameter("publicationDate"); 
+		String pubDateStr = request.getParameter("publicationDate");
 		String priceStr = request.getParameter("price");
 		String description = request.getParameter("description");
 		String stockStr = request.getParameter("stockQuantity");
@@ -80,7 +80,7 @@ public class AddBookServlet extends HttpServlet {
 			request.setAttribute("stockQuantity", stockStr);
 			request.setAttribute("imageUrl", imageUrl);
 			request.setAttribute("publisherId", publisherIdStr);
-			request.getRequestDispatcher("/WEB-INF/pages/add-book.jsp").forward(request, response); 
+			request.getRequestDispatcher("/WEB-INF/pages/add-book.jsp").forward(request, response);
 			return;
 		}
 
@@ -149,7 +149,7 @@ public class AddBookServlet extends HttpServlet {
 			request.getRequestDispatcher("/WEB-INF/pages/add-book.jsp").forward(request, response);
 			return; // Stop further processing
 
-		}  catch (Exception e) { // Catch unexpected errors
+		} catch (Exception e) { // Catch unexpected errors
 			System.err.println("AddBookServlet [doPost]: Unexpected error - " + e.getMessage());
 			e.printStackTrace(); // Log the stack trace
 			session.setAttribute("flashErrorMessage", "An unexpected error occurred. Please check logs.");

@@ -16,12 +16,12 @@ public class UserServiceImpl implements UserService {
 	// --- Configuration Constants ---
 	private static final String DEFAULT_PROFILE_IMAGE = "resources/images/system/person.png";
 	// *** RE-ADD MAX FILE SIZE ***
-	private static final long MAX_FILE_SIZE_BYTES = 3 * 1024 * 1024; 
+	private static final long MAX_FILE_SIZE_BYTES = 3 * 1024 * 1024;
 	private static final String PROFILE_IMAGE_SAVE_SUBFOLDER = "/profile";
 	private static final String PROFILE_IMAGE_RELATIVE_BASE_PATH = "resources/images/system";
 
 	private final imageUtil imgUtil;
-	private static final DecimalFormat df = new DecimalFormat("#.##"); 
+	private static final DecimalFormat df = new DecimalFormat("#.##");
 
 	public UserServiceImpl() {
 		this.imgUtil = new imageUtil();
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String getProfileImageUrl(String userName) {
 		String profileImageUrl = DEFAULT_PROFILE_IMAGE;
-		
+
 		String sql = "SELECT user_img_url FROM user WHERE user_name = ?";
 
 		if (userName == null || userName.trim().isEmpty()) {

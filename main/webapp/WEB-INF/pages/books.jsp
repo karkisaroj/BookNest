@@ -10,17 +10,13 @@
 <title>BookNest - Our Books</title>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/books.css">
-
-
 </head>
 <body>
 	<jsp:include page="header.jsp" />
 	<div class="container">
 		<h1>Books available in BookNest</h1>
 
-
 		<c:if test="${not empty sessionScope.flashSuccessMessage}">
-
 			<div class="alert alert-success">
 				<c:out value="${sessionScope.flashSuccessMessage}" />
 			</div>
@@ -29,7 +25,6 @@
 			%>
 		</c:if>
 		<c:if test="${not empty sessionScope.flashErrorMessage}">
-
 			<div class="alert alert-danger">
 				<c:out value="${sessionScope.flashErrorMessage}" />
 			</div>
@@ -50,12 +45,21 @@
 					<c:forEach var="book" items="${books}">
 						<div class="book-item">
 							<div>
-
 								<c:choose>
 									<c:when test="${not empty book.book_img_url}">
-										<img
-											src="${pageContext.request.contextPath}${book.book_img_url}"
-											alt="<c:out value='${book.book_title}'/>">
+										<!-- UPDATED: Added the same condition as in home.jsp -->
+										<c:choose>
+											<c:when test="${book.book_img_url.startsWith('resources/')}">
+												<img
+													src="${pageContext.request.contextPath}/${book.book_img_url}"
+													alt="<c:out value='${book.book_title}'/>">
+											</c:when>
+											<c:otherwise>
+												<img
+													src="${pageContext.request.contextPath}${book.book_img_url}"
+													alt="<c:out value='${book.book_title}'/>">
+											</c:otherwise>
+										</c:choose>
 									</c:when>
 									<c:otherwise>
 										<img
@@ -64,36 +68,28 @@
 									</c:otherwise>
 								</c:choose>
 
-
 								<h3>
 									<c:out value="${book.book_title}" />
 								</h3>
-
 
 								<p class="author">
 									By:
 									<c:out value="${book.authorName}" default="N/A" />
 								</p>
 
-								<%-- Price access (seems okay) --%>
 								<p class="book-price">
 									<fmt:formatNumber value="${book.price}" type="currency"
 										currencySymbol="Rs " />
-
 								</p>
 							</div>
 
-							<%-- Form for Add To Cart --%>
 							<form action="<c:url value='/cart'/>" method="POST">
-								<input type="hidden" name="action" value="add">
-								<%-- Corrected Book ID access --%>
-								<input type="hidden" name="bookId" value="${book.bookID}">
-								<input type="hidden" name="sourceUrl"
+								<input type="hidden" name="action" value="add"> <input
+									type="hidden" name="bookId" value="${book.bookID}"> <input
+									type="hidden" name="sourceUrl"
 									value="${pageContext.request.contextPath}/books">
-
 								<button type="submit">Add To Cart</button>
 							</form>
-
 						</div>
 					</c:forEach>
 				</c:when>
@@ -107,5 +103,25 @@
 		</div>
 	</div>
 	<jsp:include page="footer.jsp" />
+
+	<!-- Added debugging JavaScript for troubleshooting -->
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			// Debug image paths
+			console.log('--- Book Image Path Debugging ---');
+			document.querySelectorAll('.book-item img').forEach(
+					function(img, index) {
+						console
+								.log('Book ' + index + ' image path: '
+										+ img.src);
+						// Add error handler to detect broken images
+						img.onerror = function() {
+							console.error('Failed to load image: ' + this.src);
+							// Optionally add a red border to highlight broken images during development
+							// this.style.border = '2px solid red';
+						};
+					});
+		});
+	</script>
 </body>
 </html>
