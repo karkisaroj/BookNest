@@ -27,18 +27,12 @@ public class LoginController extends HttpServlet {
 
 
 
-//	private final String passwordvaliditymessage = "Password should contain alleast a capital letter, a number and a symbol";
-
-
-//private final String passwordvaliditymessage = "Password should contain minimum a capital letter, a number and a symbol";
 
 
 	private final String loginFailedMessage = "Invalid credentials. Please try again.";
 	private final String connectionErrorMessage = "Connection error. Please try again later.";
 
 	private final String loginpagepath = "/WEB-INF/pages/login.jsp";
-	private final String homepagepath = "/WEB-INF/pages/home.jsp";
-	private final String adminpagepath = "/WEB-INF/pages/admindashboard.jsp";
 	private RedirectionUtil redirectionUtil;
 	private ValidationUtil validationUtil;
 	private LoginService loginService;
@@ -105,6 +99,7 @@ public class LoginController extends HttpServlet {
 				System.out.println(userInfo.getRoleName());
 			}
 			if ("Admin".equals(userInfo.getRoleName())) {
+
 				resp.sendRedirect(req.getContextPath()+"/admindashboard");
 			} else {
 				resp.sendRedirect(req.getContextPath()+"/home");

@@ -51,7 +51,7 @@ public class imageUtil {
 			part.write(deployedFilePath);
 
 			// 2. Also upload to the source project location for persistence
-			String projectPath = "C:\\Users\\Acer\\Documents\\BookNest\\src\\main\\webapp\\resources\\"
+			String projectPath = "C:\\\\Users\\\\noble\\\\NewWorkSpaceCoursework\\\\BookNest\\\\src\\\\main\\\\webapp\\\\resources\\\\"
 					+ saveFolder.replace('/', File.separatorChar);
 			File projectDir = new File(projectPath);
 			if (!projectDir.exists()) {
@@ -77,6 +77,6 @@ public class imageUtil {
 	}
 
 	public String getSavePath(String saveFolder) {
-		return "C:\\Users\\Acer\\Documents\\BookNest\\src\\main\\webapp\\resources\\" + saveFolder;
+		return "C:\\Users\\noble\\NewWorkSpaceCoursework\\BookNest\\src\\main\\webapp\\resources\\" + saveFolder;
 	}
 }
