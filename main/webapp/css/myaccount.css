@@ -195,28 +195,53 @@ input[type="file"] {
 	color: #2D3748;
 }
 
-/* Edit button - CENTERED */
+/* Edit button container - Updated for multiple buttons */
 .edit-button-container {
-	margin-top: 30px;
-	display: flex;
-	justify-content: center; /* Changed from flex-end to center */
+    margin-top: 30px;
+    display: flex;
+    justify-content: center; 
+    gap: 20px; /* Adds space between buttons */
 }
 
 .edit-btn {
-	background-color: #3D5A80;
-	color: white;
-	border: none;
-	border-radius: 4px;
-	padding: 12px 25px;
-	font-weight: 600;
-	cursor: pointer;
-	transition: background-color 0.3s;
-	width: 200px; /* Added fixed width for better appearance */
-	text-align: center;
+    background-color: #3D5A80;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 12px 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 200px;
+    text-align: center;
 }
 
 .edit-btn:hover {
-	background-color: #2B4570;
+    background-color: #2B4570;
+}
+
+/* Logout button styles */
+.logout-btn {
+    background-color: #e53935; /* Red color */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 12px 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 200px;
+    text-align: center;
+}
+
+.logout-btn:hover {
+    background-color: #c62828; /* Darker red on hover */
+}
+
+/* Remove any margin on the logout form */
+.logout-form {
+    margin: 0;
+    padding: 0;
 }
 
 /* Success and error messages */
@@ -244,6 +269,27 @@ input[type="file"] {
 	font-weight: 500;
 	width: 100%;
 	max-width: 300px;
+}
+
+/* Message classes */
+.message {
+    padding: 12px 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.success {
+    color: #2e7d32;
+    background-color: #e8f5e9;
+    border-left: 4px solid #2e7d32;
+}
+
+.error {
+    color: #c62828;
+    background-color: #ffebee;
+    border-left: 4px solid #c62828;
 }
 
 /* Fix for Email Information section */

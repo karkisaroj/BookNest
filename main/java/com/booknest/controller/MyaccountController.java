@@ -63,9 +63,9 @@ public class MyAccountController extends HttpServlet {
 
 		// Forward to the JSP
 		String forwardPath = "/WEB-INF/pages/myaccount.jsp";
-		System.out.println(">>> MyaccountController forwarding to page: " + forwardPath);
+		
 		request.getRequestDispatcher(forwardPath).forward(request, response);
-		System.out.println(">>> MyaccountController doGet END (after forward)");
+		
 	}
 
 	@Override
@@ -124,15 +124,15 @@ public class MyAccountController extends HttpServlet {
 
 		// Handle response based on outcome
 		if (errorMessage != null) {
-			System.out.println(">>> MyaccountController doPost ERROR: " + errorMessage);
+			
 			request.setAttribute("errorMessage", errorMessage);
 			doGet(request, response);
 		} else {
-			System.out.println(">>> MyaccountController doPost SUCCESS");
+			
 			SessionUtil.setAttribute(request, "successMessage", successFlashMessage);
 			response.sendRedirect(request.getContextPath() + "/myaccount");
 		}
 
-		System.out.println(">>> MyaccountController doPost END");
+		
 	}
 }

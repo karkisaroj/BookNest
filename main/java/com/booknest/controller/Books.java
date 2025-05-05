@@ -12,7 +12,7 @@ import com.booknest.model.BookCartModel;
 import com.booknest.service.BookService;
 import com.booknest.service.BookServiceImpl;
 
-@WebServlet("/books")
+@WebServlet(asyncSupported = true, urlPatterns = { "/books" })
 public class Books extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
