@@ -19,7 +19,7 @@ import java.io.IOException;
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
 		maxFileSize = 1024 * 1024 * 10, // 10MB
 		maxRequestSize = 1024 * 1024 * 50) // 50MB
-public class MyaccountController extends HttpServlet {
+public class MyAccountController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final UserService userService = new UserServiceImpl();
 	private static final String USERNAME_SESSION_KEY = "userName";
@@ -63,9 +63,9 @@ public class MyaccountController extends HttpServlet {
 
 		// Forward to the JSP
 		String forwardPath = "/WEB-INF/pages/myaccount.jsp";
-		
+
 		request.getRequestDispatcher(forwardPath).forward(request, response);
-		
+
 	}
 
 	@Override
@@ -117,22 +117,21 @@ public class MyaccountController extends HttpServlet {
 			}
 
 		} catch (Exception e) {
-			System.err.println("User: " + userName + " - Error during profile update: " + e.getMessage());
+			
 			e.printStackTrace();
 			errorMessage = "An unexpected error occurred while updating your profile.";
 		}
 
 		// Handle response based on outcome
 		if (errorMessage != null) {
-			
+
 			request.setAttribute("errorMessage", errorMessage);
 			doGet(request, response);
 		} else {
-			
+
 			SessionUtil.setAttribute(request, "successMessage", successFlashMessage);
 			response.sendRedirect(request.getContextPath() + "/myaccount");
 		}
 
-		
 	}
 }
