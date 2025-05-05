@@ -122,8 +122,13 @@
 
 				<!-- Action Buttons -->
 				<div class="edit-button-container">
+					<!-- Logout Button - Added to the left of Edit Details button -->
+					<form action="<c:url value='/logout'/>" method="post"
+						class="logout-form">
+						<button type="submit" class="logout-btn">LOG OUT</button>
+					</form>
 					<button class="edit-btn"
-						onclick="location.href='<c:url value="/editAccount"/>'">EDIT
+						onclick="location.href='<c:url value="/accountsetting"/>'">EDIT
 						Details</button>
 				</div>
 			</div>

@@ -108,8 +108,7 @@ public class AdminProductController extends HttpServlet {
 				}
 			}
 
-			// Process the data (example: save to the database)
-			AdminProductService adminProductService = new AdminProductService();
+
 			BookModel book = new BookModel(0, // bookID (auto-incremented)
 					bookTitle, isbn, Date.valueOf(publicationDate), new BigDecimal(price), description,
 					Integer.parseInt(stockQuantity), Integer.parseInt(pageCount), imageUrl,
@@ -130,7 +129,7 @@ public class AdminProductController extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		// Reload dropdowns and forward to the form
+		
 		doGet(request, response);
 	}
 }
