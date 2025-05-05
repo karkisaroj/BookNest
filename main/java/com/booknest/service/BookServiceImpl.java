@@ -38,10 +38,10 @@ public class BookServiceImpl implements BookService {
 					book.setAuthorName("Unknown");
 
 					books.add(book);
-					System.out.println("Added book: " + book.getBook_title());
+					
 				}
 
-				System.out.println("BookServiceImpl - Found " + books.size() + " books with simple query");
+				
 			}
 		} catch (SQLException e) {
 			System.err.println("Error getting all books (simple query): " + e.getMessage());
