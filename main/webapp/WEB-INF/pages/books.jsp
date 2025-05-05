@@ -1,233 +1,127 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BookNest</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/books.css">
+<meta charset="UTF-8">
+<title>BookNest - Our Books</title>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/books.css">
 </head>
 <body>
 	<jsp:include page="header.jsp" />
-    <section class="sec-2">
-        <div class="container1">
-            <h3 class="topic">Books available in BookNest</h3>
-            <div class="divider"></div>
-            <div class="cards"> <!--Products-->
-                <div class="card"> <!--product-->
-                    <div class="card-img"> <!--image-->
-                        <img src="${pageContext.request.contextPath}/resources/images/system/book-cover-1.jpg" alt="">
-                    </div>
-                    <h3>Book1</h3>
-                    <div class="price-name">
-                        <span>Rs. 1400</span>
-                    </div>
-                    <div class="cart"> <!--buy-->
-                        <button>Add To Cart </button>
-                    </div>
-                </div>
-                <div class="card"> <!--product-->
-                    <div class="card-img"> <!--image-->
-                        <img src="${pageContext.request.contextPath}/resources/images/system/book-cover-2.jpg" alt="">
-                    </div>
-                    <h3>Book1</h3>
-                    <div class="price-name">
-                        <span>Rs. 1400</span>
-                    </div>
-                    <div class="cart"> <!--buy-->
-                        <button>Add To Cart </button>
-                    </div>
-                </div>
-                <div class="card"> <!--product-->
-                    <div class="card-img"> <!--image-->
-                        <img src="${pageContext.request.contextPath}/resources/images/system/book-cover-3.jpg" alt="">
-                    </div>
-                    <h3>Book1</h3>
-                    <div class="price-name">
-                        <span>Rs. 1400</span>
-                    </div>
-                    <div class="cart"> <!--buy-->
-                        <button>Add To Cart </button>
-                    </div>
-                </div>
-                <div class="card"> <!--product-->
-                    <div class="card-img"> <!--image-->
-                        <img src="${pageContext.request.contextPath}/resources/images/system/book-cover-4.jpg" alt="">
-                    </div>
-                    <h3>Book1</h3>
-                    <div class="price-name">
-                        <span>Rs. 1400</span>
-                    </div>
-                    <div class="cart"> <!--buy-->
-                        <button>Add To Cart </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="sec-2">
-        <div class="container1">
-            <div class="cards"> <!--Products-->
-                <div class="card"> <!--product-->
-                    <div class="card-img"> <!--image-->
-                        <img src="${pageContext.request.contextPath}/resources/images/system/book-cover-1.jpg" alt="">
-                    </div>
-                    <h3>Book1</h3>
-                    <div class="price-name">
-                        <span>Rs. 1400</span>
-                    </div>
-                    <div class="cart"> <!--buy-->
-                        <button>Add To Cart </button>
-                    </div>
-                </div>
-                <div class="card"> <!--product-->
-                    <div class="card-img"> <!--image-->
-                        <img src="${pageContext.request.contextPath}/resources/images/system/book-cover-2.jpg" alt="">
-                    </div>
-                    <h3>Book1</h3>
-                    <div class="price-name">
-                        <span>Rs. 1400</span>
-                    </div>
-                    <div class="cart"> <!--buy-->
-                        <button>Add To Cart </button>
-                    </div>
-                </div>
-                <div class="card"> <!--product-->
-                    <div class="card-img"> <!--image-->
-                        <img src="${pageContext.request.contextPath}/resources/images/system/book-cover-3.jpg" alt="">
-                    </div>
-                    <h3>Book1</h3>
-                    <div class="price-name">
-                        <span>Rs. 1400</span>
-                    </div>
-                    <div class="cart"> <!--buy-->
-                        <button>Add To Cart </button>
-                    </div>
-                </div>
-                <div class="card"> <!--product-->
-                    <div class="card-img"> <!--image-->
-                        <img src="${pageContext.request.contextPath}/resources/images/system/book-cover-4.jpg" alt="">
-                    </div>
-                    <h3>Book1</h3>
-                    <div class="price-name">
-                        <span>Rs. 1400</span>
-                    </div>
-                    <div class="cart"> <!--buy-->
-                        <button>Add To Cart </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="sec-2">
-        <div class="container1">
-            <div class="cards"> <!--Products-->
-                <div class="card"> <!--product-->
-                    <div class="card-img"> <!--image-->
-                        <img src="${pageContext.request.contextPath}/resources/images/system/book-cover-1.jpg" alt="">
-                    </div>
-                    <h3>Book1</h3>
-                    <div class="price-name">
-                        <span>Rs. 1400</span>
-                    </div>
-                    <div class="cart"> <!--buy-->
-                        <button>Add To Cart </button>
-                    </div>
-                </div>
-                <div class="card"> <!--product-->
-                    <div class="card-img"> <!--image-->
-                        <img src="${pageContext.request.contextPath}/resources/images/system/book-cover-2.jpg" alt="">
-                    </div>
-                    <h3>Book1</h3>
-                    <div class="price-name">
-                        <span>Rs. 1400</span>
-                    </div>
-                    <div class="cart"> <!--buy-->
-                        <button>Add To Cart </button>
-                    </div>
-                </div>
-                <div class="card"> <!--product-->
-                    <div class="card-img"> <!--image-->
-                        <img src="${pageContext.request.contextPath}/resources/images/system/book-cover-3.jpg" alt="">
-                    </div>
-                    <h3>Book1</h3>
-                    <div class="price-name">
-                        <span>Rs. 1400</span>
-                    </div>
-                    <div class="cart"> <!--buy-->
-                        <button>Add To Cart </button>
-                    </div>
-                </div>
-                <div class="card"> <!--product-->
-                    <div class="card-img"> <!--image-->
-                        <img src="${pageContext.request.contextPath}/resources/images/system/book-cover-4.jpg" alt="">
-                    </div>
-                    <h3>Book1</h3>
-                    <div class="price-name">
-                        <span>Rs. 1400</span>
-                    </div>
-                    <div class="cart"> <!--buy-->
-                        <button>Add To Cart </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="sec-2">
-        <div class="container1">
-            <div class="cards"> <!--Products-->
-                <div class="card"> <!--product-->
-                    <div class="card-img"> <!--image-->
-                        <img src="${pageContext.request.contextPath}/resources/images/system/book-cover-1.jpg" alt="">
-                    </div>
-                    <h3>Book1</h3>
-                    <div class="price-name">
-                        <span>Rs. 1400</span>
-                    </div>
-                    <div class="cart"> <!--buy-->
-                        <button>Add To Cart </button>
-                    </div>
-                </div>
-                <div class="card"> <!--product-->
-                    <div class="card-img"> <!--image-->
-                        <img src="${pageContext.request.contextPath}/resources/images/system/book-cover-2.jpg" alt="">
-                    </div>
-                    <h3>Book1</h3>
-                    <div class="price-name">
-                        <span>Rs. 1400</span>
-                    </div>
-                    <div class="cart"> <!--buy-->
-                        <button>Add To Cart </button>
-                    </div>
-                </div>
-                <div class="card"> <!--product-->
-                    <div class="card-img"> <!--image-->
-                        <img src="${pageContext.request.contextPath}/resources/images/system/book-cover-3.jpg" alt="">
-                    </div>
-                    <h3>Book1</h3>
-                    <div class="price-name">
-                        <span>Rs. 1400</span>
-                    </div>
-                    <div class="cart"> <!--buy-->
-                        <button>Add To Cart </button>
-                    </div>
-                </div>
-                <div class="card"> <!--product-->
-                    <div class="card-img"> <!--image-->
-                        <img src="${pageContext.request.contextPath}/resources/images/system/book-cover-4.jpg" alt="">
-                    </div>
-                    <h3>Book1</h3>
-                    <div class="price-name">
-                        <span>Rs. 1400</span>
-                    </div>
-                    <div class="cart"> <!--buy-->
-                        <button>Add To Cart </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <jsp:include page="footer.jsp" />
+	<div class="container">
+		<h1>Books available in BookNest</h1>
+
+		<c:if test="${not empty sessionScope.flashSuccessMessage}">
+			<div class="alert alert-success">
+				<c:out value="${sessionScope.flashSuccessMessage}" />
+			</div>
+			<%
+			session.removeAttribute("flashSuccessMessage");
+			%>
+		</c:if>
+		<c:if test="${not empty sessionScope.flashErrorMessage}">
+			<div class="alert alert-danger">
+				<c:out value="${sessionScope.flashErrorMessage}" />
+			</div>
+			<%
+			session.removeAttribute("flashErrorMessage");
+			%>
+		</c:if>
+
+		<c:if test="${not empty viewErrorMessage}">
+			<div class="alert alert-danger">
+				<c:out value="${viewErrorMessage}" />
+			</div>
+		</c:if>
+
+		<div class="book-list">
+			<c:choose>
+				<c:when test="${not empty books}">
+					<c:forEach var="book" items="${books}">
+						<div class="book-item">
+							<div>
+								<c:choose>
+									<c:when test="${not empty book.book_img_url}">
+										<!-- UPDATED: Added the same condition as in home.jsp -->
+										<c:choose>
+											<c:when test="${book.book_img_url.startsWith('resources/')}">
+												<img
+													src="${pageContext.request.contextPath}/${book.book_img_url}"
+													alt="<c:out value='${book.book_title}'/>">
+											</c:when>
+											<c:otherwise>
+												<img
+													src="${pageContext.request.contextPath}${book.book_img_url}"
+													alt="<c:out value='${book.book_title}'/>">
+											</c:otherwise>
+										</c:choose>
+									</c:when>
+									<c:otherwise>
+										<img
+											src="${pageContext.request.contextPath}/resources/images/system/placeholder.png"
+											alt="No image available">
+									</c:otherwise>
+								</c:choose>
+
+								<h3>
+									<c:out value="${book.book_title}" />
+								</h3>
+
+								<p class="author">
+									By:
+									<c:out value="${book.authorName}" default="N/A" />
+								</p>
+
+								<p class="book-price">
+									<fmt:formatNumber value="${book.price}" type="currency"
+										currencySymbol="Rs " />
+								</p>
+							</div>
+
+							<form action="<c:url value='/cart'/>" method="POST">
+								<input type="hidden" name="action" value="add"> <input
+									type="hidden" name="bookId" value="${book.bookID}"> <input
+									type="hidden" name="sourceUrl"
+									value="${pageContext.request.contextPath}/books">
+								<button type="submit">Add To Cart</button>
+							</form>
+						</div>
+					</c:forEach>
+				</c:when>
+				<c:otherwise>
+					<c:if test="${empty viewErrorMessage}">
+						<p style="text-align: center; width: 100%;">No books available
+							at the moment.</p>
+					</c:if>
+				</c:otherwise>
+			</c:choose>
+		</div>
+	</div>
+	<jsp:include page="footer.jsp" />
+
+	<!-- Added debugging JavaScript for troubleshooting -->
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			// Debug image paths
+			console.log('--- Book Image Path Debugging ---');
+			document.querySelectorAll('.book-item img').forEach(
+					function(img, index) {
+						console
+								.log('Book ' + index + ' image path: '
+										+ img.src);
+						// Add error handler to detect broken images
+						img.onerror = function() {
+							console.error('Failed to load image: ' + this.src);
+							// Optionally add a red border to highlight broken images during development
+							// this.style.border = '2px solid red';
+						};
+					});
+		});
+	</script>
 </body>
 </html>

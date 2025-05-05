@@ -1,10 +1,10 @@
 package com.booknest.controller;
 
-import com.booknest.config.DbConfiguration;
+import com.booknest.service.UserService;
+import com.booknest.service.UserServiceImpl;
+import com.booknest.util.SessionUtil;
 import com.booknest.util.imageUtil;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,119 +13,126 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 
-@WebServlet(asyncSupported = true, urlPatterns = { "/myaccount" })
-@MultipartConfig(
-	    fileSizeThreshold = 1024 * 1024 * 2, // 2MB
-	    maxFileSize = 1024 * 1024 * 10,      // 10MB
-	    maxRequestSize = 1024 * 1024 * 50 )   // 50MB
+import java.io.IOException;
 
-public class MyaccountController extends HttpServlet {
-    /**
-	 * 
-	 */
+@WebServlet(asyncSupported = true, urlPatterns = { "/myaccount" })
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+		maxFileSize = 1024 * 1024 * 10, // 10MB
+		maxRequestSize = 1024 * 1024 * 50) // 50MB
+public class MyAccountController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private final UserService userService = new UserServiceImpl();
+	private static final String USERNAME_SESSION_KEY = "userName";
 
 	@Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        // Retrieve user information (e.g., username) from the session
-        String userName = (String) request.getSession().getAttribute("userName");
-        
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-        if (userName == null) {
-            // Redirect to login if user is not logged in
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
+		// Check if user is logged in
+		if (!SessionUtil.isLoggedIn(request, USERNAME_SESSION_KEY)) {
+			response.sendRedirect(request.getContextPath() + "/login");
+			return;
+		}
 
-        // Retrieve profile image URL from the database
-        Connection conn = null;
-        PreparedStatement ps = null;
-        try {
-            conn = DbConfiguration.getDbConnection();
-            String sql = "SELECT user_img_url FROM user WHERE user_name = ?";
-            ps = conn.prepareStatement(sql);
-            ps.setString(1, userName);
-            var rs = ps.executeQuery();
-            if (rs.next()) {
-                String profileImageUrl = rs.getString("user_img_url");
-                if (profileImageUrl != null && !profileImageUrl.trim().isEmpty()) {
-                    request.setAttribute("profileImageUrl", profileImageUrl);
-                } else {
-                    // Default placeholder image
-                    request.setAttribute("profileImageUrl", "resources/images/system/default.png");
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (ps != null) ps.close();
-                if (conn != null) conn.close();
-            } catch (Exception ignore) {}
-        }
+		// Get user attributes from session
+		String userName = SessionUtil.getAttribute(request, USERNAME_SESSION_KEY, String.class);
+		String firstName = SessionUtil.getAttribute(request, "firstName", String.class);
+		String lastName = SessionUtil.getAttribute(request, "lastName", String.class);
+		String email = SessionUtil.getAttribute(request, "email", String.class);
+		String phoneNumber = SessionUtil.getAttribute(request, "phoneNumber", String.class);
+		String address = SessionUtil.getAttribute(request, "address", String.class);
 
-        // Forward to the JSP
-        request.getRequestDispatcher("/WEB-INF/pages/myaccount.jsp").forward(request, response);
-    }
+		// Get profile image URL
+		String profileImageUrl = userService.getProfileImageUrl(userName);
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        // Retrieve username from session
-        String userName = (String) request.getSession().getAttribute("userName");
-        if (userName == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
+		// Set attributes for the JSP
+		request.setAttribute("userName", userName);
+		request.setAttribute("firstName", firstName);
+		request.setAttribute("lastName", lastName);
+		request.setAttribute("email", email);
+		request.setAttribute("phoneNumber", phoneNumber);
+		request.setAttribute("address", address);
+		request.setAttribute("profileImageUrl", profileImageUrl);
 
-        // File upload logic
-        try {
-            Part filePart = request.getPart("image");
-            
-            if (filePart.getSize() > 3 * 1024 * 1024) { // 3 MB size limit
-                request.setAttribute("errorMessage", "File size exceeds the maximum allowed size of 3 MB.");
-                request.getRequestDispatcher("/WEB-INF/pages/myaccount.jsp").forward(request, response);
-                return;
-            }
+		// Check for flash messages
+		String successMessage = SessionUtil.getAttribute(request, "successMessage", String.class);
+		if (successMessage != null) {
+			request.setAttribute("successMessage", successMessage);
+			SessionUtil.removeAttribute(request, "successMessage");
+		}
 
-            // Save the file using imageUtil
-            imageUtil util = new imageUtil();
-            String saveFolder = "/profile";
-            boolean uploaded = util.uploadImage(filePart, "", saveFolder);
+		// Forward to the JSP
+		String forwardPath = "/WEB-INF/pages/myaccount.jsp";
+		System.out.println(">>> MyaccountController forwarding to page: " + forwardPath);
+		request.getRequestDispatcher(forwardPath).forward(request, response);
+		System.out.println(">>> MyaccountController doGet END (after forward)");
+	}
 
-            if (uploaded) {
-                String imageName = util.getImageNameFromPart(filePart);
-     
-                String relativePath = "resources/images/system/profile/" + imageName;
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-                // Update the database with the new image URL
-                Connection conn = null;
-                PreparedStatement ps = null;
-                try {
-                    conn = DbConfiguration.getDbConnection();
-                    String sql = "UPDATE user SET user_img_url = ? WHERE user_name = ?";
-                    ps = conn.prepareStatement(sql);
-                    ps.setString(1, relativePath);
-                    ps.setString(2, userName);
-                    ps.executeUpdate();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (ps != null) ps.close();
-                        if (conn != null) conn.close();
-                    } catch (Exception ignore) {}
-                }
-            }
+		// Check if user is logged in
+		String userName = SessionUtil.getAttribute(request, USERNAME_SESSION_KEY, String.class);
+		if (userName == null) {
+			response.sendRedirect(request.getContextPath() + "/login");
+			return;
+		}
 
-            // Redirect to myaccount page after successful upload
-            response.sendRedirect(request.getContextPath() + "/myaccount");
+		String successFlashMessage = null;
+		String errorMessage = null;
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("errorMessage", "An error occurred during file upload.");
-            request.getRequestDispatcher("/WEB-INF/pages/myaccount.jsp").forward(request, response);
-        }
-    }
+		try {
+			// Get uploaded file
+			Part filePart = request.getPart("image");
+
+			// Validate file size (3MB limit)
+			if (filePart.getSize() > 3 * 1024 * 1024) {
+				errorMessage = "File size exceeds the maximum allowed size of 3 MB.";
+				request.setAttribute("errorMessage", errorMessage);
+				doGet(request, response);
+				return;
+			}
+
+			// Save the profile image to UploadedProfilePicture folder
+			imageUtil util = new imageUtil();
+			String saveFolder = "images/UploadedProfilePicture";
+			boolean uploaded = util.uploadImage(filePart, getServletContext().getRealPath("resources"), saveFolder);
+
+			if (uploaded) {
+				String imageName = util.getImageNameFromPart(filePart);
+				// The path to store in database
+				String relativePath = "resources/images/UploadedProfilePicture/" + imageName;
+
+				// Update database with new image URL
+				boolean updated = userService.updateProfileImageUrl(userName, relativePath);
+
+				if (updated) {
+					successFlashMessage = "Profile picture updated successfully!";
+				} else {
+					errorMessage = "Failed to update profile picture information in the database.";
+				}
+			} else {
+				errorMessage = "Failed to upload the profile picture.";
+			}
+
+		} catch (Exception e) {
+			System.err.println("User: " + userName + " - Error during profile update: " + e.getMessage());
+			e.printStackTrace();
+			errorMessage = "An unexpected error occurred while updating your profile.";
+		}
+
+		// Handle response based on outcome
+		if (errorMessage != null) {
+			System.out.println(">>> MyaccountController doPost ERROR: " + errorMessage);
+			request.setAttribute("errorMessage", errorMessage);
+			doGet(request, response);
+		} else {
+			System.out.println(">>> MyaccountController doPost SUCCESS");
+			SessionUtil.setAttribute(request, "successMessage", successFlashMessage);
+			response.sendRedirect(request.getContextPath() + "/myaccount");
+		}
+
+		System.out.println(">>> MyaccountController doPost END");
+	}
 }
