@@ -14,7 +14,9 @@
   <header id="main-header">
     <div class="container">
       <div class="logo-container">
-        <img class="logo" src="${pageContext.request.contextPath}/resources/images/system/logo.png" alt="logo">
+        <div class="logo">
+        	<span style="font-family: serif; font-style: italic; font-weight: bold; font-size: 22px;">BookNest</span>
+        </div>
       </div>
       
       <button class="mobile-menu-btn" id="mobile-menu-toggle">
