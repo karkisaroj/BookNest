@@ -93,10 +93,17 @@
 	border: 1px solid #f5c6cb;
 }
 
+<<<<<<< HEAD
+.container1 {
+    max-width: 1200px;
+    margin: auto;
+
+=======
 .container {
 	max-width: 1200px;
 	margin: 0 auto;
 	padding: 15px;
+>>>>>>> 9e889e77b1d9e65d2db0b514f63eba9ab43ccb0f
 }
 
 /* Styled heading like "Why Choose Us" */
