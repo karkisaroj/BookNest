@@ -8,6 +8,75 @@ import java.util.*;
 import java.math.BigDecimal;
 
 public class BookServiceImpl implements BookService {
+	@Override
+	public List<BookCartModel> searchBooksByTitle(String title) throws Exception {
+		List<BookCartModel> books = new ArrayList<>();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		System.out.println("SEARCH DEBUG: Starting search for title: '" + title + "'");
+
+		try {
+			conn = DbConfiguration.getDbConnection();
+			System.out.println("SEARCH DEBUG: Database connection established: " + (conn != null));
+
+			// Updated SQL query to include author information
+			String sql = "SELECT b.*, GROUP_CONCAT(DISTINCT a.author_name SEPARATOR ', ') AS author_name "
+					+ "FROM book b " + "LEFT JOIN book_author ba ON b.bookID = ba.bookID "
+					+ "LEFT JOIN author a ON ba.authorID = a.authorID " + "WHERE b.book_title LIKE ? "
+					+ "GROUP BY b.bookID";
+
+			System.out.println("SEARCH DEBUG: Using SQL: " + sql);
+
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, "%" + title + "%");
+			System.out.println("SEARCH DEBUG: Search parameter: %" + title + "%");
+
+			rs = stmt.executeQuery();
+			System.out.println("SEARCH DEBUG: Query executed successfully");
+
+			int count = 0;
+			while (rs.next()) {
+				count++;
+				BookCartModel book = new BookCartModel();
+				book.setBookID(rs.getInt("bookID"));
+				book.setBook_title(rs.getString("book_title"));
+				book.setIsbn(rs.getString("isbn"));
+				book.setPrice(rs.getBigDecimal("price"));
+				book.setDescription(rs.getString("description"));
+				book.setStock_quantity(rs.getInt("stock_quantity"));
+				book.setBook_img_url(rs.getString("book_img_url"));
+				book.setPublisherID(rs.getInt("publisherID"));
+				book.setAuthorName(rs.getString("author_name")); // Set the author name from the query
+
+				System.out.println("SEARCH DEBUG: Found book #" + count + ": " + book.getBookID() + " - "
+						+ book.getBook_title() + " by " + book.getAuthorName());
+
+				books.add(book);
+			}
+
+			System.out.println("SEARCH DEBUG: Total books found: " + count);
+
+		} catch (Exception e) {
+			System.err.println("SEARCH ERROR: " + e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (stmt != null)
+					stmt.close();
+				if (conn != null)
+					conn.close();
+				System.out.println("SEARCH DEBUG: Resources closed properly");
+			} catch (SQLException e) {
+				System.err.println("SEARCH ERROR: Failed to close resources: " + e.getMessage());
+			}
+		}
+
+		return books;
+	}
 
 	@Override
 	public List<BookCartModel> getAllBooks() throws ClassNotFoundException {
@@ -206,6 +275,76 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
+	public List<BookCartModel> getBooksByCategory(Integer categoryId) throws Exception {
+		List<BookCartModel> books = new ArrayList<>();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		System.out.println("CATEGORY SEARCH DEBUG: Starting search for category ID: " + categoryId);
+
+		try {
+			conn = DbConfiguration.getDbConnection();
+			System.out.println("CATEGORY SEARCH DEBUG: Database connection established: " + (conn != null));
+
+			// Modified SQL to properly handle multiple authors per book using GROUP_CONCAT
+			String sql = "SELECT b.*, GROUP_CONCAT(DISTINCT a.author_name SEPARATOR ', ') AS author_name "
+					+ "FROM book b " + "INNER JOIN book_categories bc ON b.bookID = bc.bookID "
+					+ "LEFT JOIN book_author ba ON b.bookID = ba.bookID "
+					+ "LEFT JOIN author a ON ba.authorID = a.authorID " + "WHERE bc.categoryID = ? "
+					+ "GROUP BY b.bookID";
+
+			System.out.println("CATEGORY SEARCH DEBUG: Using SQL: " + sql);
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, categoryId);
+			System.out.println("CATEGORY SEARCH DEBUG: Parameter set: categoryId=" + categoryId);
+
+			rs = stmt.executeQuery();
+			System.out.println("CATEGORY SEARCH DEBUG: Query executed successfully");
+
+			int count = 0;
+			while (rs.next()) {
+				count++;
+				BookCartModel book = new BookCartModel();
+				book.setBookID(rs.getInt("bookID"));
+				book.setBook_title(rs.getString("book_title"));
+				book.setIsbn(rs.getString("isbn"));
+				book.setPrice(rs.getBigDecimal("price"));
+				book.setDescription(rs.getString("description"));
+				book.setStock_quantity(rs.getInt("stock_quantity"));
+				book.setBook_img_url(rs.getString("book_img_url"));
+				book.setPublisherID(rs.getInt("publisherID"));
+				book.setAuthorName(rs.getString("author_name"));
+
+				System.out.println("CATEGORY SEARCH DEBUG: Found book #" + count + ": " + book.getBookID() + " - "
+						+ book.getBook_title());
+
+				books.add(book);
+			}
+
+			System.out.println("CATEGORY SEARCH DEBUG: Total books found for category " + categoryId + ": " + count);
+
+		} catch (Exception e) {
+			System.err.println("CATEGORY SEARCH ERROR: " + e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (stmt != null)
+					stmt.close();
+				if (conn != null)
+					conn.close();
+				System.out.println("CATEGORY SEARCH DEBUG: Resources closed properly");
+			} catch (SQLException e) {
+				System.err.println("CATEGORY SEARCH ERROR: Failed to close resources: " + e.getMessage());
+			}
+		}
+
+		return books;
+	}
+
+	@Override
 	public boolean updateBook(BookCartModel book) throws Exception { // Changed parameter type to BookCartModel
 		System.err.println(
 				"WARNING: BookServiceImpl.updateBook does NOT currently handle author relationships correctly!");
@@ -272,4 +411,17 @@ public class BookServiceImpl implements BookService {
 				e.printStackTrace();
 			}
 	}
+
+	@Override
+	public List<BookCartModel> searchBooksByCategories(String[] categories) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<BookCartModel> searchBooksByTitleAndCategories(String title, String[] categories) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
