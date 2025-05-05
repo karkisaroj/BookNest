@@ -52,17 +52,7 @@
 						<button type="submit" class="search-button">Search</button>
 					</form>
 
-					<div class="search-category">
-						<div class="category-label">Popular Categories</div>
-						<div class="category-options">
-							<span class="category-option" data-category="fiction">Fiction</span>
-							<span class="category-option" data-category="non-fiction">Non-Fiction</span>
-							<span class="category-option" data-category="science">Science</span>
-							<span class="category-option" data-category="biography">Biography</span>
-							<span class="category-option" data-category="children">Children</span>
-							<span class="category-option" data-category="business">Business</span>
-						</div>
-					</div>
+					
 
 					<div class="search-results-preview" id="search-results-preview">
 						<div class="preview-title">
