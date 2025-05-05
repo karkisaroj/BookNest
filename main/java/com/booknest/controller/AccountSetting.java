@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * @author Saroj Karki
  */
-@WebServlet("/accountsetting")
+@WebServlet(asyncSupported = true, urlPatterns = { "/accountsetting" })
 public class AccountSetting extends HttpServlet {
 
     private static final long serialVersionUID = 1L;

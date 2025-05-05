@@ -79,7 +79,8 @@ public class RoleBasedAccessFilter implements Filter {
 			if ("Admin".equals(roleName)) {
 				// Admin is logged in
 				if (uri.contains(HOME) || uri.contains(PRODUCTPAGE) || uri.contains(BOOKS) || uri.contains(CART)
-						|| uri.contains(CHECKOUT) || uri.contains(CONTACTUS)) {
+						|| uri.contains(LOGIN) || uri.contains(REGISTER) || uri.contains(CHECKOUT)
+						|| uri.contains(CONTACTUS)) {
 					resp.sendRedirect(contextPath + ADMIN_DASHBOARD);
 				} else {
 					chain.doFilter(request, response);
@@ -87,7 +88,7 @@ public class RoleBasedAccessFilter implements Filter {
 			} else {
 				// User is logged in
 				if (uri.contains(ADMIN_DASHBOARD) || uri.contains(ADMIN_CUSTOMER) || uri.contains(ADMIN_ORDER)
-						|| uri.contains(ADMIN_PRODUCT)) {
+						|| uri.contains(ADMIN_PRODUCT)|| uri.contains(LOGIN) || uri.contains(REGISTER)) {
 					resp.sendRedirect(contextPath + HOME);
 				} else {
 					chain.doFilter(request, response);

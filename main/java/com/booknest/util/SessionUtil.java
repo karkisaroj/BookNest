@@ -97,7 +97,7 @@ public class SessionUtil {
      * Useful for checking login status without retrieving the actual value.
      *
      * @param req the HttpServletRequest
-     * @param userAttributeKey The session key that indicates a logged-in user (e.g., "userName")
+     * @param userAttributeKey The session key that indicates a dlogged-in user (e.g., "userName")
      * @return true if the session exists and the user attribute is present, false otherwise.
      */
     public static boolean isLoggedIn(HttpServletRequest req, String userAttributeKey) {

@@ -17,7 +17,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@WebServlet("/addBook")
+@WebServlet(asyncSupported = true, urlPatterns = { "/addbook" })
 public class AddBookServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
