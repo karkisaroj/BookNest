@@ -15,9 +15,9 @@
 	<header id="main-header">
 		<div class="container">
 			<div class="logo-container">
-				<img class="logo"
-					src="${pageContext.request.contextPath}/resources/images/system/logo.png"
-					alt="logo">
+				 <div class="logo">
+					<span style="font-family: serif; font-style: italic; font-weight: bold; font-size: 22px;">BookNest</span>
+				</div>	
 			</div>
 
 			<button class="mobile-menu-btn" id="mobile-menu-toggle">
@@ -52,17 +52,7 @@
 						<button type="submit" class="search-button">Search</button>
 					</form>
 
-					<div class="search-category">
-						<div class="category-label">Popular Categories</div>
-						<div class="category-options">
-							<span class="category-option" data-category="fiction">Fiction</span>
-							<span class="category-option" data-category="non-fiction">Non-Fiction</span>
-							<span class="category-option" data-category="science">Science</span>
-							<span class="category-option" data-category="biography">Biography</span>
-							<span class="category-option" data-category="children">Children</span>
-							<span class="category-option" data-category="business">Business</span>
-						</div>
-					</div>
+					
 
 					<div class="search-results-preview" id="search-results-preview">
 						<div class="preview-title">
