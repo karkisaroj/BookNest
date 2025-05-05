@@ -22,13 +22,13 @@ public class HomeController extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		this.bookService = new BookServiceImpl();
-		System.out.println("HomeController Initialized.");
+
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("HomeController doGet called.");
+
 
 		List<BookCartModel> booksForBookSection = Collections.emptyList();
 		List<BookCartModel> booksForPopularSection = Collections.emptyList();
@@ -39,10 +39,8 @@ public class HomeController extends HttpServlet {
 		try {
 			booksForBookSection = bookService.getRandomBooks(4);
 			request.setAttribute("randomBooks", booksForBookSection);
-			System.out.println(
-					"HomeController: Fetched " + booksForBookSection.size() + " random books for 'Books' section.");
+
 		} catch (Exception e) {
-			System.err.println("HomeController: Error fetching random books - " + e.getMessage());
 			e.printStackTrace();
 			errorOccurred = true;
 			errorMessage = "Could not load some book sections.";
@@ -51,12 +49,10 @@ public class HomeController extends HttpServlet {
 		// 2. Fetch Popular Books (most added to cart)
 		try {
 			List<BookCartModel> popularResult = bookService.getTopAddedToCartBooks(4);
-			System.out.println("HomeController: Fetched " + popularResult.size() + " popular books initially.");
 
 			// 3. Implement Fallback Logic for "Popular" section
 			if (popularResult == null || popularResult.isEmpty()) {
-				System.out.println(
-						"HomeController: Popular books empty, fetching random books as fallback for 'Popular' section.");
+
 				// If no popular books found, fetch random ones instead
 				try { // --- Start Inner Try for Fallback ---
 					booksForPopularSection = bookService.getRandomBooks(4); // Fetch another random set
@@ -77,7 +73,6 @@ public class HomeController extends HttpServlet {
 			request.setAttribute("popularBooks", booksForPopularSection);
 
 		} catch (Exception e) { // Catch for initial popular books fetch
-			System.err.println("HomeController: Unexpected error fetching popular books - " + e.getMessage());
 			e.printStackTrace();
 			errorOccurred = true;
 			if (errorMessage == null)

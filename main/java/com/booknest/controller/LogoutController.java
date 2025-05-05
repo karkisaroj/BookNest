@@ -36,11 +36,8 @@ public class LogoutController extends HttpServlet {
      */
     private void processLogout(HttpServletRequest request, HttpServletResponse response) 
             throws IOException {
-        // Log the logout event (optional but recommended for security auditing)
-        String userName = SessionUtil.getAttribute(request, "userName", String.class);
-        if (userName != null) {
-            System.out.println("User logged out: " + userName);
-        }
+
+    	
         
         // Invalidate the session, which removes all session attributes
         SessionUtil.invalidateSession(request);
