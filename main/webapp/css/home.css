@@ -8,6 +8,7 @@
 	--primary-color: #5864ff;
 	--secondary-color: #f8a01c;
 	--text-color: #333333;
+	/* Changed from inheriting #fff to ensure visibility */
 	--light-gray: #f8f9fa;
 	--gray: #6c757d;
 	--success: #28a745;
@@ -56,6 +57,7 @@ body {
 	position: relative;
 	background: linear-gradient(135deg, #f7f9fc 30%, #e8f0fe 100%);
 	overflow: hidden;
+	color: #333333; /* Explicit color declaration for this section */
 }
 
 .sec-1::before {
@@ -103,7 +105,7 @@ body {
 .sec-right p {
 	font-size: 1.1rem;
 	margin-bottom: 2rem;
-	color: var(--gray);
+	color: #333333; /* Explicit color instead of var(--gray) */
 	max-width: 90%;
 }
 
@@ -212,6 +214,7 @@ body {
 .sec-2, .sec-3 {
 	padding: 5rem 0;
 	background-color: white;
+	color: #333333; /* Explicit color declaration for these sections */
 }
 
 .sec-3 {
@@ -304,6 +307,7 @@ body {
 	font-size: 1.2rem;
 	padding: 1rem 1rem 0.5rem;
 	font-weight: 600;
+	color: #333333; /* Explicit color for card titles */
 }
 
 .price-name {
@@ -340,14 +344,12 @@ body {
 /* ==========================================================================
    Why Choose Us Section
    ========================================================================== */
-/* ==========================================================================
-   Why Choose Us Section
-   ========================================================================== */
 .sec-4 {
 	padding: 5rem 0;
 	background-color: white;
 	position: relative;
 	overflow: hidden;
+	color: #333333; /* Explicit color declaration for this section */
 }
 
 .choose-us {
@@ -414,7 +416,7 @@ body {
 }
 
 .abt-fit p {
-	color: #333333; 
+	color: #333333;
 	line-height: 1.6;
 }
 
@@ -426,6 +428,40 @@ body {
 	opacity: 0.1;
 	z-index: 1;
 }
+
+/* Link styles specifically for sections */
+.sec-1 a:not(.exp-btn a), .sec-2 a:not(button a), .sec-3 a:not(button a),
+	.sec-4 a {
+	color: #183B4E;
+}
+
+/* Responsive styles */
+@media ( max-width : 1024px) {
+	.cards {
+		grid-template-columns: repeat(3, 1fr);
+	}
+	.sec-1 .container.flex {
+		flex-direction: column;
+	}
+	.sec-left {
+		height: 400px;
+		width: 100%;
+		margin-top: 2rem;
+	}
+}
+
+@media ( max-width : 768px) {
+	.cards {
+		grid-template-columns: repeat(2, 1fr);
+	}
+	.flex-abt {
+		grid-template-columns: 1fr;
+	}
+	.sec-right h2 {
+		font-size: 2.5rem;
+	}
+}
+
 @media ( max-width : 576px) {
 	.sec-right h2 {
 		font-size: 2.5rem;

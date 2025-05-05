@@ -1,135 +1,232 @@
 @charset "UTF-8";
 
-.book-list {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 20px;
-	justify-content: center;
-	padding: 20px;
-}
-
-.book-item {
-	border: 1px solid #eee;
-	padding: 15px;
-	width: 230px;
-	text-align: center;
-	background-color: #fff;
-	border-radius: 8px;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	transition: transform 0.2s ease;
-}
-
-.book-item:hover {
-	transform: translateY(-5px);
-}
-
-.book-item img {
-	max-width: 80%;
-	height: 180px;
-	object-fit: contain;
-	margin: 0 auto 10px auto;
-	display: block;
-}
-
-.book-item h3 {
-	font-size: 1.1em;
-	margin: 10px 0 5px 0;
-	color: #333;
-}
-
-.book-item .author {
-	font-size: 0.9em;
-	color: #666;
-	margin: 0 0 8px 0;
-}
-
-.book-price {
-	font-weight: bold;
-	color: #007bff;
-	margin-bottom: 15px;
-	font-size: 1.1em;
-}
-
-.book-item form {
-	margin-top: auto;
-}
-
-.book-item button {
-	background-color: #183B4E;
-	color: #F5EEDC;
-	border: none;
-	padding: 10px 15px;
-	border-radius: 34px;
-	cursor: pointer;
-	font-size: 0.9em;
-	width: 80%;
-	transition: background-color 0.3s ease;
-}
-
-.book-item button:hover {
-	background-color: #2a6f97;
-}
-
-.alert {
-	padding: 12px;
-	margin: 15px auto;
-	border-radius: 4px;
-	max-width: 90%;
-	text-align: center;
-}
-
-.alert-success {
-	background-color: #d4edda;
-	color: #155724;
-	border: 1px solid #c3e6cb;
-}
-
-.alert-danger {
-	background-color: #f8d7da;
-	color: #721c24;
-	border: 1px solid #f5c6cb;
-}
-
+/* Container Styles */
 .container {
-	max-width: 1200px;
-	margin: 0 auto;
-	padding: 15px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px;
 }
 
-/* Styled heading like "Why Choose Us" */
+/* Styled heading like in books.css */
 h1 {
-	font-size: 2.2rem;
-	text-align: center;
-	margin-bottom: 3rem;
-	position: relative;
-	color: #183B4E; /* Match the blue color used in the header */
+    font-size: 2.2rem;
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+    color: #183B4E; /* Match the blue color used in the header */
 }
 
 h1::after {
-	content: "";
-	position: absolute;
-	bottom: -0.8rem;
-	left: 50%;
-	transform: translateX(-50%);
-	width: 80px;
-	height: 3px;
-	background-color: #183B4E;
+    content: "";
+    position: absolute;
+    bottom: -0.8rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: #183B4E;
 }
 
-/* Add this to handle any other text that might be white on white */
-body {
-	color: #333; /* Default text color for the page */
+h2 {
+    font-size: 1.5rem;
+    margin: 20px 0;
+    color: #183B4E;
 }
 
-p {
-	color: #333; /* Ensure paragraphs are visible */
+/* Search Form Styles */
+.search-form {
+    display: flex;
+    max-width: 600px;
+    margin: 0 auto 30px;
+    border-radius: 34px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Make sure the "No books available" message is visible */
-.book-list p {
-	color: #333;
-	font-size: 1.1em;
+.search-form input[type="text"] {
+    flex: 1;
+    padding: 12px 20px;
+    border: 1px solid #ddd;
+    border-right: none;
+    font-size: 1rem;
+    outline: none;
+    border-radius: 34px 0 0 34px;
+}
+
+.search-form button {
+    background-color: #183B4E;
+    color: #F5EEDC;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 0 34px 34px 0;
+    transition: background-color 0.3s ease;
+}
+
+.search-form button:hover {
+    background-color: #2a6f97;
+}
+
+/* Book List Styles - Same as in books.css */
+.book-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.book-item {
+    border: 1px solid #eee;
+    padding: 15px;
+    width: 230px;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease;
+}
+
+.book-item:hover {
+    transform: translateY(-5px);
+}
+
+.book-item img {
+    max-width: 80%;
+    height: 180px;
+    object-fit: contain;
+    margin: 0 auto 10px auto;
+    display: block;
+}
+
+.book-item h3 {
+    font-size: 1.1em;
+    margin: 10px 0 5px 0;
+    color: #333;
+}
+
+.book-item .author {
+    font-size: 0.9em;
+    color: #666;
+    margin: 0 0 8px 0;
+}
+
+.book-price {
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+/* Add to Cart Button Styling */
+.book-item button, .add-to-cart-btn {
+    background-color: #183B4E;
+    color: #F5EEDC;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 34px;
+    cursor: pointer;
+    font-size: 0.9em;
+    width: 80%;
+    transition: background-color 0.3s ease;
+}
+
+.book-item button:hover, .add-to-cart-btn:hover {
+    background-color: #2a6f97;
+}
+
+.book-item button:disabled, .add-to-cart-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Alert Styles */
+.alert {
+    padding: 12px;
+    margin: 15px auto;
+    border-radius: 4px;
+    max-width: 90%;
+    text-align: center;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* No Results Styling */
+.no-results {
+    text-align: center;
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 30px;
+    margin: 20px auto;
+    max-width: 600px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.no-results h3 {
+    color: #183B4E;
+    font-size: 1.3em;
+    margin-bottom: 15px;
+}
+
+.no-results p {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+/* Add to Cart Message Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.add-to-cart-message {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .search-form {
+        flex-direction: column;
+        border-radius: 8px;
+    }
+    
+    .search-form input[type="text"] {
+        border-radius: 8px 8px 0 0;
+        border-right: 1px solid #ddd;
+        border-bottom: none;
+    }
+    
+    .search-form button {
+        border-radius: 0 0 8px 8px;
+        width: 100%;
+    }
+    
+    .book-list {
+        gap: 15px;
+    }
+    
+    .book-item {
+        width: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .book-item {
+        width: 100%;
+    }
 }
