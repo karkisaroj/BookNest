@@ -126,11 +126,13 @@ public class BookServiceImpl implements BookService {
 			throw new Exception("Invalid Book ID: " + bookId);
 		BookCartModel book = null;
 
-		String sql = "SELECT " + "  b.bookID, b.book_title, b.description, b.price, b.book_img_url, "
+		String sql = "SELECT " + "  b.bookID, b.book_title, b.isbn, b.publication_date, b.price, b.description, "
+				+ "  b.stock_quantity, b.page_count, b.book_img_url, b.publisherID, "
 				+ "  GROUP_CONCAT(DISTINCT a.author_name ORDER BY a.author_name SEPARATOR ', ') AS authors "
 				+ "FROM book b " + "LEFT JOIN book_author ba ON b.bookID = ba.bookID "
 				+ "LEFT JOIN author a ON ba.authorID = a.authorID " + "WHERE b.bookID = ? "
-				+ "GROUP BY b.bookID, b.book_title, b.description, b.price, b.book_img_url";
+				+ "GROUP BY b.bookID, b.book_title, b.isbn, b.publication_date, b.price, b.description, "
+				+ "b.stock_quantity, b.page_count, b.book_img_url, b.publisherID";
 
 		try (Connection conn = DbConfiguration.getDbConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setInt(1, bookId);
@@ -388,14 +390,18 @@ public class BookServiceImpl implements BookService {
 		}
 	}
 
-	// Changed method name and return type to match BookCartModel
 	private BookCartModel mapRowToBookCartModel(ResultSet rs) throws SQLException {
 		BookCartModel book = new BookCartModel();
 		book.setBookID(rs.getInt("bookID"));
 		book.setBook_title(rs.getString("book_title"));
-		book.setDescription(rs.getString("description"));
+		book.setIsbn(rs.getString("isbn"));
+		book.setPublication_date(rs.getDate("publication_date"));
 		book.setPrice(rs.getBigDecimal("price"));
+		book.setDescription(rs.getString("description"));
+		book.setStock_quantity(rs.getInt("stock_quantity"));
+		book.setPage_count(rs.getInt("page_count"));
 		book.setBook_img_url(rs.getString("book_img_url"));
+		book.setPublisherID(rs.getInt("publisherID"));
 		// Get the comma-separated author list from the 'authors' alias created by
 		// GROUP_CONCAT
 		book.setAuthorName(rs.getString("authors")); // Use the alias 'authors'

@@ -63,8 +63,6 @@ public class CartServiceImpl implements CartService {
 			// Re-throw CartServiceExceptions directly
 			throw e;
 		} catch (Exception e) {
-			// Catch any other unexpected exceptions
-			System.err.println("Unexpected Error in addItemToCart: " + e.getMessage());
 			e.printStackTrace(); // Consider more robust logging
 			throw new CartServiceException("An unexpected error occurred while adding item to cart.", e);
 		}

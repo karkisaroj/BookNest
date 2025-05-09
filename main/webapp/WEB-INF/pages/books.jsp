@@ -45,32 +45,35 @@
 					<c:forEach var="book" items="${books}">
 						<div class="book-item">
 							<div>
-								<c:choose>
-									<c:when test="${not empty book.book_img_url}">
-										<!-- UPDATED: Added the same condition as in home.jsp -->
-										<c:choose>
-											<c:when test="${book.book_img_url.startsWith('resources/')}">
-												<img
-													src="${pageContext.request.contextPath}/${book.book_img_url}"
-													alt="<c:out value='${book.book_title}'/>">
-											</c:when>
-											<c:otherwise>
-												<img
-													src="${pageContext.request.contextPath}${book.book_img_url}"
-													alt="<c:out value='${book.book_title}'/>">
-											</c:otherwise>
-										</c:choose>
-									</c:when>
-									<c:otherwise>
-										<img
-											src="${pageContext.request.contextPath}/resources/images/system/placeholder.png"
-											alt="No image available">
-									</c:otherwise>
-								</c:choose>
+								<!-- Important: This is the link to the product page -->
+								<a
+									href="${pageContext.request.contextPath}/product?bookId=${book.bookID}"
+									class="book-link"> <c:choose>
+										<c:when test="${not empty book.book_img_url}">
+											<c:choose>
+												<c:when test="${book.book_img_url.startsWith('resources/')}">
+													<img
+														src="${pageContext.request.contextPath}/${book.book_img_url}"
+														alt="<c:out value='${book.book_title}'/>">
+												</c:when>
+												<c:otherwise>
+													<img
+														src="${pageContext.request.contextPath}/${book.book_img_url}"
+														alt="<c:out value='${book.book_title}'/>">
+												</c:otherwise>
+											</c:choose>
+										</c:when>
+										<c:otherwise>
+											<img
+												src="${pageContext.request.contextPath}/resources/images/system/placeholder.png"
+												alt="No image available">
+										</c:otherwise>
+									</c:choose>
 
-								<h3>
-									<c:out value="${book.book_title}" />
-								</h3>
+									<h3>
+										<c:out value="${book.book_title}" />
+									</h3>
+								</a>
 
 								<p class="author">
 									By:
@@ -104,7 +107,6 @@
 	</div>
 	<jsp:include page="footer.jsp" />
 
-	<!-- Added debugging JavaScript for troubleshooting -->
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
 			// Debug image paths
@@ -117,9 +119,14 @@
 						// Add error handler to detect broken images
 						img.onerror = function() {
 							console.error('Failed to load image: ' + this.src);
-							// Optionally add a red border to highlight broken images during development
-							// this.style.border = '2px solid red';
 						};
+					});
+
+			// Debug product links
+			document.querySelectorAll('.book-link').forEach(
+					function(link, index) {
+						console.log('Book ' + index + ' product link: '
+								+ link.href);
 					});
 		});
 	</script>

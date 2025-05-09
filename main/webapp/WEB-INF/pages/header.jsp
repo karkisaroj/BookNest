@@ -15,9 +15,10 @@
 	<header id="main-header">
 		<div class="container">
 			<div class="logo-container">
-				 <div class="logo">
-					<span style="font-family: serif; font-style: italic; font-weight: bold; font-size: 22px;">BookNest</span>
-				</div>	
+				<div class="logo">
+					<span
+						style="font-family: serif; font-style: italic; font-weight: bold; font-size: 22px;">BookNest</span>
+				</div>
 			</div>
 
 			<button class="mobile-menu-btn" id="mobile-menu-toggle">
@@ -196,7 +197,7 @@
       });
     });
     
-    // Live search functionality
+    // Live search functionality - without AJAX
     let searchTimeout;
     searchInput.addEventListener('input', () => {
       clearTimeout(searchTimeout);
@@ -211,47 +212,43 @@
       }
     });
     
-    // Function to fetch search results (simulated for this example)
+    // Function to fetch search results (simulated - no AJAX)
     function fetchSearchResults(query) {
-      // In a real application, this would make an AJAX call to the server
-      // For this example, we'll simulate with some dummy data
+      // Sample data with the correct property names
+      const sampleBooks = [
+        { 
+          bookID: 1,
+          book_title: 'The Great Gatsby', 
+          price: '12.99',
+          book_img_url: '${pageContext.request.contextPath}/resources/images/system/placeholder.png'
+        },
+        { 
+          bookID: 2,
+          book_title: 'To Kill a Mockingbird', 
+          price: '10.99',
+          book_img_url: '${pageContext.request.contextPath}/resources/images/system/placeholder.png'
+        },
+        { 
+          bookID: 3,
+          book_title: '1984', 
+          price: '9.99',
+          book_img_url: '${pageContext.request.contextPath}/resources/images/system/placeholder.png'
+        },
+        { 
+          bookID: 4,
+          book_title: 'Pride and Prejudice', 
+          price: '8.99',
+          book_img_url: '${pageContext.request.contextPath}/resources/images/system/placeholder.png' 
+        }
+      ];
       
-      // Show loading state if needed
+      // Filter books based on query (case insensitive)
+      const filteredBooks = sampleBooks.filter(book => 
+        book.book_title.toLowerCase().includes(query.toLowerCase())
+      );
       
-      // Simulate network delay
-      setTimeout(() => {
-        // Sample data - in a real application, this would come from the server
-        const sampleBooks = [
-          { 
-            title: 'The Great Gatsby', 
-            price: '$12.99',
-            image: '${pageContext.request.contextPath}/resources/images/placeholder.jpg'
-          },
-          { 
-            title: 'To Kill a Mockingbird', 
-            price: '$10.99',
-            image: '${pageContext.request.contextPath}/resources/images/placeholder.jpg'
-          },
-          { 
-            title: '1984', 
-            price: '$9.99',
-            image: '${pageContext.request.contextPath}/resources/images/placeholder.jpg'
-          },
-          { 
-            title: 'Pride and Prejudice', 
-            price: '$8.99',
-            image: '${pageContext.request.contextPath}/resources/images/placeholder.jpg' 
-          }
-        ];
-        
-        // Filter books based on query (case insensitive)
-        const filteredBooks = sampleBooks.filter(book => 
-          book.title.toLowerCase().includes(query.toLowerCase())
-        );
-        
-        // Display results
-        displaySearchResults(filteredBooks);
-      }, 300);
+      // Display results
+      displaySearchResults(filteredBooks);
     }
     
     // Function to display search results
@@ -267,16 +264,18 @@
         books.forEach(book => {
           const bookItem = document.createElement('div');
           bookItem.className = 'preview-item';
+          
+          // FIXED: Use the correct property names (book_img_url, book_title)
           bookItem.innerHTML = `
-            <div class="preview-item-img" style="background-image: url('${book.image}')"></div>
-            <div class="preview-item-title">${book.title}</div>
-            <div class="preview-item-price">${book.price}</div>
+            <div class="preview-item-img" style="background-image: url('${book.book_img_url}')"></div>
+            <div class="preview-item-title">${book.book_title}</div>
+            <div class="preview-item-price">Rs ${book.price}</div>
           `;
           
-          // Make the entire item clickable
+          // FIXED: Make the item link to the product page with the correct bookId
           bookItem.style.cursor = 'pointer';
           bookItem.addEventListener('click', () => {
-            window.location.href = '${pageContext.request.contextPath}/book-details?title=' + encodeURIComponent(book.title);
+            window.location.href = '${pageContext.request.contextPath}/product?bookId=' + book.bookID;
           });
           
           previewItemsContainer.appendChild(bookItem);

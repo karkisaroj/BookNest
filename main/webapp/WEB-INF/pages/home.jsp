@@ -63,8 +63,9 @@
 						<c:forEach var="book" items="${randomBooks}">
 							<div class="card">
 								<div class="card-img">
+									<!-- FIXED: Changed 'id' to 'bookId' in the URL parameter -->
 									<a
-										href="${pageContext.request.contextPath}/product?id=${book.bookID}">
+										href="${pageContext.request.contextPath}/product?bookId=${book.bookID}">
 										<c:choose>
 											<c:when test="${not empty book.book_img_url}">
 												<c:choose>
@@ -76,7 +77,7 @@
 													</c:when>
 													<c:otherwise>
 														<img
-															src="${pageContext.request.contextPath}${book.book_img_url}"
+															src="${pageContext.request.contextPath}/${book.book_img_url}"
 															alt="<c:out value='${book.book_title}'/>" />
 													</c:otherwise>
 												</c:choose>
@@ -91,7 +92,10 @@
 									</a>
 								</div>
 								<h3>
-									<c:out value="${book.book_title}" />
+									<a
+										href="${pageContext.request.contextPath}/product?bookId=${book.bookID}">
+										<c:out value="${book.book_title}" />
+									</a>
 								</h3>
 								<div class="price-name">
 									<span><fmt:formatNumber value="${book.price}"
@@ -133,8 +137,9 @@
 						<c:forEach var="book" items="${popularBooks}">
 							<div class="card">
 								<div class="card-img">
+									<!-- FIXED: Changed 'id' to 'bookId' in the URL parameter -->
 									<a
-										href="${pageContext.request.contextPath}/product?id=${book.bookID}">
+										href="${pageContext.request.contextPath}/product?bookId=${book.bookID}">
 										<c:choose>
 											<c:when test="${not empty book.book_img_url}">
 												<c:choose>
@@ -146,7 +151,7 @@
 													</c:when>
 													<c:otherwise>
 														<img
-															src="${pageContext.request.contextPath}${book.book_img_url}"
+															src="${pageContext.request.contextPath}/${book.book_img_url}"
 															alt="<c:out value='${book.book_title}'/>" />
 													</c:otherwise>
 												</c:choose>
@@ -160,7 +165,10 @@
 									</a>
 								</div>
 								<h3>
-									<c:out value="${book.book_title}" />
+									<a
+										href="${pageContext.request.contextPath}/product?bookId=${book.bookID}">
+										<c:out value="${book.book_title}" />
+									</a>
 								</h3>
 								<div class="price-name">
 									<span><fmt:formatNumber value="${book.price}"
@@ -248,6 +256,14 @@
           }
           window.addEventListener('scroll', revealOnScroll);
           revealOnScroll();
+          
+          // Debug logging for book links
+          console.log("Debug: Checking book links on home page");
+          const productLinks = document.querySelectorAll('a[href*="product"]');
+          console.log(`Found ${productLinks.length} product links on this page`);
+          productLinks.forEach((link, index) => {
+            console.log(`Link ${index}: ${link.href}`);
+          });
         });
     </script>
 
