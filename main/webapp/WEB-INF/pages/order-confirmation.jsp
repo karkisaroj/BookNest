@@ -10,68 +10,8 @@
 <title>BookNest - Order Confirmation</title>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/styles.css">
-<style>
-.confirmation-container {
-	max-width: 800px;
-	margin: 50px auto;
-	padding: 30px;
-	background-color: #fff;
-	box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-	border-radius: 5px;
-}
-
-.confirmation-title {
-	color: #28a745;
-	text-align: center;
-	margin-bottom: 30px;
-}
-
-.success-message {
-	background-color: #d4edda;
-	color: #155724;
-	border: 1px solid #c3e6cb;
-	border-radius: 4px;
-	padding: 15px;
-	margin-bottom: 20px;
-}
-
-.order-details {
-	background-color: #f8f9fa;
-	border-left: 5px solid #28a745;
-	padding: 20px;
-	margin: 20px 0;
-}
-
-.total-box {
-	font-size: 18px;
-	font-weight: bold;
-	text-align: right;
-	margin-top: 20px;
-}
-
-.action-buttons {
-	text-align: center;
-	margin-top: 30px;
-}
-
-.btn {
-	display: inline-block;
-	padding: 10px 20px;
-	margin: 0 10px;
-	text-decoration: none;
-	color: white;
-	border-radius: 4px;
-	font-weight: bold;
-}
-
-.btn-primary {
-	background-color: #007bff;
-}
-
-.btn-success {
-	background-color: #28a745;
-}
-</style>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/order-confirmation.css">
 </head>
 <body>
 	<jsp:include page="header.jsp" />
@@ -86,25 +26,31 @@
 
 			<div class="order-details">
 				<p>
-					<strong>Order Number:</strong> #${orderId}
+					<strong>Order Number:</strong> <span id="orderNumber">#${orderId}</span>
 				</p>
 				<p>
-					<strong>Order Date:</strong> ${not empty orderDate ? orderDate : 'Today'}
+					<strong>Order Date:</strong> <span id="orderDate">${not empty orderDate ? orderDate : 'Today'}</span>
 				</p>
 				<p>
-					<strong>Status:</strong> Confirmed
+					<strong>Status:</strong> <span id="orderStatus"
+						class="status-confirmed">Confirmed</span>
 				</p>
 			</div>
 
+			<!-- Total display with proper null check and improved styling -->
 			<div class="total-box">
-				<p>
-					Total: Rs.
-					<fmt:formatNumber value="${orderTotal}" pattern="#,##0.00" />
-				</p>
+				<span class="total-label">Total:</span> <span class="total-amount">
+					Rs. <c:choose>
+						<c:when test="${empty orderTotal}">0.00</c:when>
+						<c:otherwise>
+							<fmt:formatNumber value="${orderTotal}" pattern="#,##0.00" />
+						</c:otherwise>
+					</c:choose>
+				</span>
 			</div>
 
-			<p>Thank you for your purchase! We've received your order and
-				will begin processing it right away.</p>
+			<p class="thank-you-text">Thank you for your purchase! We've
+				received your order and will begin processing it right away.</p>
 
 			<div class="action-buttons">
 				<a href="${pageContext.request.contextPath}/books"

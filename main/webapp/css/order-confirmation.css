@@ -1,0 +1,270 @@
+@charset "UTF-8";
+
+/* Order Confirmation Page Styles */
+:root {
+	--primary-color: #3d5a80;
+	--success-color: #2e8540;
+	--success-light: #dff0d8;
+	--primary-light: #eef5ff;
+	--text-dark: #333333;
+	--text-darker: #000000;
+	--text-light: #ffffff;
+	--border-radius: 8px;
+	--box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+	--transition: all 0.3s ease;
+}
+
+.main-container {
+	background-color: #f8f9fa;
+	min-height: calc(100vh - 200px);
+	padding: 40px 20px;
+}
+
+.confirmation-container {
+	max-width: 800px;
+	margin: 20px auto 50px;
+	padding: 40px;
+	background-color: #ffffff;
+	box-shadow: var(--box-shadow);
+	border-radius: var(--border-radius);
+	position: relative;
+}
+
+.confirmation-title {
+	color: var(--success-color);
+	text-align: center;
+	margin-bottom: 30px;
+	font-size: 32px;
+	font-weight: 700;
+	position: relative;
+}
+
+/* Underline for title */
+.confirmation-title::after {
+	content: "";
+	display: block;
+	width: 100px;
+	height: 4px;
+	background-color: var(--success-color);
+	margin: 15px auto 0;
+	border-radius: 2px;
+}
+
+.success-message {
+	background-color: var(--success-light);
+	color: var(--success-color);
+	border: 1px solid #c3e6cb;
+	border-radius: var(--border-radius);
+	padding: 20px;
+	margin-bottom: 30px;
+	font-size: 18px;
+	font-weight: 500;
+	text-align: center;
+}
+
+.order-details {
+	background-color: var(--primary-light);
+	border-left: 6px solid var(--success-color);
+	padding: 25px;
+	margin: 30px 0;
+	border-radius: var(--border-radius);
+}
+
+.order-details p {
+	margin: 15px 0;
+	font-size: 17px;
+	color: var(--text-dark);
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.order-details strong {
+	color: var(--text-darker);
+	font-weight: 600;
+	display: inline-block;
+	width: 140px;
+	flex-shrink: 0;
+}
+
+/* FIXED: Improved Order Label Visibility */
+.order-label {
+	background-color: var(--primary-color);
+	color: var(--text-light);
+	/* Keeping white text but ensuring it's visible */
+	display: inline-block;
+	padding: 8px 16px;
+	border-radius: 4px;
+	font-weight: 700;
+	margin-right: 10px;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+	/* Added text shadow for better visibility */
+	letter-spacing: 0.5px; /* Improved readability */
+}
+
+.order-value {
+	font-weight: 600;
+	color: var(--text-darker);
+}
+
+.total-box {
+	margin: 30px 0;
+	padding: 20px;
+	background-color: #f8f9fa;
+	border-top: 2px solid #e9ecef;
+	border-bottom: 2px solid #e9ecef;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+/* FIXED: Improved Total Label Visibility */
+.total-label {
+	background-color: var(--primary-color);
+	color: var(--text-light);
+	padding: 10px 15px;
+	border-radius: 5px;
+	font-weight: 700;
+	font-size: 18px;
+	margin-right: 15px;
+	display: inline-block;
+	text-align: center;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+	/* Added text shadow for better visibility */
+	letter-spacing: 0.5px; /* Improved readability */
+	border: 1px solid #2d4a70; /* Subtle border for definition */
+}
+
+.total-amount {
+	font-size: 24px;
+	color: var(--text-darker);
+	font-weight: 700;
+	display: inline-block;
+}
+
+.thank-you-text {
+	text-align: center;
+	margin: 30px 0;
+	font-size: 18px;
+	color: var(--text-dark);
+	line-height: 1.6;
+}
+
+.action-buttons {
+	text-align: center;
+	margin-top: 40px;
+	display: flex;
+	justify-content: center;
+	gap: 20px;
+}
+
+.btn {
+	display: inline-block;
+	padding: 14px 28px;
+	text-decoration: none;
+	color: white;
+	border-radius: var(--border-radius);
+	font-weight: 600;
+	font-size: 16px;
+	transition: var(--transition);
+	border: none;
+	cursor: pointer;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 7px 14px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+	transform: translateY(1px);
+}
+
+.btn-primary {
+	background-color: #4169e1; /* Royal Blue */
+}
+
+.btn-primary:hover {
+	background-color: #3557c7;
+}
+
+.btn-success {
+	background-color: #2e8b57; /* Sea Green */
+}
+
+.btn-success:hover {
+	background-color: #26734a;
+}
+
+/* FIXED: Status styling with improved visibility */
+.status-confirmed {
+	color: var(--success-color);
+	font-weight: 600;
+	background-color: rgba(46, 133, 64, 0.1);
+	/* Very light green background */
+	padding: 3px 8px;
+	border-radius: 3px;
+}
+
+/* Remove search button that appears in the screenshot */
+.search {
+	display: none;
+}
+
+/* Order number, date and status styling for better visibility */
+#orderNumber, #orderDate, #orderStatus {
+	background-color: var(--primary-color);
+	color: white;
+	padding: 6px 12px;
+	border-radius: 4px;
+	font-weight: 600;
+	display: inline-block;
+	margin-left: 8px;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+/* Total styling for better visibility */
+#orderTotal {
+	background-color: var(--primary-color);
+	color: white;
+	padding: 8px 15px;
+	border-radius: 5px;
+	font-size: 20px;
+	font-weight: 700;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive styles */
+@media ( max-width : 768px) {
+	.confirmation-container {
+		padding: 30px 20px;
+	}
+	.order-details strong {
+		width: 120px;
+	}
+	.action-buttons {
+		flex-direction: column;
+		gap: 15px;
+	}
+	.btn {
+		width: 100%;
+	}
+	.confirmation-title {
+		font-size: 26px;
+	}
+}
+
+/* Print styles */
+@media print {
+	.action-buttons, header, footer {
+		display: none;
+	}
+	.confirmation-container {
+		box-shadow: none;
+		border: 1px solid #ddd;
+	}
+	.order-details {
+		background-color: #fff;
+		border-left: 2px solid #333;
+	}
+}
