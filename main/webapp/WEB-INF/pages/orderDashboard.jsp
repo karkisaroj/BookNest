@@ -5,10 +5,11 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>BookNest Admin - Orders</title>
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/orderDashboard.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BookNest Admin - Orders</title>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/orderDashboard.css">
 
 </head>
 
@@ -25,19 +26,19 @@
 			<!-- Display Success or Error Messages -->
 			<div class="message-container">
 				<%
-				if (request.getAttribute("success") != null) { 
+				if (request.getAttribute("success") != null) {
 				%>
 				<div class="success-message">
-					<%= request.getAttribute("success") %>
+					<%=request.getAttribute("success")%>
 				</div>
 				<%
-				} else if (request.getAttribute("error") != null) { 
+				} else if (request.getAttribute("error") != null) {
 				%>
 				<div class="error-message">
-					<%= request.getAttribute("error") %>
+					<%=request.getAttribute("error")%>
 				</div>
 				<%
-				} 
+				}
 				%>
 			</div>
 
@@ -65,7 +66,7 @@
 										<td>${order.orderID}</td>
 										<td>${order.userID}</td>
 										<td>${order.orderDate}</td>
-										<td>${order.shippingAddress}</td>
+										<td class="shipping-address">${order.shippingAddress}</td>
 										<td>${order.totalAmount}</td>
 										<td class="order-status">${order.orderStatus}</td>
 										<td>
@@ -82,7 +83,8 @@
 							</c:when>
 							<c:otherwise>
 								<tr>
-									<td colspan="8" style="text-align: center;">No orders found</td>
+									<td colspan="8" style="text-align: center;">No orders
+										found</td>
 								</tr>
 							</c:otherwise>
 						</c:choose>
@@ -110,6 +112,8 @@
 					element.classList.add("status-in-progress");
 				} else if (status === "completed") {
 					element.classList.add("status-completed");
+				} else if (status === "pending") {
+					element.classList.add("status-pending");
 				}
 			});
 		});

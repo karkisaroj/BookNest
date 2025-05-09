@@ -1,114 +1,177 @@
 @charset "UTF-8";
+/* Order Dashboard Styles */
 
-/* Styling for the Orders page */
+/* Main layout */
+.admin-dashboard-container {
+	display: flex;
+	min-height: calc(100vh - 100px);
+	background-color: #f5f7fa;
+}
+
 .main-content {
-	padding: 20px;
+	flex: 1;
+	padding: 20px 30px;
 }
 
 .header {
-	margin-bottom: 20px; /* Reduced space below the header */
-	padding-bottom: 10px;
-	border-bottom: 3px solid #3498db;
+	margin-bottom: 30px;
 }
 
 .header h1 {
-	color: #2c3e50;
+	color: #333;
 	font-size: 28px;
+	margin-bottom: 10px;
 }
 
-.orders-table-container {
-	background: white;
-	padding: 20px;
-	border-radius: 5px;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-	margin: 30px auto 270px; /* Added triple space below the table */
-}
-
-.orders-table-container h2 {
-	margin-bottom: 20px;
-	color: #2c3e50;
-}
-
-table {
-	width: 100%;
-	border-collapse: collapse;
-}
-
-th {
-	background-color: #ecf0f1;
-	padding: 10px;
-	text-align: left;
-	border-bottom: 2px solid #dcdcdc;
-	color: #2c3e50; /* Ensuring header text is visible */
-}
-
-td {
-	padding: 10px;
-	border-bottom: 1px solid #ecf0f1;
-	color: #333; /* Adding text color for table data */
-}
-
-.status-btn {
-	background-color: #3498db;
-	color: white;
-	border: none;
-	padding: 5px 12px;
-	border-radius: 5px;
-	cursor: pointer;
-	transition: background-color 0.2s ease;
-}
-
-.status-btn:hover {
-	background-color: #2980b9;
-}
-
-.checkbox-column {
-	width: 30px;
-}
-
-.id-column {
-	width: 50px;
-}
-
+/* Message styling */
 .message-container {
-	margin: 20px auto; /* Consistent spacing for messages */
-	padding: 10px;
-	width: 80%;
-	text-align: center;
-	border-radius: 5px;
-	font-size: 16px;
-	font-weight: bold;
+	margin-bottom: 20px;
 }
 
 .success-message {
 	background-color: #d4edda;
 	color: #155724;
-	border: 1px solid #c3e6cb;
+	padding: 15px;
+	border-radius: 5px;
+	margin-bottom: 20px;
 }
 
 .error-message {
 	background-color: #f8d7da;
 	color: #721c24;
-	border: 1px solid #f5c6cb;
+	padding: 15px;
+	border-radius: 5px;
+	margin-bottom: 20px;
 }
 
-/* Styling for status colors */
+/* Orders table styling */
+.orders-table-container {
+	background-color: white;
+	border-radius: 8px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	padding: 20px;
+	overflow: hidden;
+}
+
+.orders-table-container h2 {
+	color: #333;
+	font-size: 22px;
+	margin-bottom: 20px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #eee;
+}
+
+.orders-table-container table {
+	border-collapse: collapse;
+	width: 100%;
+	margin-top: 20px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.orders-table-container th {
+	background-color: #3d5a80;
+	color: white;
+	padding: 12px 10px;
+	text-align: left;
+	font-weight: 600;
+}
+
+.orders-table-container td {
+	padding: 10px;
+	border-bottom: 1px solid #ddd;
+	vertical-align: middle;
+}
+
+.orders-table-container tr:nth-child(even) {
+	background-color: #f5f7fa;
+}
+
+.orders-table-container tr:hover {
+	background-color: #eef5ff;
+}
+
+.checkbox-column {
+	width: 40px;
+	text-align: center;
+}
+
+/* Shipping address styling */
+.shipping-address {
+	font-size: 14px;
+	line-height: 1.4;
+	color: #333;
+	max-width: 220px;
+	white-space: normal;
+	word-break: break-word;
+	font-family: 'Arial', sans-serif;
+	padding: 5px;
+	background-color: #f9f9f9;
+	border-radius: 4px;
+	border-left: 3px solid #3d5a80;
+}
+
+/* Order status styling */
+.order-status {
+	padding: 6px 10px;
+	border-radius: 20px;
+	font-weight: 500;
+	text-align: center;
+	display: inline-block;
+	min-width: 100px;
+}
+
+.status-pending {
+	background-color: #fff3cd;
+	color: #856404;
+}
+
 .status-in-progress {
-	color: orange;
-	font-weight: bold;
+	background-color: #d1ecf1;
+	color: #0c5460;
 }
 
 .status-completed {
-	color: green;
-	font-weight: bold;
+	background-color: #d4edda;
+	color: #155724;
 }
 
-/* Add specific styling for the Order List table */
-#order-list-table td {
-	color: #333; /* Ensuring text in cells is visible */
-}
-
-/* Ensure "Change Status" button text is visible */
+/* Action button styling */
 .status-btn {
-	color: white !important;
+	background-color: #4169e1;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	padding: 8px 12px;
+	cursor: pointer;
+	font-size: 13px;
+	transition: background-color 0.3s;
+}
+
+.status-btn:hover {
+	background-color: #3557c7;
+}
+
+/* Responsive table adjustments */
+@media ( max-width : 992px) {
+	.orders-table-container table {
+		font-size: 14px;
+	}
+	.orders-table-container th, .orders-table-container td {
+		padding: 8px 6px;
+	}
+	.shipping-address {
+		max-width: 150px;
+	}
+}
+
+@media ( max-width : 768px) {
+	.orders-table-container {
+		overflow-x: auto;
+	}
+	.orders-table-container table {
+		min-width: 800px;
+	}
+	.admin-dashboard-container {
+		flex-direction: column;
+	}
 }
