@@ -2,244 +2,364 @@
 
 /* General Body Styling */
 body {
-	font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
-	margin: 0;
-	padding: 0;
-	background-color: #f5f5f5;
-	color: #333;
-	line-height: 1.6;
+    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
 }
 
 .container1 {
-	display: flex;
-	min-height: calc(100vh - 60px);
+    display: flex;
+    min-height: calc(100vh - 60px);
 }
 
 /* Main Content Styling */
 main {
-	flex: 1;
-	padding: 40px;
-	background-color: #f5f5f5;
-	max-width: 1200px;
-	margin: 0 auto;
+    flex: 1;
+    padding: 40px;
+    background-color: #f5f5f5;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 /* Center-aligned content wrapper */
 .content-wrapper {
-	max-width: 1000px;
-	margin: 0 auto;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 /* Enhanced header styling with centered gradient underline */
 main h1 {
-	color: #183B4E;
-	font-size: 2.4rem;
-	margin-bottom: 40px;
-	font-weight: 600;
-	text-align: center;
-	position: relative;
-	padding-bottom: 15px;
+    color: #183B4E;
+    font-size: 2.4rem;
+    margin-bottom: 40px;
+    font-weight: 600;
+    text-align: center;
+    position: relative;
+    padding-bottom: 15px;
 }
 
 main h1::after {
-	content: '';
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-	bottom: 0;
-	height: 3px;
-	width: 120px;
-	background: linear-gradient(90deg, rgba(52, 152, 219, 0.5) 0%, #183B4E
-		50%, rgba(52, 152, 219, 0.5) 100%);
-	border-radius: 2px;
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    height: 3px;
+    width: 120px;
+    background: linear-gradient(90deg, rgba(52, 152, 219, 0.5) 0%, #183B4E 50%, rgba(52, 152, 219, 0.5) 100%);
+    border-radius: 2px;
 }
 
 /* Store Overview Cards */
 .store-overview {
-	display: flex;
-	gap: 25px;
-	margin-bottom: 50px;
-	justify-content: center;
+    display: flex;
+    gap: 25px;
+    margin-bottom: 50px;
+    justify-content: center;
 }
 
 .overview-item {
-	background: #fff;
-	border-radius: 12px;
-	padding: 30px 25px;
-	flex: 1;
-	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-	transition: transform 0.3s ease, box-shadow 0.3s ease;
-	text-align: center;
-	border-left: none;
-	position: relative;
-	overflow: hidden;
+    background: #fff;
+    border-radius: 12px;
+    padding: 30px 25px;
+    flex: 1;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    border-left: none;
+    position: relative;
+    overflow: hidden;
 }
 
 /* Colored top borders instead of side borders */
 .overview-item::before {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 5px;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
 }
 
 .overview-item:nth-child(1)::before {
-	background-color: #3498db;
+    background-color: #3498db;
 }
 
 .overview-item:nth-child(2)::before {
-	background-color: #2ecc71;
+    background-color: #2ecc71;
 }
 
 .overview-item:nth-child(3)::before {
-	background-color: #e74c3c;
+    background-color: #e74c3c;
 }
 
 .overview-item:hover {
-	transform: translateY(-8px);
-	box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
 /* Enhanced amount text */
 .overview-item p:first-child {
-	font-size: 32px;
-	font-weight: 700;
-	margin: 0 0 15px 0;
-	color: #183B4E;
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0 0 15px 0;
+    color: #183B4E;
 }
 
 /* Enhanced caption text */
 .overview-item p:last-child {
-	margin: 0;
-	color: #555;
-	font-size: 16px;
-	font-weight: 500;
+    margin: 0;
+    color: #555;
+    font-size: 16px;
+    font-weight: 500;
 }
 
 /* Best Selling Section */
 .best-selling {
-	background-color: #fff;
-	border-radius: 12px;
-	padding: 35px;
-	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 35px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
 }
 
 .best-selling h2 {
-	color: #183B4E;
-	font-size: 1.8rem;
-	margin-top: 0;
-	margin-bottom: 30px;
-	font-weight: 600;
-	text-align: center;
-	position: relative;
-	padding-bottom: 12px;
+    color: #183B4E;
+    font-size: 1.8rem;
+    margin-top: 0;
+    margin-bottom: 30px;
+    font-weight: 600;
+    text-align: center;
+    position: relative;
+    padding-bottom: 12px;
 }
 
 /* Centered underline for heading */
 .best-selling h2::after {
-	content: "";
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-	bottom: 0;
-	width: 80px;
-	height: 3px;
-	background-color: #183B4E;
-	border-radius: 2px;
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 80px;
+    height: 3px;
+    background-color: #183B4E;
+    border-radius: 2px;
 }
 
 .best-selling table {
-	width: 100%;
-	border-collapse: separate;
-	border-spacing: 0;
-	border-radius: 8px;
-	overflow: hidden;
-	margin-top: 20px;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 20px;
 }
 
 /* Table header styling */
 .best-selling th {
-	background-color: #183B4E;
-	color: #ffffff;
-	font-weight: 500;
-	padding: 16px 20px;
-	text-align: left;
-	font-size: 16px;
+    background-color: #183B4E;
+    color: #ffffff;
+    font-weight: 500;
+    padding: 16px 20px;
+    text-align: left;
+    font-size: 16px;
 }
 
 /* Table data styling with explicit colors */
 .best-selling td {
-	padding: 16px 20px;
-	border-bottom: 1px solid #eaeaea;
-	font-size: 15px;
-	color: #333;
-	background-color: #ffffff;
+    padding: 16px 20px;
+    border-bottom: 1px solid #eaeaea;
+    font-size: 15px;
+    color: #333;
+    background-color: #ffffff;
 }
 
 .best-selling tbody tr:hover {
-	background-color: #f0f7fc;
+    background-color: #f0f7fc;
 }
 
 .best-selling tbody tr:hover td {
-	background-color: #f0f7fc;
+    background-color: #f0f7fc;
 }
 
 .best-selling tbody tr:last-child td {
-	border-bottom: none;
+    border-bottom: none;
 }
 
 /* Special styling for numbers in the table */
 .best-selling td:last-child {
-	font-weight: 600;
-	color: #183B4E;
-	text-align: center;
+    font-weight: 600;
+    color: #183B4E;
+    text-align: center;
 }
 
 /* Book name column */
 .best-selling td:first-child {
-	font-weight: 500;
+    font-weight: 500;
+}
+
+/* Books Management Section */
+.books-management {
+    margin-top: 50px;
+}
+
+.books-management h2 {
+    margin-bottom: 25px;
+    color: #183B4E;
+    font-size: 1.8rem;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+/* Add underline to the Books Management heading */
+.books-management h2::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 60px;
+    height: 3px;
+    background-color: #183B4E;
+    border-radius: 2px;
+}
+
+/* Books Table Styling */
+.books-table-container {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+}
+
+.books-table-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.books-table-container th {
+    background-color: #183B4E;
+    padding: 12px 15px;
+    text-align: left;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.books-table-container td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ecf0f1;
+    color: #333;
+}
+
+.books-table-container tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.books-table-container tr:hover {
+    background-color: #f0f7fc;
+}
+
+/* Book Image Styling */
+.book-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Action Buttons */
+.edit-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    font-weight: 500;
+    margin-right: 5px;
+}
+
+.edit-btn:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+.delete-btn {
+    background-color: #c44d4d;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    font-weight: 500;
+}
+
+.delete-btn:hover {
+    background-color: #b53535;
+    transform: translateY(-2px);
 }
 
 /* Responsive adjustments */
 @media ( max-width : 992px) {
-	.container1 {
-		flex-direction: column;
-	}
-	main {
-		padding: 30px 20px;
-	}
-	.store-overview {
-		flex-wrap: wrap;
-	}
-	.best-selling {
-		padding: 25px;
-	}
+    .container1 {
+        flex-direction: column;
+    }
+    table {
+        display: block;
+        overflow-x: auto;
+    }
 }
 
-@media ( max-width : 768px) {
-	.store-overview {
-		flex-direction: column;
-	}
-	.overview-item {
-		width: 100%;
-		margin-bottom: 20px;
-		max-width: 400px;
-		margin-left: auto;
-		margin-right: auto;
-	}
-	main h1 {
-		font-size: 2rem;
-	}
-	.best-selling h2 {
-		font-size: 1.5rem;
-	}
-	.best-selling {
-		overflow-x: auto;
-		padding: 20px;
-	}
-	.best-selling table {
-		min-width: 500px;
-	}
+@media ( max-width : 576px) {
+    main h1 {
+        font-size: 2rem;
+    }
+    .books-management h2 {
+        font-size: 1.5rem;
+    }
+    .books-table-container {
+        overflow-x: auto;
+        padding: 20px;
+    }
+    .books-table-container table {
+        min-width: 500px;
+    }
+}
+/* Improved Message Styling */
+.message-container {
+	margin: 0 0 25px 0;
+	padding: 0;
+	width: 100%;
+}
+
+.success-message {
+	background-color: #d4edda;
+	color: #155724;
+	border: 1px solid #c3e6cb;
+	padding: 12px 15px;
+	border-radius: 5px;
+	font-size: 15px;
+	font-weight: 500;
+	text-align: center;
+}
+
+.error-message {
+	background-color: #f8d7da;
+	color: #721c24;
+	border: 1px solid #f5c6cb;
+	padding: 12px 15px;
+	border-radius: 5px;
+	font-size: 15px;
+	font-weight: 500;
+	text-align: center;
 }
