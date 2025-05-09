@@ -2,9 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,175 +14,126 @@
 <body>
 	<jsp:include page="header.jsp" />
 
-	<%
-	// Ensure user is logged in
-	if (session.getAttribute("userID") == null) {
-		response.sendRedirect(request.getContextPath() + "/login");
-		return;
-	}
-	%>
+	<div class="checkout-container">
+		<h1>Checkout</h1>
 
-	<div class="main-content">
-		<!-- Display any error messages -->
-		<c:if test="${not empty formError}">
-			<div class="error-message">${formError}</div>
+		<!-- Display messages -->
+		<c:if test="${not empty errorMessage}">
+			<div class="error-message">${errorMessage}</div>
 		</c:if>
 
-		<form action="${pageContext.request.contextPath}/checkout"
-			method="post">
-			<div class="shipping-section">
-				<h1>Checkout</h1>
-
+		<div class="checkout-content">
+			<div class="checkout-form">
 				<h2>Shipping Information</h2>
+				<form action="${pageContext.request.contextPath}/checkout"
+					method="post">
+					<div class="form-group">
+						<label for="streetAddress">Street Address*</label> <input
+							type="text" id="streetAddress" name="streetAddress" required>
+					</div>
 
-				<div class="delivery-options">
-					<label class="delivery-option"> <input type="radio"
-						name="deliveryType" value="delivery" checked> <span>Delivery</span>
-					</label> <label class="delivery-option"> <input type="radio"
-						name="deliveryType" value="pickup"> <span>Pick Up</span>
-					</label>
-				</div>
+					<div class="form-group">
+						<label for="city">City*</label> <input type="text" id="city"
+							name="city" required>
+					</div>
 
-				<div class="form-group">
-					<label>First name *</label> <input type="text" name="firstName"
-						class="form-control" placeholder="Enter your first name"
-						value="${userName}" required>
-				</div>
+					<div class="form-row">
+						<div class="form-group half">
+							<label for="state">State/Province*</label> <input type="text"
+								id="state" name="state" required>
+						</div>
 
-				<div class="form-group">
-					<label>Email Address</label> <input type="email" name="email"
-						class="form-control" placeholder="Enter your email address"
-						value="${userEmail}">
-				</div>
+						<div class="form-group half">
+							<label for="zipCode">Postal Code*</label> <input type="text"
+								id="zipCode" name="zipCode" required>
+						</div>
+					</div>
 
-				<div class="form-group">
-					<label>Phone Number *</label> <input type="tel" name="phone"
-						class="form-control" placeholder="Enter your phone number"
-						required>
-				</div>
+					<div class="form-group">
+						<label for="phone">Phone Number*</label> <input type="tel"
+							id="phone" name="phone" required> <small>For
+							delivery purposes only</small>
+					</div>
 
-				<div class="form-group">
-					<label>Country *</label> <input type="text" name="country"
-						class="form-control" placeholder="Enter your country name"
-						value="Nepal" required>
-				</div>
+					<h2 class="payment-title">Payment Information</h2>
+					<div class="payment-methods">
+						<div class="payment-method">
+							<input type="radio" id="cashOnDelivery" name="paymentMethod"
+								value="cod" checked> <label for="cashOnDelivery">Cash
+								on Delivery</label>
+						</div>
+						<div class="payment-method">
+							<input type="radio" id="onlinePayment" name="paymentMethod"
+								value="online"> <label for="onlinePayment">Online
+								Payment</label>
+						</div>
+					</div>
 
-				<div class="terms-checkbox">
-					<input type="checkbox" id="terms" name="terms" required> <label
-						for="terms">I have read and agree to the Terms and
-						Conditions.</label>
-				</div>
+					<div class="order-summary">
+						<h2>Order Summary</h2>
+						<div class="summary-row">
+							<span>Subtotal</span> <span>Rs. <fmt:formatNumber
+									value="${cartTotal}" pattern="#,##0.00" /></span>
+						</div>
+						<div class="summary-row">
+							<span>Shipping</span> <span>Rs. <fmt:formatNumber
+									value="${shippingCost}" pattern="#,##0.00" /></span>
+						</div>
+						<div class="summary-row total">
+							<span>Total</span> <span>Rs. <fmt:formatNumber
+									value="${cartTotal + shippingCost}" pattern="#,##0.00" /></span>
+						</div>
+					</div>
+
+					<div class="checkout-actions">
+						<a href="${pageContext.request.contextPath}/cart"
+							class="btn btn-secondary">Back to Cart</a>
+						<button type="submit" class="btn btn-primary">Place Order</button>
+					</div>
+				</form>
 			</div>
-
-			<div class="review-section">
-				<h2>Review Your Cart</h2>
-
-				<c:forEach var="item" items="${cartItems}">
-					<div class="cart-item">
-						<c:choose>
-							<c:when test="${not empty item.bookModel.book_img_url}">
-								<c:choose>
-									<c:when
-										test="${item.bookModel.book_img_url.startsWith('resources/')}">
-										<img
-											src="${pageContext.request.contextPath}/${item.bookModel.book_img_url}"
-											alt="${item.bookModel.book_title}">
-									</c:when>
-									<c:otherwise>
-										<img
-											src="${pageContext.request.contextPath}/${item.bookModel.book_img_url}"
-											alt="${item.bookModel.book_title}">
-									</c:otherwise>
-								</c:choose>
-							</c:when>
-							<c:otherwise>
-								<img
-									src="${pageContext.request.contextPath}/resources/images/system/placeholder.png"
-									alt="No image available">
-							</c:otherwise>
-						</c:choose>
-
-						<div class="cart-item-details">
-							<p>${item.bookModel.book_title}</p>
-							<p>${item.quantity}x</p>
-							<p>
-								Rs.
-								<fmt:formatNumber value="${item.bookModel.price}"
-									pattern="#,##0.00" />
-							</p>
-						</div>
-					</div>
-				</c:forEach>
-
-				<div class="price-summary">
-					<div class="price-row">
-						<div>Subtotal</div>
-						<div>
-							Rs.
-							<fmt:formatNumber value="${subtotal}" pattern="#,##0.00" />
-						</div>
-					</div>
-					<div class="price-row">
-						<div>Shipping</div>
-						<div>
-							Rs.
-							<fmt:formatNumber value="${shipping}" pattern="#,##0.00" />
-						</div>
-					</div>
-					<div class="price-row">
-						<div>Discount</div>
-						<div>
-							Rs.
-							<fmt:formatNumber value="${discount}" pattern="#,##0.00" />
-						</div>
-					</div>
-					<div class="price-row total-row">
-						<div>Total</div>
-						<div>
-							Rs.
-							<fmt:formatNumber value="${total}" pattern="#,##0.00" />
-						</div>
-					</div>
-				</div>
-
-				<button type="submit" class="btn btn-primary">Pay Now</button>
-				<a href="${pageContext.request.contextPath}/cart"
-					class="btn btn-secondary">Back to Cart</a>
-			</div>
-		</form>
+		</div>
 	</div>
 
 	<jsp:include page="footer.jsp" />
 
 	<script>
+		// Form validation
 		document
 				.addEventListener(
 						'DOMContentLoaded',
 						function() {
-							// Debug information
-							console.log('Checkout page loaded');
-							console.log('Cart items: ${cartItems.size()}');
-							console.log('Total: ${total}');
-
-							// Form validation enhancement
-							const form = document.querySelector('form');
-							form
+							const checkoutForm = document.querySelector('form');
+							checkoutForm
 									.addEventListener(
 											'submit',
-											function(e) {
+											function(event) {
+												const streetAddress = document
+														.getElementById('streetAddress').value
+														.trim();
+												const city = document
+														.getElementById('city').value
+														.trim();
+												const state = document
+														.getElementById('state').value
+														.trim();
+												const zipCode = document
+														.getElementById('zipCode').value
+														.trim();
 												const phone = document
-														.querySelector('input[name="phone"]').value;
-												if (phone.trim().length < 6) {
-													e.preventDefault();
-													alert('Please enter a valid phone number');
+														.getElementById('phone').value
+														.trim();
+
+												if (!streetAddress || !city
+														|| !state || !zipCode
+														|| !phone) {
+													event.preventDefault();
+													alert('Please fill in all required fields.');
+													return false;
 												}
 
-												const terms = document
-														.querySelector('#terms').checked;
-												if (!terms) {
-													e.preventDefault();
-													alert('You must agree to the Terms and Conditions');
-												}
+												console
+														.log("Form is valid, submitting...");
 											});
 						});
 	</script>
