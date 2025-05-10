@@ -4,46 +4,433 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.container1 {
+:root {
+    /* Using unique variable names to avoid conflicts */
+    --bn-primary-color: #2b4b81;
+    --bn-accent-color: #3a6ea5;
+    --bn-light-accent: #e8f0f9;
+    --bn-text-color: #2d3b4e;
+    --bn-light-bg: #f8f9fa;
+    --bn-white: #ffffff;
+    --bn-gold: #d4af37;
+}
+
+/* Reset styles specifically for about page sections */
+.about-section * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* About Us Section Styles */
+.about-hero {
+    background-color: var(--bn-primary-color);
+    color: var(--bn-white);
+    padding: 6rem 0 8rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.shape {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+}
+
+.shape-1 {
+    width: 300px;
+    height: 300px;
+    top: -100px;
+    right: 10%;
+}
+
+.shape-2 {
+    width: 200px;
+    height: 200px;
+    bottom: -50px;
+    left: 5%;
+}
+
+.shape-3 {
+    width: 150px;
+    height: 150px;
+    top: 30%;
+    left: 20%;
+}
+
+.about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.section-label {
+    font-weight: 500;
+    font-size: 1rem;
+    color: var(--bn-gold);
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    display: inline-block;
+    position: relative;
+}
+
+.section-label::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 2px;
+    background-color: var(--bn-gold);
+    margin-top: 8px;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    max-width: 600px;
+    font-weight: 300;
+}
+
+.about-content {
+    margin-top: -4rem;
+    padding-bottom: 6rem;
+    position: relative;
+    z-index: 10;
+}
+
+.content-card {
+    background: var(--bn-white);
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 30px 100px;
-
-    border-radius: 15px; 
+    overflow: hidden;
 }
 
-.about-us {
-    width: 20%;
+.story-section {
+    flex: 1;
+    padding: 3rem;
 }
 
+.story-title {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    color: var(--bn-primary-color);
+}
 
-.about-us p {
-    font-size: 16px;
-    line-height: 1.6;
-    margin-bottom: 20px;
+.story-text {
+    margin-bottom: 1.5rem;
+    color: var(--bn-text-color);
+    font-size: 1rem;
+}
+
+.bn-divider {
+    width: 40px;
+    height: 3px;
+    background-color: var(--bn-accent-color);
+    margin: 2rem 0;
 }
 
 .image-section {
-    width: 35%;
+    flex: 1;
+    position: relative;
+    min-height: 400px;
+    background-color: var(--bn-light-accent);
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 2px solid;
-
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    border-radius: 10prgb(255, 255, 255)
-    }
-
-.image-section img {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
+    overflow: hidden;
 }
 
+.book-stack {
+    position: relative;
+    width: 70%;
+    height: 70%;
+}
+
+.book {
+    position: absolute;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    background-color: var(--bn-white);
+}
+
+.book-1 {
+    width: 200px;
+    height: 260px;
+    background-color: #333;
+    z-index: 3;
+    top: 10%;
+    left: 30%;
+    transform: rotate(-5deg);
+}
+
+.book-2 {
+    width: 180px;
+    height: 240px;
+    background-color: var(--bn-accent-color);
+    z-index: 2;
+    top: 20%;
+    left: 20%;
+    transform: rotate(5deg);
+}
+
+.book-3 {
+    width: 160px;
+    height: 220px;
+    background-color: var(--bn-gold);
+    z-index: 1;
+    top: 30%;
+    left: 10%;
+    transform: rotate(-10deg);
+}
+
+.cat-silhouette {
+    position: absolute;
+    width: 80px;
+    height: 120px;
+    background-color: #000;
+    top: 0;
+    left: 50%;
+    transform: translateY(-40%);
+    z-index: 4;
+    clip-path: polygon(
+        50% 0%, 
+        30% 30%, 
+        45% 30%, 
+        45% 50%, 
+        25% 70%, 
+        25% 100%, 
+        75% 100%, 
+        75% 70%, 
+        55% 50%, 
+        55% 30%, 
+        70% 30%
+    );
+}
+
+.stats-section {
+    background-color: var(--bn-light-bg);
+    padding: 5rem 0;
+    margin-top: -2rem;
+}
+
+.stats-container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--bn-primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 1rem;
+    color: var(--bn-text-color);
+    font-weight: 500;
+}
+
+/* Team Section Styles */
+.team-section {
+    padding: 6rem 0;
+    background-color: var(--bn-white);
+}
+
+.team-header {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 4rem;
+}
+
+.team-title {
+    font-size: 2.5rem;
+    color: var(--bn-primary-color);
+    margin-bottom: 1rem;
+}
+
+.team-subtitle {
+    font-size: 1.1rem;
+    color: var(--bn-text-color);
+    margin-bottom: 2rem;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.team-member {
+    background-color: var(--bn-white);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.team-member:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+}
+
+.member-image {
+    height: 200px;
+    position: relative;
+    background-color: var(--bn-light-accent);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.member-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: var(--bn-primary-color);
+    position: relative;
+    z-index: 2;
+    border: 5px solid var(--bn-white);
+}
+
+.member-book {
+    position: absolute;
+    width: 60px;
+    height: 90px;
+    right: 30px;
+    bottom: 20px;
+    perspective: 600px;
+    transform-style: preserve-3d;
+    transform: rotate(15deg);
+}
+
+.book-spine {
+    position: absolute;
+    width: 15px;
+    height: 90px;
+    background-color: var(--bn-accent-color);
+    transform: rotateY(-30deg);
+    left: 0;
+    transform-origin: left;
+}
+
+.book-cover {
+    position: absolute;
+    width: 60px;
+    height: 90px;
+    background-color: var(--bn-primary-color);
+    transform: rotateY(0deg);
+    left: 15px;
+    transform-origin: left;
+}
+
+.member-info {
+    padding: 1.5rem;
+}
+
+.member-name {
+    font-size: 1.25rem;
+    color: var(--bn-primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.member-role {
+    font-size: 0.9rem;
+    color: var(--bn-accent-color);
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.member-bio {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--bn-text-color);
+}
+
+/* Generate unique appearances for each team member */
+.team-member:nth-child(1) .member-avatar {
+    background-color: var(--bn-primary-color);
+}
+
+.team-member:nth-child(2) .member-avatar {
+    background-color: #5a7d9a;
+}
+
+.team-member:nth-child(3) .member-avatar {
+    background-color: #7a9a5a;
+}
+
+.team-member:nth-child(4) .member-avatar {
+    background-color: #9a5a7d;
+}
+
+.team-member:nth-child(5) .member-avatar {
+    background-color: #aa8239;
+}
+
+.team-member:nth-child(1) .book-cover {
+    background-color: #5a7d9a;
+}
+
+.team-member:nth-child(2) .book-cover {
+    background-color: #7a9a5a;
+}
+
+.team-member:nth-child(3) .book-cover {
+    background-color: #9a5a7d;
+}
+
+.team-member:nth-child(4) .book-cover {
+    background-color: #aa8239;
+}
+
+.team-member:nth-child(5) .book-cover {
+    background-color: var(--bn-primary-color);
+}
+
+@media (max-width: 768px) {
+    .content-card {
+        flex-direction: column;
+    }
+    
+    .image-section {
+        min-height: 300px;
+        order: -1;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .stats-container {
+        flex-direction: column;
+        gap: 2rem;
+    }
+    
+    .team-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+    }
+}
