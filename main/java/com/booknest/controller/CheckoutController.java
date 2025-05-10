@@ -4,8 +4,8 @@ import com.booknest.model.CartItem;
 import com.booknest.service.CartService;
 import com.booknest.service.CartServiceException;
 import com.booknest.service.CartServiceImpl;
-import com.booknest.service.OrderService;
-import com.booknest.service.OrderServiceImpl;
+import com.booknest.service.CheckoutService;
+import com.booknest.service.CheckoutServiceImpl;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -22,12 +22,12 @@ import java.util.List;
 @WebServlet("/checkout")
 public class CheckoutController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private final OrderService orderService;
+	private final CheckoutService checkoutService;
 	private final CartService cartService;
 
 	public CheckoutController() {
 		super();
-		this.orderService = new OrderServiceImpl();
+		this.checkoutService = new CheckoutServiceImpl();
 		this.cartService = new CartServiceImpl();
 	}
 
@@ -48,10 +48,9 @@ public class CheckoutController extends HttpServlet {
 		try {
 			cartItems = cartService.getCartContents(userId);
 		} catch (CartServiceException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("CartItems size: " + cartItems.size());
+		System.out.println("CartItems size: " + (cartItems != null ? cartItems.size() : 0));
 
 		if (cartItems == null || cartItems.isEmpty()) {
 			request.setAttribute("errorMessage", "Your cart is empty. Please add items before checkout.");
@@ -59,16 +58,10 @@ public class CheckoutController extends HttpServlet {
 			return;
 		}
 
-		// Calculate totals
-		BigDecimal cartTotal = BigDecimal.ZERO;
-		for (CartItem item : cartItems) {
-			BigDecimal itemPrice = item.getBookModel().getPrice();
-			BigDecimal itemTotal = itemPrice.multiply(new BigDecimal(item.getQuantity()));
-			cartTotal = cartTotal.add(itemTotal);
-		}
-
-		// Set default shipping cost
-		BigDecimal shippingCost = new BigDecimal("100.00");
+		// Calculate totals using service
+		BigDecimal subtotal = checkoutService.calculateSubtotal(cartItems);
+		BigDecimal shippingCost = checkoutService.getShippingCost();
+		BigDecimal cartTotal = subtotal;
 
 		// Set attributes for the checkout page
 		request.setAttribute("cartItems", cartItems);
@@ -94,7 +87,7 @@ public class CheckoutController extends HttpServlet {
 		try {
 			// Get cart contents
 			List<CartItem> cartItems = cartService.getCartContents(userId);
-			System.out.println("Cart items found for checkout: " + cartItems.size());
+			System.out.println("Cart items found for checkout: " + (cartItems != null ? cartItems.size() : 0));
 
 			if (cartItems == null || cartItems.isEmpty()) {
 				request.setAttribute("errorMessage", "Your cart is empty. Please add items before checkout.");
@@ -112,47 +105,25 @@ public class CheckoutController extends HttpServlet {
 			System.out.println(
 					"Address parameters received: " + streetAddress + ", " + city + ", " + state + " " + zipCode);
 
-			// Validation
-			if (streetAddress == null || city == null || state == null || zipCode == null || phone == null
-					|| streetAddress.trim().isEmpty() || city.trim().isEmpty() || state.trim().isEmpty()
-					|| zipCode.trim().isEmpty() || phone.trim().isEmpty()) {
-
+			// Validate using service
+			if (!checkoutService.validateAddressInfo(streetAddress, city, state, zipCode, phone)) {
 				request.setAttribute("errorMessage", "Please fill in all required address fields.");
 				doGet(request, response);
 				return;
 			}
 
-			// Format address in standard format: Street, City, State/Province Postal Code
-			OrderServiceImpl orderServiceImpl = (OrderServiceImpl) orderService;
-			String formattedAddress = orderServiceImpl.createStandardAddress(streetAddress, city, state, zipCode);
+			// Process checkout using service
+			int orderId = checkoutService.processCheckout(userId, cartItems, streetAddress, city, state, zipCode,
+					phone);
 
-			System.out.println("Formatted address: " + formattedAddress);
-
-			// Calculate totals
-			BigDecimal subtotal = BigDecimal.ZERO;
-			for (CartItem item : cartItems) {
-				BigDecimal itemPrice = item.getBookModel().getPrice();
-				BigDecimal itemTotal = itemPrice.multiply(new BigDecimal(item.getQuantity()));
-				subtotal = subtotal.add(itemTotal);
-			}
-
-			// Set shipping and other costs
-			BigDecimal shippingCost = new BigDecimal("100.00");
-			BigDecimal discount = BigDecimal.ZERO;
-			BigDecimal totalAmount = subtotal.add(shippingCost).subtract(discount);
-
-			System.out.println("Creating order with amount: " + totalAmount);
-
-			// Create the order
-			int orderId = orderService.createOrder(userId, cartItems, formattedAddress, // Use formatted address without
-																						// phone number
-					subtotal, shippingCost, discount, totalAmount);
+			// Calculate totals for display
+			BigDecimal orderTotal = checkoutService.calculateOrderTotal(cartItems);
 
 			// If order creation was successful
 			if (orderId > 0) {
 				// Set success attributes for order confirmation
 				request.setAttribute("orderId", orderId);
-				request.setAttribute("orderTotal", totalAmount);
+				request.setAttribute("orderTotal", orderTotal);
 				request.setAttribute("successMessage", "Order placed successfully! Thank you for your purchase.");
 
 				System.out.println("Order created successfully with ID: " + orderId);
@@ -169,6 +140,11 @@ public class CheckoutController extends HttpServlet {
 			e.printStackTrace();
 			System.err.println("SQL Error: " + e.getMessage());
 			request.setAttribute("errorMessage", "Error processing your order: " + e.getMessage());
+			doGet(request, response);
+		} catch (CartServiceException e) {
+			e.printStackTrace();
+			System.err.println("Cart Service Error: " + e.getMessage());
+			request.setAttribute("errorMessage", "Error retrieving your cart: " + e.getMessage());
 			doGet(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
