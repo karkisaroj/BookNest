@@ -24,30 +24,29 @@ public class OrderConfirmationController extends HttpServlet {
 		BigDecimal orderTotal = (BigDecimal) session.getAttribute("orderTotal");
 		String orderDate = (String) session.getAttribute("orderDate");
 		String successMessage = (String) session.getAttribute("flashSuccessMessage");
+		String paymentMethod = (String) session.getAttribute("paymentMethod");
 
 		// If no order ID in session, generate a random one for demo purposes
 		if (orderId == null) {
 			orderId = 10000 + (int) (Math.random() * 90000);
 		}
 
+		// Always set payment status to "Completed"
+		String paymentStatus = "Completed";
+
 		// Set attributes for JSP
 		request.setAttribute("orderId", orderId);
 		request.setAttribute("orderTotal", orderTotal);
 		request.setAttribute("orderDate", orderDate);
 		request.setAttribute("successMessage", successMessage);
+		request.setAttribute("paymentMethod", paymentMethod);
+		request.setAttribute("paymentStatus", paymentStatus);
 
 		try {
 			// Forward to confirmation JSP
 			request.getRequestDispatcher("/WEB-INF/pages/order-confirmation.jsp").forward(request, response);
 		} catch (Exception e) {
-//			// Fallback to simple HTML response if JSP is not found
-//			response.setContentType("text/html");
-//			response.getWriter().println("<html><body>");
-//			response.getWriter().println("<h1>Order Confirmed!</h1>");
-//			response.getWriter().println("<p>Your order #" + orderId + " has been placed successfully.</p>");
-//			response.getWriter().println("<p>Thank you for your purchase!</p>");
-//			response.getWriter().println("<a href='" + request.getContextPath() + "/home'>Return to Home</a>");
-//			response.getWriter().println("</body></html>");
+			e.printStackTrace();
 		}
 
 		// Clean up session attributes
@@ -55,5 +54,6 @@ public class OrderConfirmationController extends HttpServlet {
 		session.removeAttribute("orderTotal");
 		session.removeAttribute("orderDate");
 		session.removeAttribute("flashSuccessMessage");
+		session.removeAttribute("paymentMethod");
 	}
 }

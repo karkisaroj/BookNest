@@ -72,4 +72,24 @@ public interface CheckoutService {
 	 * @return Formatted address string
 	 */
 	String formatAddress(String streetAddress, String city, String state, String zipCode);
+
+	/**
+	 * Creates a payment record for a completed order
+	 * 
+	 * @param orderId       Order ID to associate the payment with
+	 * @param amount        Payment amount
+	 * @param paymentMethod Method of payment (e.g., "Cash on Delivery", "Online
+	 *                      Payment")
+	 * @return Payment ID if successful, -1 if failed
+	 * @throws SQLException If a database error occurs
+	 */
+	int createPaymentRecord(int orderId, BigDecimal amount, String paymentMethod) throws SQLException;
+
+	/**
+	 * Formats the payment method from form input to standardized value
+	 * 
+	 * @param paymentMethodParam Raw payment method from form
+	 * @return Formatted payment method string
+	 */
+	String formatPaymentMethod(String paymentMethodParam);
 }
