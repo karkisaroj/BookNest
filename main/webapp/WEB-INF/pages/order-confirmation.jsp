@@ -8,10 +8,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BookNest - Order Confirmation</title>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/css/styles.css">
+
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/order-confirmation.css">
+
 </head>
 <body>
 	<jsp:include page="header.jsp" />
@@ -35,6 +35,16 @@
 					<strong>Status:</strong> <span id="orderStatus"
 						class="status-confirmed">Confirmed</span>
 				</p>
+
+				<!-- Payment information display -->
+				<div class="payment-info">
+					<p>
+						<strong>Payment Method:</strong> <span class="payment-method">${not empty paymentMethod ? paymentMethod : 'Cash on Delivery'}</span>
+					</p>
+					<p>
+						<strong>Payment Status:</strong> <span class="payment-status">Completed</span>
+					</p>
+				</div>
 			</div>
 
 			<!-- Total display with proper null check and improved styling -->

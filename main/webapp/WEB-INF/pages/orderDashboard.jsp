@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,7 +11,6 @@
 <title>BookNest Admin - Orders</title>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/orderDashboard.css">
-
 </head>
 
 <body>
@@ -25,26 +25,17 @@
 
 			<!-- Display Success or Error Messages -->
 			<div class="message-container">
-				<%
-				if (request.getAttribute("success") != null) {
-				%>
-				<div class="success-message">
-					<%=request.getAttribute("success")%>
-				</div>
-				<%
-				} else if (request.getAttribute("error") != null) {
-				%>
-				<div class="error-message">
-					<%=request.getAttribute("error")%>
-				</div>
-				<%
-				}
-				%>
+				<c:if test="${not empty success}">
+					<div class="success-message">${success}</div>
+				</c:if>
+				<c:if test="${not empty error}">
+					<div class="error-message">${error}</div>
+				</c:if>
 			</div>
 
 			<div class="orders-table-container">
 				<h2>Order List</h2>
-				<table>
+				<table class="orders-table">
 					<thead>
 						<tr>
 							<th class="checkbox-column"><input type="checkbox"></th>
@@ -62,17 +53,21 @@
 							<c:when test="${not empty orders}">
 								<c:forEach var="order" items="${orders}">
 									<tr>
-										<td><input type="checkbox"></td>
-										<td>${order.orderID}</td>
-										<td>${order.userID}</td>
-										<td>${order.orderDate}</td>
+										<td class="checkbox-cell"><input type="checkbox"></td>
+										<td class="order-id">${order.orderID}</td>
+										<td class="user-id">${order.userID}</td>
+										<td class="order-date"><fmt:formatDate
+												value="${order.orderDate}" pattern="yyyy-MM-dd" /></td>
 										<td class="shipping-address">${order.shippingAddress}</td>
-										<td>${order.totalAmount}</td>
-										<td class="order-status">${order.orderStatus}</td>
-										<td>
+										<td class="total-amount">${order.totalAmount}</td>
+										<td class="status-cell"><span
+											class="order-status 
+												${order.orderStatus eq 'completed' ? 'status-completed' : 
+												order.orderStatus eq 'in progress' ? 'status-in-progress' : 'status-pending'}">
+												${order.orderStatus} </span></td>
+										<td class="action-cell">
 											<form method="post"
-												action="${pageContext.request.contextPath}/adminorder"
-												style="display: inline;">
+												action="${pageContext.request.contextPath}/adminorder">
 												<input type="hidden" name="orderId" value="${order.orderID}" />
 												<button type="submit" name="action" value="changeStatus"
 													class="status-btn">Change Status</button>
@@ -83,8 +78,7 @@
 							</c:when>
 							<c:otherwise>
 								<tr>
-									<td colspan="8" style="text-align: center;">No orders
-										found</td>
+									<td colspan="8" class="no-orders">No orders found</td>
 								</tr>
 							</c:otherwise>
 						</c:choose>
@@ -95,29 +89,5 @@
 	</div>
 
 	<jsp:include page="footer.jsp" />
-
-	<script>
-		/**
-		 * Apply colors to the order status dynamically
-		 */
-		document.addEventListener("DOMContentLoaded", () => {
-			// Get all elements with the "order-status" class
-			const statusElements = document.querySelectorAll(".order-status");
-
-			// Loop through each status element and apply the corresponding class
-			statusElements.forEach((element) => {
-				const status = element.textContent.trim().toLowerCase();
-
-				if (status === "in progress") {
-					element.classList.add("status-in-progress");
-				} else if (status === "completed") {
-					element.classList.add("status-completed");
-				} else if (status === "pending") {
-					element.classList.add("status-pending");
-				}
-			});
-		});
-	</script>
 </body>
-
 </html>

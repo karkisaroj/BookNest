@@ -44,13 +44,13 @@
 	margin-bottom: 20px;
 }
 
-/* Orders table styling */
+/* Orders table container */
 .orders-table-container {
 	background-color: white;
 	border-radius: 8px;
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 	padding: 20px;
-	overflow: hidden;
+	overflow-x: auto;
 }
 
 .orders-table-container h2 {
@@ -61,78 +61,137 @@
 	border-bottom: 1px solid #eee;
 }
 
-.orders-table-container table {
-	border-collapse: collapse;
+/* Table style reset and improvements */
+.orders-table {
 	width: 100%;
-	margin-top: 20px;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	border-collapse: separate;
+	border-spacing: 0;
+	margin-top: 15px;
+	color: #333;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.orders-table-container th {
+/* Table header */
+.orders-table th {
 	background-color: #3d5a80;
 	color: white;
-	padding: 12px 10px;
+	padding: 14px 12px;
 	text-align: left;
 	font-weight: 600;
+	white-space: nowrap;
+	border-top: 1px solid #3d5a80;
+	border-bottom: 1px solid #3d5a80;
 }
 
-.orders-table-container td {
-	padding: 10px;
-	border-bottom: 1px solid #ddd;
+.orders-table th:first-child {
+	border-left: 1px solid #3d5a80;
+	border-top-left-radius: 6px;
+}
+
+.orders-table th:last-child {
+	border-right: 1px solid #3d5a80;
+	border-top-right-radius: 6px;
+}
+
+/* Table cells */
+.orders-table td {
+	padding: 12px;
+	background-color: #ffffff;
 	vertical-align: middle;
+	border-bottom: 1px solid #e0e0e0;
+	font-size: 14px;
 }
 
-.orders-table-container tr:nth-child(even) {
-	background-color: #f5f7fa;
+/* Remove border line between Order Date and Shipping Address */
+.orders-table tr td, .orders-table tr th {
+	border-right: none;
+	border-left: none;
 }
 
-.orders-table-container tr:hover {
-	background-color: #eef5ff;
+/* Table row hover effect */
+.orders-table tbody tr:hover td {
+	background-color: #f5f9ff;
 }
 
-.checkbox-column {
+/* Specific cell styling */
+.checkbox-column, .checkbox-cell {
 	width: 40px;
+	text-align: center;
+	padding: 0 8px;
+}
+
+.order-id, .user-id {
+	width: 80px;
+	font-weight: 600;
+	color: #3d5a80;
+}
+
+.order-date {
+	width: 100px;
+}
+
+.shipping-address {
+	min-width: 200px;
+	max-width: 250px;
+	color: #333;
+	line-height: 1.4;
+	padding-left: 12px;
+	position: relative;
+	/* Add a left border instead of background for better visibility */
+	border-left: 3px solid #3d5a80;
+}
+
+.total-amount {
+	width: 100px;
+	text-align: right;
+	font-weight: 600;
+	color: #1a1a1a;
+}
+
+.status-cell {
+	width: 120px;
 	text-align: center;
 }
 
-/* Shipping address styling */
-.shipping-address {
-	font-size: 14px;
-	line-height: 1.4;
-	color: #333;
-	max-width: 220px;
-	white-space: normal;
-	word-break: break-word;
-	font-family: 'Arial', sans-serif;
-	padding: 5px;
-	background-color: #f9f9f9;
-	border-radius: 4px;
-	border-left: 3px solid #3d5a80;
+.action-cell {
+	width: 120px;
+	text-align: center;
+}
+
+.no-orders {
+	text-align: center;
+	padding: 20px;
+	color: #666;
+	font-style: italic;
 }
 
 /* Order status styling */
 .order-status {
-	padding: 6px 10px;
+	padding: 6px 12px;
 	border-radius: 20px;
 	font-weight: 500;
-	text-align: center;
 	display: inline-block;
 	min-width: 100px;
+	text-align: center;
+	text-transform: capitalize;
 }
 
 .status-pending {
 	background-color: #fff3cd;
 	color: #856404;
+	border: 1px solid #ffeeba;
 }
 
 .status-in-progress {
 	background-color: #d1ecf1;
 	color: #0c5460;
+	border: 1px solid #bee5eb;
 }
 
 .status-completed {
 	background-color: #d4edda;
 	color: #155724;
+	border: 1px solid #c3e6cb;
 }
 
 /* Action button styling */
@@ -145,33 +204,46 @@
 	cursor: pointer;
 	font-size: 13px;
 	transition: background-color 0.3s;
+	width: 100%;
+	font-weight: 500;
 }
 
 .status-btn:hover {
 	background-color: #3557c7;
 }
 
-/* Responsive table adjustments */
+/* Zebra striping for better readability */
+.orders-table tbody tr:nth-child(even) td {
+	background-color: #f8f9fa;
+}
+
+.orders-table tbody tr:nth-child(even):hover td {
+	background-color: #f0f4fa;
+}
+
+/* Responsive adjustments */
 @media ( max-width : 992px) {
-	.orders-table-container table {
-		font-size: 14px;
+	.orders-table {
+		font-size: 13px;
 	}
-	.orders-table-container th, .orders-table-container td {
-		padding: 8px 6px;
+	.status-btn {
+		padding: 6px 10px;
+		font-size: 12px;
 	}
 	.shipping-address {
-		max-width: 150px;
+		min-width: 150px;
+		max-width: 180px;
 	}
 }
 
 @media ( max-width : 768px) {
-	.orders-table-container {
-		overflow-x: auto;
-	}
-	.orders-table-container table {
+	.orders-table {
 		min-width: 800px;
 	}
 	.admin-dashboard-container {
 		flex-direction: column;
+	}
+	.main-content {
+		padding: 15px;
 	}
 }
