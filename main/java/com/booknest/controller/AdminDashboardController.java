@@ -12,10 +12,11 @@ import java.util.List;
 
 import com.booknest.model.BookModel;
 import com.booknest.service.AdminBookService;
+import com.booknest.service.AdminDashboardService;
 import com.booknest.util.RedirectionUtil;
 
 /**
- * Controller for handling admin dashboard functionalities, including book management.
+ * Controller for handling admin dashboard functionalities, including book management and popular books.
  * 
  * @author Noble Nepal
  */
@@ -35,11 +36,13 @@ public class AdminDashboardController extends HttpServlet {
     private final String missingBookIdOrStockMessage = "Book ID or new stock quantity is missing.";
 
     private AdminBookService adminBookService;
+    private AdminDashboardService adminDashboardService;
     private RedirectionUtil redirectionUtil;
 
     @Override
     public void init() throws ServletException {
         this.adminBookService = new AdminBookService();
+        this.adminDashboardService = new AdminDashboardService();
         this.redirectionUtil = new RedirectionUtil();
     }
 
@@ -48,10 +51,27 @@ public class AdminDashboardController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Fetch the initial list of books and forward to the dashboard
-		List<BookModel> books = adminBookService.getAllBooks();
-		request.setAttribute("books", books);
-		redirectionUtil.redirectToPage(request, response, dashboardPagePath);
+        try {
+            double totalRevenue = adminDashboardService.getTotalRevenue();
+            int totalOrders = adminDashboardService.getTotalOrders();
+            int totalBooksSold = adminDashboardService.getTotalBooksSold();
+            // Fetch the initial list of books and the top 5 most popular books
+            List<BookModel> books = adminBookService.getAllBooks();
+            List<BookModel> popularBooks = adminDashboardService.getTopPopularBooks();
+
+            // Set attributes for the JSP
+            request.setAttribute("totalRevenue", totalRevenue);
+            request.setAttribute("totalOrders", totalOrders);
+            request.setAttribute("totalBooksSold", totalBooksSold);
+            request.setAttribute("books", books);
+            request.setAttribute("popularBooks", popularBooks);
+
+            // Redirect to the dashboard page
+            redirectionUtil.redirectToPage(request, response, dashboardPagePath);
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "error", "An error occurred while loading the dashboard.");
+        }
     }
 
     /**
@@ -67,12 +87,47 @@ public class AdminDashboardController extends HttpServlet {
             } else if ("deleteBook".equalsIgnoreCase(action)) {
                 handleDeleteBook(request, response);
             } else {
-                redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "error", invalidActionMessage);
+                request.setAttribute("error", invalidActionMessage);
+                recalculateAndSetAnalytics(request);
+                forwardToDashboard(request, response);
+                return; // Exit early for invalid actions
             }
+
+            // Recalculate and set analytics after update or delete
+            recalculateAndSetAnalytics(request);
+
+            // Forward to dashboard instead of redirecting
+            forwardToDashboard(request, response);
+
         } catch (SQLException e) {
             e.printStackTrace();
-            redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "error", processRequestErrorMessage);
+            request.setAttribute("error", processRequestErrorMessage);
+            forwardToDashboard(request, response);
         }
+    }
+    /**
+     * Forward the request to the admin dashboard JSP.
+     */
+    private void forwardToDashboard(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher(dashboardPagePath).forward(request, response);
+    }
+    /**
+     * Recalculates analytics data and sets them as request attributes.
+     */
+    /**
+     * Recalculates analytics data and sets them as request attributes for the JSP.
+     */
+    private void recalculateAndSetAnalytics(HttpServletRequest request) throws SQLException {
+        double totalRevenue = adminDashboardService.getTotalRevenue();
+        int totalOrders = adminDashboardService.getTotalOrders();
+        int totalBooksSold = adminDashboardService.getTotalBooksSold();
+        List<BookModel> popularBooks = adminDashboardService.getTopPopularBooks();
+
+        // Set analytics attributes for the request
+        request.setAttribute("totalRevenue", totalRevenue);
+        request.setAttribute("totalOrders", totalOrders);
+        request.setAttribute("totalBooksSold", totalBooksSold);
+        request.setAttribute("popularBooks", popularBooks);
     }
 
     /**
@@ -92,16 +147,16 @@ public class AdminDashboardController extends HttpServlet {
 
                 if (updatedBooks != null) {
                     request.setAttribute("books", updatedBooks);
-                    redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "success", stockUpdateSuccessMessage);
+                    request.setAttribute("success", stockUpdateSuccessMessage); // Set success message
                 } else {
-                    redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "error", stockUpdateErrorMessage);
+                    request.setAttribute("error", stockUpdateErrorMessage); // Set error message
                 }
             } catch (NumberFormatException e) {
                 e.printStackTrace();
-                redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "error", invalidBookIdMessage);
+                request.setAttribute("error", invalidBookIdMessage); // Set error message
             }
         } else {
-            redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "error", missingBookIdOrStockMessage);
+            request.setAttribute("error", missingBookIdOrStockMessage); // Set error message
         }
     }
 
@@ -120,22 +175,23 @@ public class AdminDashboardController extends HttpServlet {
 
                 if (updatedBooks != null) {
                     request.setAttribute("books", updatedBooks);
-                    redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "success", deleteBookSuccessMessage);
+                    request.setAttribute("success", deleteBookSuccessMessage); // Set success message
                 } else {
-                    redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "error", deleteBookErrorMessage);
+                    request.setAttribute("error", deleteBookErrorMessage); // Set error message
                 }
             } catch (SQLException e) {
                 if (e.getMessage().contains("Cannot delete book because it is referenced in another table")) {
-                    redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "error", deleteBookReferencedErrorMessage);
+                    request.setAttribute("error", deleteBookReferencedErrorMessage); // Set error message
                 } else {
                     throw e; // Re-throw generic SQL exceptions
                 }
             } catch (NumberFormatException e) {
                 e.printStackTrace();
-                redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "error", invalidBookIdMessage);
+                request.setAttribute("error", invalidBookIdMessage); // Set error message
             }
         } else {
-            redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "error", missingBookIdOrStockMessage);
+            request.setAttribute("error", missingBookIdOrStockMessage); // Set error message
         }
     }
+
 }
