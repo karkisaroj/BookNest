@@ -12,10 +12,11 @@ import java.util.List;
 
 import com.booknest.model.BookModel;
 import com.booknest.service.AdminBookService;
+import com.booknest.service.AdminDashboardService;
 import com.booknest.util.RedirectionUtil;
 
 /**
- * Controller for handling admin dashboard functionalities, including book management.
+ * Controller for handling admin dashboard functionalities, including book management and popular books.
  * 
  * @author Noble Nepal
  */
@@ -35,11 +36,13 @@ public class AdminDashboardController extends HttpServlet {
     private final String missingBookIdOrStockMessage = "Book ID or new stock quantity is missing.";
 
     private AdminBookService adminBookService;
+    private AdminDashboardService adminDashboardService;
     private RedirectionUtil redirectionUtil;
 
     @Override
     public void init() throws ServletException {
         this.adminBookService = new AdminBookService();
+        this.adminDashboardService = new AdminDashboardService();
         this.redirectionUtil = new RedirectionUtil();
     }
 
@@ -48,10 +51,27 @@ public class AdminDashboardController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Fetch the initial list of books and forward to the dashboard
-		List<BookModel> books = adminBookService.getAllBooks();
-		request.setAttribute("books", books);
-		redirectionUtil.redirectToPage(request, response, dashboardPagePath);
+        try {
+            double totalRevenue = adminDashboardService.getTotalRevenue();
+            int totalOrders = adminDashboardService.getTotalOrders();
+            int totalBooksSold = adminDashboardService.getTotalBooksSold();
+            // Fetch the initial list of books and the top 5 most popular books
+            List<BookModel> books = adminBookService.getAllBooks();
+            List<BookModel> popularBooks = adminDashboardService.getTopPopularBooks();
+
+            // Set attributes for the JSP
+            request.setAttribute("totalRevenue", totalRevenue);
+            request.setAttribute("totalOrders", totalOrders);
+            request.setAttribute("totalBooksSold", totalBooksSold);
+            request.setAttribute("books", books);
+            request.setAttribute("popularBooks", popularBooks);
+
+            // Redirect to the dashboard page
+            redirectionUtil.redirectToPage(request, response, dashboardPagePath);
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "error", "An error occurred while loading the dashboard.");
+        }
     }
 
     /**
