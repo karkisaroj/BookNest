@@ -47,8 +47,10 @@ public class AdminDashboardService {
 
 	// Method to calculate total orders
 	public int getTotalOrders() throws SQLException {
-		String query = "SELECT COUNT(*) AS totalOrders " + "FROM orders " 
-				+ "AND order_date >= CURDATE() - INTERVAL 30 DAY";
+		  String query = "SELECT COUNT(*) AS totalOrders " +
+                  "FROM orders " +
+                  "WHERE order_status = 'completed' " +
+                  "AND order_date >= CURDATE() - INTERVAL 30 DAY";
 		try (PreparedStatement stmt = dbConn.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
 			if (rs.next()) {
 				return rs.getInt("totalOrders");

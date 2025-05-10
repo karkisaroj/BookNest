@@ -87,12 +87,47 @@ public class AdminDashboardController extends HttpServlet {
             } else if ("deleteBook".equalsIgnoreCase(action)) {
                 handleDeleteBook(request, response);
             } else {
-                redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "error", invalidActionMessage);
+                request.setAttribute("error", invalidActionMessage);
+                recalculateAndSetAnalytics(request);
+                forwardToDashboard(request, response);
+                return; // Exit early for invalid actions
             }
+
+            // Recalculate and set analytics after update or delete
+            recalculateAndSetAnalytics(request);
+
+            // Forward to dashboard instead of redirecting
+            forwardToDashboard(request, response);
+
         } catch (SQLException e) {
             e.printStackTrace();
-            redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "error", processRequestErrorMessage);
+            request.setAttribute("error", processRequestErrorMessage);
+            forwardToDashboard(request, response);
         }
+    }
+    /**
+     * Forward the request to the admin dashboard JSP.
+     */
+    private void forwardToDashboard(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher(dashboardPagePath).forward(request, response);
+    }
+    /**
+     * Recalculates analytics data and sets them as request attributes.
+     */
+    /**
+     * Recalculates analytics data and sets them as request attributes for the JSP.
+     */
+    private void recalculateAndSetAnalytics(HttpServletRequest request) throws SQLException {
+        double totalRevenue = adminDashboardService.getTotalRevenue();
+        int totalOrders = adminDashboardService.getTotalOrders();
+        int totalBooksSold = adminDashboardService.getTotalBooksSold();
+        List<BookModel> popularBooks = adminDashboardService.getTopPopularBooks();
+
+        // Set analytics attributes for the request
+        request.setAttribute("totalRevenue", totalRevenue);
+        request.setAttribute("totalOrders", totalOrders);
+        request.setAttribute("totalBooksSold", totalBooksSold);
+        request.setAttribute("popularBooks", popularBooks);
     }
 
     /**
@@ -112,16 +147,16 @@ public class AdminDashboardController extends HttpServlet {
 
                 if (updatedBooks != null) {
                     request.setAttribute("books", updatedBooks);
-                    redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "success", stockUpdateSuccessMessage);
+                    request.setAttribute("success", stockUpdateSuccessMessage); // Set success message
                 } else {
-                    redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "error", stockUpdateErrorMessage);
+                    request.setAttribute("error", stockUpdateErrorMessage); // Set error message
                 }
             } catch (NumberFormatException e) {
                 e.printStackTrace();
-                redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "error", invalidBookIdMessage);
+                request.setAttribute("error", invalidBookIdMessage); // Set error message
             }
         } else {
-            redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "error", missingBookIdOrStockMessage);
+            request.setAttribute("error", missingBookIdOrStockMessage); // Set error message
         }
     }
 
@@ -140,22 +175,23 @@ public class AdminDashboardController extends HttpServlet {
 
                 if (updatedBooks != null) {
                     request.setAttribute("books", updatedBooks);
-                    redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "success", deleteBookSuccessMessage);
+                    request.setAttribute("success", deleteBookSuccessMessage); // Set success message
                 } else {
-                    redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "error", deleteBookErrorMessage);
+                    request.setAttribute("error", deleteBookErrorMessage); // Set error message
                 }
             } catch (SQLException e) {
                 if (e.getMessage().contains("Cannot delete book because it is referenced in another table")) {
-                    redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "error", deleteBookReferencedErrorMessage);
+                    request.setAttribute("error", deleteBookReferencedErrorMessage); // Set error message
                 } else {
                     throw e; // Re-throw generic SQL exceptions
                 }
             } catch (NumberFormatException e) {
                 e.printStackTrace();
-                redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "error", invalidBookIdMessage);
+                request.setAttribute("error", invalidBookIdMessage); // Set error message
             }
         } else {
-            redirectionUtil.setMsgAndRedirect(request, response, dashboardPagePath, "error", missingBookIdOrStockMessage);
+            request.setAttribute("error", missingBookIdOrStockMessage); // Set error message
         }
     }
+
 }
