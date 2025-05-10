@@ -4,109 +4,229 @@
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
-	font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-body {
-	color: #333;
-	background-color: #f5f5f5;
-	line-height: 1.6;
+/* BookNest Contact Page Specific Styles */
+/* .booknest-contact * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+} */
+
+.booknest-contact {
+    background-color: #f8f9fa;
+    color: #2c3e50;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: center;
 }
 
-.container2 {
-	max-width: 1200px;
-	margin: 40px auto;
-	padding: 40px;
-	border-radius: 15px;
-	background-color: #ffffff;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+.booknest-contact-container {
+    max-width: 900px;
+    margin: 4rem auto;
+    padding: 2rem;
 }
 
-.contact-form {
-	width: 100%;
-	max-width: 800px;
-	margin: 0 auto;
+.booknest-contact-header {
+    text-align: center;
+    margin-bottom: 3rem;
 }
 
-.contact-form h1 {
-	font-size: 2.2rem;
-	text-align: center;
-	margin-bottom: 2rem;
-	position: relative;
-	color: #183B4E;
+.booknest-logo-container {
+    margin-bottom: 2.5rem;
+    text-align: center;
 }
 
-/* Adding the underline styling similar to "Why Choose Us" heading */
-.contact-form h1::after {
-	content: "";
-	position: absolute;
-	bottom: -0.8rem;
-	left: 50%;
-	transform: translateX(-50%);
-	width: 80px;
-	height: 3px;
-	background-color: #183B4E;
+.booknest-contact-logo {
+    background-color: #2c4a7c;
+    color: white;
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    border-radius: 2rem;
+    font-weight: bold;
+    font-size: 1.4rem;
+    box-shadow: 0 4px 10px rgba(44, 74, 124, 0.2);
 }
 
-.contact-form p {
-	font-size: 16px;
-	line-height: 1.6;
-	margin-bottom: 30px;
-	color: #333; /* Explicit dark color for paragraph */
-	text-align: center;
+.booknest-contact-header h2 {
+    color: #2c4a7c;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
 }
 
-.contact-form label {
-	display: block;
-	font-size: 16px;
-	margin-bottom: 8px;
-	color: #333; /* Darker color for better visibility */
-	font-weight: 500;
+.booknest-contact-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
 }
 
-.contact-form input, .contact-form textarea {
-	width: 100%;
-	padding: 12px;
-	margin-bottom: 20px;
-	border: 1px solid #ddd;
-	border-radius: 5px;
-	font-size: 15px;
-	background-color: #f9f9f9;
-	transition: border-color 0.3s, box-shadow 0.3s;
+.booknest-contact-header p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto;
+    color: #5d6778;
 }
 
-.contact-form input:focus, .contact-form textarea:focus {
-	outline: none;
-	border-color: #183B4E;
-	box-shadow: 0 0 0 2px rgba(24, 59, 78, 0.1);
+.booknest-decorative-line {
+    width: 60px;
+    height: 3px;
+    background-color: #2c4a7c;
+    margin: 2rem auto;
 }
 
-.contact-form button {
-	background-color: #183B4E;
-	border: none;
-	padding: 12px 30px;
-	border-radius: 50px;
-	cursor: pointer;
-	font-size: 16px;
-	color: #fff;
-	font-weight: 500;
-	transition: background-color 0.3s, transform 0.2s;
-	display: block;
-	margin: 0 auto;
+.booknest-contact-form {
+    background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
 }
 
-.contact-form button:hover {
-	background-color: #26548A;
-	transform: translateY(-2px);
+.booknest-contact-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(to right, #2c4a7c, #5d8cc2);
 }
 
-/* Responsive styles */
-@media ( max-width : 768px) {
-	.container2 {
-		padding: 30px 20px;
-		margin: 20px 15px;
-	}
-	.contact-form {
-		width: 100%;
-	}
+.booknest-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.booknest-form-full {
+    grid-column: 1 / span 2;
+}
+
+.booknest-form-group {
+    position: relative;
+}
+
+.booknest-contact-form label {
+    display: block;
+    margin-bottom: 0.8rem;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.booknest-contact-form input, 
+.booknest-contact-form textarea {
+    width: 100%;
+    padding: 1rem 1.2rem;
+    border: 1px solid #e1e5ea;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: white;
+}
+
+.booknest-contact-form input:focus, 
+.booknest-contact-form textarea:focus {
+    outline: none;
+    border-color: #2c4a7c;
+    box-shadow: 0 0 0 3px rgba(44, 74, 124, 0.1);
+}
+
+.booknest-contact-form textarea {
+    resize: vertical;
+    min-height: 180px;
+}
+
+.booknest-submit-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.booknest-contact-form button {
+    background-color: #2c4a7c;
+    color: white;
+    border: none;
+    padding: 1rem 3rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.booknest-contact-form button:hover {
+    background-color: #1e3a68;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(44, 74, 124, 0.15);
+}
+
+.booknest-contact-info {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 4rem;
+    text-align: center;
+}
+
+.booknest-contact-item {
+    flex: 1;
+    max-width: 200px;
+}
+
+.booknest-contact-icon {
+    background-color: rgba(44, 74, 124, 0.1);
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    color: #2c4a7c;
+}
+
+.booknest-contact-item h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+.booknest-contact-item p {
+    color: #5d6778;
+    font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+    .booknest-form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .booknest-form-full {
+        grid-column: 1;
+    }
+    
+    .booknest-contact-info {
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+    }
+    
+    .booknest-contact-form {
+        padding: 2rem;
+    }
+    
+    .booknest-contact-container {
+        margin: 2rem auto;
+    }
 }
