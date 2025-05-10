@@ -18,7 +18,15 @@ public class PaymentServiceImpl implements PaymentService {
 
 	private static final String SQL_UPDATE_PAYMENT_STATUS = "UPDATE payment SET payment_status = ? WHERE paymentID = ?";
 
+	private static final String SQL_UPDATE_ORDER_PAYMENT_STATUS = "UPDATE payment SET payment_status = ? WHERE orderID = ?";
+
 	private static final String SQL_GET_PAYMENTS_BY_ORDER_ID = "SELECT * FROM payment WHERE orderID = ? ORDER BY payment_date DESC";
+
+	// Payment status constants
+	public static final String PAYMENT_STATUS_PENDING = "Pending";
+	public static final String PAYMENT_STATUS_COMPLETED = "Completed";
+	public static final String PAYMENT_STATUS_FAILED = "Failed";
+	public static final String PAYMENT_STATUS_CANCELLED = "Cancelled";
 
 	@Override
 	public int createPayment(int orderId, BigDecimal amount, String method, String status) throws SQLException {
@@ -32,9 +40,16 @@ public class PaymentServiceImpl implements PaymentService {
 			throw new IllegalArgumentException("Payment method cannot be empty");
 		}
 
+		// Set default status as Pending if not provided
 		if (status == null || status.trim().isEmpty()) {
-			status = "Pending"; // Default status if not provided
+			status = PAYMENT_STATUS_PENDING;
+		} else {
+			// Ensure status is properly capitalized
+			status = capitalizeStatus(status);
 		}
+
+		System.out.println("Creating payment record for order ID: " + orderId + ", Amount: " + amount + ", Method: "
+				+ method + ", Status: " + status);
 
 		try (Connection conn = DbConfiguration.getDbConnection();
 				PreparedStatement ps = conn.prepareStatement(SQL_CREATE_PAYMENT, Statement.RETURN_GENERATED_KEYS)) {
@@ -61,9 +76,9 @@ public class PaymentServiceImpl implements PaymentService {
 			System.err.println("Database error creating payment for order ID: " + orderId);
 			e.printStackTrace();
 			throw e;
-		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			System.err.println("Database connection error: " + e.getMessage());
+			throw new SQLException("Database connection error", e);
 		}
 
 		return generatedPaymentId;
@@ -87,9 +102,9 @@ public class PaymentServiceImpl implements PaymentService {
 			System.err.println("Database error retrieving payment ID: " + paymentId);
 			e.printStackTrace();
 			throw e;
-		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			System.err.println("Database connection error: " + e.getMessage());
+			throw new SQLException("Database connection error", e);
 		}
 
 		return payment;
@@ -101,7 +116,12 @@ public class PaymentServiceImpl implements PaymentService {
 			throw new IllegalArgumentException("Payment status cannot be empty");
 		}
 
+		// Ensure status is properly capitalized
+		newStatus = capitalizeStatus(newStatus);
+
 		int rowsUpdated = 0;
+
+		System.out.println("Updating payment ID " + paymentId + " status to: " + newStatus);
 
 		try (Connection conn = DbConfiguration.getDbConnection();
 				PreparedStatement ps = conn.prepareStatement(SQL_UPDATE_PAYMENT_STATUS)) {
@@ -111,16 +131,91 @@ public class PaymentServiceImpl implements PaymentService {
 
 			rowsUpdated = ps.executeUpdate();
 
+			if (rowsUpdated > 0) {
+				System.out.println("Successfully updated payment status for ID: " + paymentId + " to: " + newStatus);
+			} else {
+				System.out.println("No records updated for payment ID: " + paymentId);
+			}
+
 		} catch (SQLException e) {
 			System.err.println("Database error updating payment status for ID: " + paymentId);
 			e.printStackTrace();
 			throw e;
-		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			System.err.println("Database connection error: " + e.getMessage());
+			throw new SQLException("Database connection error", e);
 		}
 
 		return rowsUpdated > 0;
+	}
+
+	/**
+	 * Update payment status for an order
+	 * 
+	 * @param orderId   Order ID to update payment status for
+	 * @param newStatus New payment status
+	 * @return true if successful
+	 * @throws SQLException if database error occurs
+	 */
+	public boolean updatePaymentStatusByOrderId(int orderId, String newStatus) throws SQLException {
+		if (newStatus == null || newStatus.trim().isEmpty()) {
+			throw new IllegalArgumentException("Payment status cannot be empty");
+		}
+
+		// Ensure status is properly capitalized
+		newStatus = capitalizeStatus(newStatus);
+
+		int rowsUpdated = 0;
+
+		System.out.println("Updating payment status for order ID " + orderId + " to: " + newStatus);
+
+		try (Connection conn = DbConfiguration.getDbConnection();
+				PreparedStatement ps = conn.prepareStatement(SQL_UPDATE_ORDER_PAYMENT_STATUS)) {
+
+			ps.setString(1, newStatus);
+			ps.setInt(2, orderId);
+
+			rowsUpdated = ps.executeUpdate();
+
+			if (rowsUpdated > 0) {
+				System.out.println("Successfully updated payment status for order ID: " + orderId + " to: " + newStatus
+						+ " (affected rows: " + rowsUpdated + ")");
+			} else {
+				System.out.println("No records updated for order ID: " + orderId);
+			}
+
+		} catch (SQLException e) {
+			System.err.println("Database error updating payment status for order ID: " + orderId);
+			e.printStackTrace();
+			throw e;
+		} catch (ClassNotFoundException e) {
+			System.err.println("Database connection error: " + e.getMessage());
+			throw new SQLException("Database connection error", e);
+		}
+
+		return rowsUpdated > 0;
+	}
+
+	/**
+	 * Mark a payment as completed
+	 * 
+	 * @param paymentId Payment ID to mark as completed
+	 * @return true if successful
+	 * @throws SQLException if database error occurs
+	 */
+	public boolean markPaymentAsCompleted(int paymentId) throws SQLException {
+		return updatePaymentStatus(paymentId, PAYMENT_STATUS_COMPLETED);
+	}
+
+	/**
+	 * Mark all payments for an order as completed
+	 * 
+	 * @param orderId Order ID to mark payments as completed
+	 * @return true if successful
+	 * @throws SQLException if database error occurs
+	 */
+	public boolean markOrderPaymentsAsCompleted(int orderId) throws SQLException {
+		return updatePaymentStatusByOrderId(orderId, PAYMENT_STATUS_COMPLETED);
 	}
 
 	@Override
@@ -142,9 +237,9 @@ public class PaymentServiceImpl implements PaymentService {
 			System.err.println("Database error retrieving payments for order ID: " + orderId);
 			e.printStackTrace();
 			throw e;
-		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			System.err.println("Database connection error: " + e.getMessage());
+			throw new SQLException("Database connection error", e);
 		}
 
 		return payments;
@@ -162,5 +257,30 @@ public class PaymentServiceImpl implements PaymentService {
 		payment.setPayment_status(rs.getString("payment_status"));
 
 		return payment;
+	}
+
+	/**
+	 * Capitalize first letter of status for consistency
+	 * 
+	 * @param status Input status string
+	 * @return Properly capitalized status
+	 */
+	private String capitalizeStatus(String status) {
+		if (status == null || status.isEmpty()) {
+			return PAYMENT_STATUS_PENDING;
+		}
+
+		// Standard status values
+		if (status.equalsIgnoreCase("completed"))
+			return PAYMENT_STATUS_COMPLETED;
+		if (status.equalsIgnoreCase("pending"))
+			return PAYMENT_STATUS_PENDING;
+		if (status.equalsIgnoreCase("failed"))
+			return PAYMENT_STATUS_FAILED;
+		if (status.equalsIgnoreCase("cancelled"))
+			return PAYMENT_STATUS_CANCELLED;
+
+		// If it's not a standard value, capitalize first letter
+		return status.substring(0, 1).toUpperCase() + status.substring(1).toLowerCase();
 	}
 }

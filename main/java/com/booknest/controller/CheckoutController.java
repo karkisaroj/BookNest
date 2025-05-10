@@ -17,6 +17,8 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @WebServlet("/checkout")
@@ -61,14 +63,19 @@ public class CheckoutController extends HttpServlet {
 		// Calculate totals using service
 		BigDecimal subtotal = checkoutService.calculateSubtotal(cartItems);
 		BigDecimal shippingCost = checkoutService.getShippingCost();
-		BigDecimal cartTotal = subtotal;
+		BigDecimal total = subtotal.add(shippingCost);
 
-		// Set attributes for the checkout page
+		// Set attributes for the checkout page with proper precision
 		request.setAttribute("cartItems", cartItems);
-		request.setAttribute("cartTotal", cartTotal);
+		request.setAttribute("cartTotal", subtotal);
 		request.setAttribute("shippingCost", shippingCost);
+		request.setAttribute("orderTotal", total);
 
-		// Forward to the checkout page
+		// Debug logs to verify values
+		System.out.println("Sending to checkout page - Subtotal: " + subtotal);
+		System.out.println("Sending to checkout page - Shipping: " + shippingCost);
+		System.out.println("Sending to checkout page - Total: " + total);
+
 		request.getRequestDispatcher("/WEB-INF/pages/checkout.jsp").forward(request, response);
 	}
 
@@ -102,6 +109,11 @@ public class CheckoutController extends HttpServlet {
 			String zipCode = request.getParameter("zipCode");
 			String phone = request.getParameter("phone");
 
+			// Get payment method parameter
+			String paymentMethodParam = request.getParameter("paymentMethod");
+			String paymentMethod = checkoutService.formatPaymentMethod(paymentMethodParam);
+
+			System.out.println("Payment method selected: " + paymentMethod);
 			System.out.println(
 					"Address parameters received: " + streetAddress + ", " + city + ", " + state + " " + zipCode);
 
@@ -116,20 +128,30 @@ public class CheckoutController extends HttpServlet {
 			int orderId = checkoutService.processCheckout(userId, cartItems, streetAddress, city, state, zipCode,
 					phone);
 
-			// Calculate totals for display
-			BigDecimal orderTotal = checkoutService.calculateOrderTotal(cartItems);
-
-			// If order creation was successful
+			// If order creation was successful, create payment record
 			if (orderId > 0) {
+				// Calculate totals for display and payment
+				BigDecimal orderTotal = checkoutService.calculateOrderTotal(cartItems);
+
+				// Create payment record
+				int paymentId = checkoutService.createPaymentRecord(orderId, orderTotal, paymentMethod);
+				System.out.println("Payment record created with ID: " + paymentId + " for order ID: " + orderId);
+
+				// Format current date for order display
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				String currentDate = sdf.format(new Date());
+
 				// Set success attributes for order confirmation
-				request.setAttribute("orderId", orderId);
-				request.setAttribute("orderTotal", orderTotal);
-				request.setAttribute("successMessage", "Order placed successfully! Thank you for your purchase.");
+				session.setAttribute("orderId", orderId);
+				session.setAttribute("orderTotal", orderTotal);
+				session.setAttribute("orderDate", currentDate);
+				session.setAttribute("paymentMethod", paymentMethod); // Store payment method for confirmation page
+				session.setAttribute("flashSuccessMessage", "Order placed successfully! Thank you for your purchase.");
 
 				System.out.println("Order created successfully with ID: " + orderId);
 
-				// Forward to order confirmation page
-				request.getRequestDispatcher("/WEB-INF/pages/order-confirmation.jsp").forward(request, response);
+				// Redirect to order confirmation page
+				response.sendRedirect(request.getContextPath() + "/order-confirmation");
 			} else {
 				// Handle order creation failure
 				request.setAttribute("errorMessage", "Failed to create your order. Please try again.");

@@ -159,6 +159,36 @@ public class CartServiceImpl implements CartService {
 		return items;
 	}
 
+	@Override
+	public void clearCart(Integer userId) throws CartServiceException {
+		if (userId == null) {
+			throw new CartServiceException("Cannot clear cart: User ID is null");
+		}
+
+		String sql = "DELETE FROM cart_item WHERE userID = ?";
+		Connection conn = null;
+		PreparedStatement ps = null;
+
+		try {
+			conn = DbConfiguration.getDbConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, userId);
+
+			int rowsDeleted = ps.executeUpdate();
+			System.out.println("CartServiceImpl [clearCart]: Cleared " + rowsDeleted + " items for UserID = " + userId);
+		} catch (SQLException e) {
+			System.err.println("SQL Error in clearCart for UserID = " + userId + ": " + e.getMessage());
+			e.printStackTrace();
+			throw new CartServiceException("Database error while clearing cart.", e);
+		} catch (ClassNotFoundException e) {
+			System.err.println("Database Driver Error in clearCart: " + e.getMessage());
+			throw new CartServiceException("Database driver configuration error.", e);
+		} finally {
+			close(ps);
+			close(conn);
+		}
+	}
+
 	// --- Helper Methods (findCartItemByUserIdAndBookId, insertCartItem, etc.) ---
 	private Optional<CartItem> findCartItemByUserIdAndBookId(int userId, int bookId) throws SQLException {
 		String sql = "SELECT cart_itemID, userID, bookID, quantity, updated_at FROM cart_item WHERE userID = ? AND bookID = ?";
@@ -250,5 +280,4 @@ public class CartServiceImpl implements CartService {
 				// e.printStackTrace();
 			}
 	}
-
 }
