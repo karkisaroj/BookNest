@@ -1,179 +1,194 @@
 @charset "UTF-8";
 
 .container1 {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 15px;
-    display: flex;
-    flex-wrap: wrap;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 15px;
+	display: flex;
+	flex-wrap: wrap;
 }
 
 .product {
-    display: flex;
-    width: 100%;
-    margin-top: 30px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    overflow: hidden;
+	display: flex;
+	width: 100%;
+	margin-top: 30px;
+	background-color: #fff;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	border-radius: 5px;
+	overflow: hidden;
 }
 
 .gallery {
-    width: 40%;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f9f9f9;
+	width: 40%;
+	padding: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #f9f9f9;
 }
 
 .gallery img {
-    max-width: 100%;
-    max-height: 400px;
-    object-fit: contain;
+	max-width: 100%;
+	max-height: 400px;
+	object-fit: contain;
 }
 
 .details {
-    width: 60%;
-    padding: 30px;
+	width: 60%;
+	padding: 30px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }
 
 .details h1 {
-    color: #333;
-    font-size: 24px;
-    margin-bottom: 10px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
+	color: #4E3629; /* Title color */
+	font-size: 24px;
+	margin-bottom: 10px;
+	border-bottom: 1px solid #eee;
+	padding-bottom: 10px;
 }
 
 .details .author {
-    color: #666;
-    margin-bottom: 15px;
-    font-style: italic;
+	color: #666;
+	margin-bottom: 15px;
+	font-style: italic;
 }
 
 .details .isbn {
-    color: #888;
-    margin-bottom: 10px;
-    font-size: 0.9em;
+	color: #888;
+	margin-bottom: 10px;
+	font-size: 0.9em;
 }
 
 .details .publication-date {
-    color: #888;
-    margin-bottom: 15px;
-    font-size: 0.9em;
+	color: #888;
+	margin-bottom: 15px;
+	font-size: 0.9em;
 }
 
 .details .page-count {
-    color: #666;
-    margin-bottom: 15px;
+	color: #666;
+	margin-bottom: 15px;
 }
 
 .details .description {
-    margin: 20px 0;
+	margin: 20px 0;
 }
 
 .details .description h3 {
-    color: #333;
-    margin-bottom: 10px;
-    font-size: 18px;
+	color: #333;
+	margin-bottom: 10px;
+	font-size: 18px;
 }
 
 .details .description p {
-    color: #555;
-    line-height: 1.6;
+	color: #555;
+	line-height: 1.6;
 }
 
 .details p {
-    margin-bottom: 10px;
-    color: #555;
-    line-height: 1.6;
+	margin-bottom: 10px;
+	color: #555;
+	line-height: 1.6;
 }
 
 .details h2 {
-    color: #e91e63;
-    font-size: 22px;
-    margin: 20px 0;
+	color: #4E3629; /* Price color */
+	font-size: 22px;
+	margin: 20px 0;
 }
 
 .details .stock {
-    color: green;
-    font-weight: bold;
-    margin-bottom: 20px;
+	color: green;
+	font-weight: bold;
+	margin-bottom: 20px;
 }
 
 .details .out-of-stock {
-    color: red;
-    font-weight: bold;
-    margin-bottom: 20px;
+	color: red;
+	font-weight: bold;
+	margin-bottom: 20px;
 }
 
 .details button {
-    padding: 12px 25px;
-    background-color: #e91e63;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+	padding: 10px 20px; /* Same size as Back to Books */
+	background-color: #6C757D; /* Same color as Back to Books */
+	color: white;
+	border: none;
+	border-radius: 5px;
+	font-size: 14px; /* Same font size as Back to Books */
+	text-align: center;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
 }
 
 .details button:hover {
-    background-color: #d81b60;
+	background-color: #555; /* Same hover effect as Back to Books */
 }
 
 .details button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
+	background-color: #cccccc;
+	cursor: not-allowed;
 }
 
 .back-button {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #555;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-top: 20px;
-    margin-left: 15px;
-    font-size: 14px;
+	display: inline-block;
+	padding: 10px 20px;
+	background-color: #6C757D; /* Back to Books color */
+	color: white;
+	text-decoration: none;
+	border-radius: 5px;
+	margin-top: 20px;
+	font-size: 14px; /* Font size for Back to Books */
+	text-align: center;
 }
 
 .back-button:hover {
-    background-color: #444;
+	background-color: #555; /* Hover effect for Back to Books */
 }
 
+/* Align buttons consistently */
+.details form, .back-button {
+	margin-top: 15px;
+	width: fit-content;
+	align-self: flex-start;
+}
+
+/* Responsive Design */
 @media screen and (max-width: 768px) {
-    .product {
-        flex-direction: column;
-    }
-    
-    .gallery {
-        width: 100%;
-    }
-    
-    .details {
-        width: 100%;
-    }
+	.product {
+		flex-direction: column;
+	}
+	.gallery {
+		width: 100%;
+	}
+	.details {
+		width: 100%;
+	}
+	.details form, .back-button {
+		width: 100%; /* Make buttons full width on smaller screens */
+		align-self: center;
+		text-align: center;
+	}
 }
 
-/* Add alert styling */
+/* Alert Styling */
 .alert {
-    padding: 15px;
-    margin-bottom: 20px;
-    border: 1px solid transparent;
-    border-radius: 4px;
+	padding: 15px;
+	margin-bottom: 20px;
+	border: 1px solid transparent;
+	border-radius: 4px;
 }
 
 .alert-success {
-    color: #155724;
-    background-color: #d4edda;
-    border-color: #c3e6cb;
+	color: #155724;
+	background-color: #d4edda;
+	border-color: #c3e6cb;
 }
 
 .alert-danger {
-    color: #721c24;
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
+	color: #721c24;
+	background-color: #f8d7da;
+	border-color: #f5c6cb;
 }
