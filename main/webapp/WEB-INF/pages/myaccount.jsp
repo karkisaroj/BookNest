@@ -46,7 +46,7 @@
                     </li>
                     <li class="sidebar-item">
                         <span class="sidebar-icon">📦</span>
-                        <span><a href="<c:url value='/orders'/>">My Orders</a></span>
+                        <span><a href="<c:url value='/cart'/>">My Orders</a></span>
                     </li>
                     <li class="sidebar-item">
                         <span class="sidebar-icon">⚙️</span>
