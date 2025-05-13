@@ -85,11 +85,8 @@ public class HomeController extends HttpServlet {
 			request.setAttribute("homeErrorMessage", errorMessage);
 		}
 
-		// Forward to the home JSP page - Ensure path is correct!
-		// If home.jsp is directly under webapp, use "/home.jsp"
-		// If it's under WEB-INF/pages, use "/WEB-INF/pages/home.jsp"
+
 		request.getRequestDispatcher("/WEB-INF/pages/home.jsp").forward(request, response);
-		// Note: Your screenshot shows /WEB-INF/pages/home.jsp, so I've used that here.
-		// Adjust if needed.
+	
 	}
 }
