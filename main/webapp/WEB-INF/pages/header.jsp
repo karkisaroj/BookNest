@@ -162,31 +162,7 @@
       }
     });
     
-    // Handle category selection
-    categoryOptions.forEach(option => {
-      option.addEventListener('click', () => {
-        // Toggle active state
-        option.classList.toggle('active');
-        
-        // Get all selected categories
-        const selectedCategories = [];
-        document.querySelectorAll('.category-option.active').forEach(activeOption => {
-          selectedCategories.push(activeOption.dataset.category);
-        });
-        
-        // Add hidden input to form with selected categories
-        let categoriesInput = document.getElementById('categories-input');
-        if (!categoriesInput) {
-          categoriesInput = document.createElement('input');
-          categoriesInput.type = 'hidden';
-          categoriesInput.id = 'categories-input';
-          categoriesInput.name = 'categories';
-          searchForm.appendChild(categoriesInput);
-        }
-        categoriesInput.value = selectedCategories.join(',');
-      });
-    });
-    
+  
     // Live search functionality - without AJAX
     let searchTimeout;
     searchInput.addEventListener('input', () => {
@@ -202,44 +178,7 @@
       }
     });
     
-    // Function to fetch search results (simulated - no AJAX)
-    function fetchSearchResults(query) {
-      // Sample data with the correct property names
-      const sampleBooks = [
-        { 
-          bookID: 1,
-          book_title: 'The Great Gatsby', 
-          price: '12.99',
-          book_img_url: '${pageContext.request.contextPath}/resources/images/system/placeholder.png'
-        },
-        { 
-          bookID: 2,
-          book_title: 'To Kill a Mockingbird', 
-          price: '10.99',
-          book_img_url: '${pageContext.request.contextPath}/resources/images/system/placeholder.png'
-        },
-        { 
-          bookID: 3,
-          book_title: '1984', 
-          price: '9.99',
-          book_img_url: '${pageContext.request.contextPath}/resources/images/system/placeholder.png'
-        },
-        { 
-          bookID: 4,
-          book_title: 'Pride and Prejudice', 
-          price: '8.99',
-          book_img_url: '${pageContext.request.contextPath}/resources/images/system/placeholder.png' 
-        }
-      ];
-      
-      // Filter books based on query (case insensitive)
-      const filteredBooks = sampleBooks.filter(book => 
-        book.book_title.toLowerCase().includes(query.toLowerCase())
-      );
-      
-      // Display results
-      displaySearchResults(filteredBooks);
-    }
+
     
     // Function to display search results
     function displaySearchResults(books) {
