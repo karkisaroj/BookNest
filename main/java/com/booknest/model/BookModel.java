@@ -13,8 +13,9 @@ public class BookModel {
 	private int stockQuantity;
 	private int pageCount;
 	private String bookImgUrl;
-
+	private int authorID;
 	private int publisherID;
+	private int categoryID;
 	private int soldCount;
 
 	// Constructors
@@ -130,5 +131,18 @@ public class BookModel {
 	public void setSoldCount(int soldCount) {
 		this.soldCount = soldCount;
 	}
+	public int getAuthorID() {
+	    return authorID;
+	}
 
+	public void setAuthorID(int authorID) {
+	    this.authorID = authorID;
+	}
+	public int getCategoryID() {
+	    return categoryID;
+	}
+
+	public void setCategoryID(int categoryID) {
+	    this.categoryID = categoryID;
+	}
 }
