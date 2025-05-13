@@ -53,8 +53,6 @@
 						<button type="submit" class="search-button">Search</button>
 					</form>
 
-					
-
 					<div class="search-results-preview" id="search-results-preview">
 						<div class="preview-title">
 							<span>Recent Search Results</span> <a
@@ -138,7 +136,6 @@
     const searchInput = document.getElementById('search-input');
     const searchForm = document.getElementById('search-form');
     const searchResultsPreview = document.getElementById('search-results-preview');
-    const categoryOptions = document.querySelectorAll('.category-option');
     
     // Toggle search panel
     searchToggle.addEventListener('click', (e) => {
@@ -162,6 +159,7 @@
       }
     });
     
+
   
     // Live search functionality - without AJAX
     let searchTimeout;
@@ -216,5 +214,9 @@
       }
     }
   </script>
+
+
+    </script>
+
 </body>
 </html>
