@@ -276,65 +276,44 @@ main h1::after {
 }
 
 /* Action Buttons */
-.edit-btn {
-    background-color: #3498db;
+.action-buttons {
+    display: flex;
+    gap: 10px; /* Add spacing between buttons */
+    align-items: center;
+}
+
+.edit-btn,
+.delete-btn {
+    background-color: #3498db; /* Default background for Update (blue) */
     color: white;
+    text-decoration: none; /* Remove underline from text */
+    display: inline-block;
+    text-align: center;
     border: none;
-    padding: 8px 15px;
+    padding: 10px 20px; /* Equal padding for both buttons */
     border-radius: 50px;
+    font-size: 14px; /* Same font size for consistency */
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
     font-weight: 500;
-    margin-right: 5px;
+    min-width: 80px; /* Ensure buttons have the same minimum width */
 }
 
 .edit-btn:hover {
-    background-color: #2980b9;
+    background-color: #2980b9; /* Darker blue on hover */
     transform: translateY(-2px);
 }
 
 .delete-btn {
-    background-color: #c44d4d;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-    font-weight: 500;
+    background-color: #c44d4d; /* Red background for Delete */
 }
+
 
 .delete-btn:hover {
     background-color: #b53535;
     transform: translateY(-2px);
 }
 
-/* Responsive adjustments */
-@media ( max-width : 992px) {
-    .container1 {
-        flex-direction: column;
-    }
-    table {
-        display: block;
-        overflow-x: auto;
-    }
-}
-
-@media ( max-width : 576px) {
-    main h1 {
-        font-size: 2rem;
-    }
-    .books-management h2 {
-        font-size: 1.5rem;
-    }
-    .books-table-container {
-        overflow-x: auto;
-        padding: 20px;
-    }
-    .books-table-container table {
-        min-width: 500px;
-    }
-}
 /* Improved Message Styling */
 .message-container {
 	margin: 0 0 25px 0;
