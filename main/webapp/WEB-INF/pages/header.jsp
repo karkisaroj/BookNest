@@ -21,7 +21,7 @@
 				</div>
 			</div>
 
-			<button class="mobile-menu-btn" id="mobile-menu-toggle">
+			<button cl ass="mobile-menu-btn" id="mobile-menu-toggle">
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 					viewBox="0 0 24 24" fill="none" stroke="currentColor"
 					stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -33,11 +33,10 @@
 
 			<nav id="main-nav">
 				<ul class="navigation">
-					<li><a href="${pageContext.request.contextPath}/home">Home</a></li>
-					<li><a href="${pageContext.request.contextPath}/books">Books</a></li>
-					<li><a href="${pageContext.request.contextPath}/aboutus">About</a></li>
-					<li><a href="${pageContext.request.contextPath}/contactus">Contact
-							Us</a></li>
+					<li class=""><a href="${pageContext.request.contextPath}/home">Home</a></li>
+					<li class=""><a href="${pageContext.request.contextPath}/books">Books</a></li>
+					<li class=""><a href="${pageContext.request.contextPath}/aboutus">About</a></li>
+					<li class=""><a href="${pageContext.request.contextPath}/contactus">Contact Us</a></li>
 				</ul>
 			</nav>
 
