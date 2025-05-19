@@ -176,47 +176,11 @@
       }
     });
     
-
-    
-    // Function to display search results
-    function displaySearchResults(books) {
-      const previewItemsContainer = document.querySelector('.preview-items');
-      previewItemsContainer.innerHTML = '';
-      
-      if (books.length > 0) {
-        // Show the results container
-        searchResultsPreview.classList.add('active');
-        
-        // Add book items to the container
-        books.forEach(book => {
-          const bookItem = document.createElement('div');
-          bookItem.className = 'preview-item';
-          
-          // FIXED: Use the correct property names (book_img_url, book_title)
-          bookItem.innerHTML = `
-            <div class="preview-item-img" style="background-image: url('${book.book_img_url}')"></div>
-            <div class="preview-item-title">${book.book_title}</div>
-            <div class="preview-item-price">Rs ${book.price}</div>
-          `;
-          
-          // FIXED: Make the item link to the product page with the correct bookId
-          bookItem.style.cursor = 'pointer';
-          bookItem.addEventListener('click', () => {
-            window.location.href = '${pageContext.request.contextPath}/product?bookId=' + book.bookID;
-          });
-          
-          previewItemsContainer.appendChild(bookItem);
-        });
-      } else {
-        // Show no results message
-        searchResultsPreview.classList.add('active');
-        previewItemsContainer.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: #777;">No results found for your search.</p>';
-      }
-    }
+ 
   </script>
 
 
-    </script>
+    
 
 </body>
 </html>

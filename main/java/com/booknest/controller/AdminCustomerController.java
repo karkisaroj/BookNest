@@ -52,22 +52,18 @@ public class AdminCustomerController extends HttpServlet {
         if (userIdParam != null) {
             try {
                 int userId = Integer.parseInt(userIdParam);
-                boolean isDeleted = customerService.deleteUserById(userId);
+                String deleteResult = customerService.deleteUserById(userId);
 
-                if (isDeleted) {
-                    // Fetch the updated customer list after deletion
-                    List<UserModel> customers = customerService.getAllCustomers();
-                    request.setAttribute("customers", customers);
-                    System.out.println("Success Message: " + request.getAttribute("success"));
-                    System.out.println("Error Message: " + request.getAttribute("error"));
-                    // Set success message and forward to JSP
+                // Fetch the updated customer list after attempted deletion
+                List<UserModel> customers = customerService.getAllCustomers();
+                request.setAttribute("customers", customers);
+
+                if (deleteResult.equals("success")) {
+                    // Success message
                     redirectionUtil.setMsgAndRedirect(request, response, customerpagepath, "success", "User deleted successfully!");
                 } else {
-                    // Set error message and forward to JSP
-                    List<UserModel> customers = customerService.getAllCustomers();
-                    request.setAttribute("customers", customers);
-
-                    redirectionUtil.setMsgAndRedirect(request, response, customerpagepath, "error", "Failed to delete user.");
+                    // Show the specific error from the service
+                    redirectionUtil.setMsgAndRedirect(request, response, customerpagepath, "error", deleteResult);
                 }
             } catch (NumberFormatException e) {
                 e.printStackTrace();

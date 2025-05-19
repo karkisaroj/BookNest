@@ -62,7 +62,7 @@ public class AdminCustomerService {
                 );
                 
                 // Store userID as a request attribute since it's not in the model
-                user.setUser_name(result.getInt("userID") + ""); // Temporarily store ID in username for display
+                user.setUserName(result.getInt("userID") + ""); // Temporarily store ID in username for display
                 
                 customers.add(user);
             }
@@ -81,20 +81,28 @@ public class AdminCustomerService {
      * @param userId The ID of the user to delete.
      * @return true if the user was deleted successfully, false otherwise.
      */
-    public boolean deleteUserById(int userId) {
+    public String deleteUserById(int userId) {
         if (isConnectionError) {
             System.out.println("Connection Error!");
-            return false;
+            return "Database connection error";
         }
 
         String query = "DELETE FROM user WHERE userID = ?";
         try (PreparedStatement stmt = dbConn.prepareStatement(query)) {
             stmt.setInt(1, userId);
             int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0; // Return true if a row was deleted
+            if (rowsAffected > 0) {
+                return "success"; 
+            } else {
+                return "User not found"; 
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            
+            
+            if (e instanceof java.sql.SQLIntegrityConstraintViolationException) {
+                return "Cannot delete customer. This customer has related records (orders,carts,etc).";
+            }
+            return "Database error occurred: " + e.getMessage();
         }
-        return false;
     }
 }
