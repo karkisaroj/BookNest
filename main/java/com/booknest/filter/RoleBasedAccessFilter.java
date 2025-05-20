@@ -36,6 +36,7 @@ public class RoleBasedAccessFilter implements Filter {
 	private static final String ADMIN_ORDER = "/adminorder";
 	private static final String ADMIN_PRODUCT = "/adminproduct";
 	private static final String ADMIN_UPDATE_BOOK = "/adminupdatebook";
+	private static final String SEARCH = "/search";
 	// Common paths
 	private static final String LOGIN = "/login";
 	private static final String REGISTER = "/register";
@@ -80,7 +81,7 @@ public class RoleBasedAccessFilter implements Filter {
 				// Admin is logged in
 				if (uri.contains(HOME) || uri.contains(PRODUCTPAGE) || uri.contains(BOOKS) || uri.contains(CART)
 						|| uri.contains(LOGIN) || uri.contains(REGISTER) || uri.contains(CHECKOUT)
-						|| uri.contains(CONTACTUS)) {
+						|| uri.contains(CONTACTUS)|| uri.contains(SEARCH) ) {
 					resp.sendRedirect(contextPath + ADMIN_DASHBOARD);
 				} else {
 					chain.doFilter(request, response);

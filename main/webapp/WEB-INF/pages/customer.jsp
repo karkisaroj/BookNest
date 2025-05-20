@@ -75,8 +75,8 @@
                                 <c:forEach var="customer" items="${customers}">
                                     <tr>
                                         <td><input type="checkbox"></td>
-                                        <td>${customer.first_name} ${customer.last_name}</td>
-                                        <td>${customer.user_name}</td>
+                                        <td>${customer.firstName} ${customer.lastName}</td>
+                                        <td>${customer.userName}</td>
                                         <td>${customer.address}</td>
                                         <td>${customer.email}</td>
                                         <td>
@@ -85,7 +85,7 @@
                                                 style="display: inline;"
                                                 onsubmit="confirmDelete(event, this);">
                                                 <input type="hidden" name="userId"
-                                                    value="${customer.user_name}" />
+                                                    value="${customer.userName}" />
                                                 <button type="submit" class="edit-btn">Delete</button>
                                             </form>
                                         </td>

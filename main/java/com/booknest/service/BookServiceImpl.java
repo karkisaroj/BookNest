@@ -41,17 +41,17 @@ public class BookServiceImpl implements BookService {
 				count++;
 				BookCartModel book = new BookCartModel();
 				book.setBookID(rs.getInt("bookID"));
-				book.setBook_title(rs.getString("book_title"));
+				book.setBookTitle(rs.getString("book_title"));
 				book.setIsbn(rs.getString("isbn"));
 				book.setPrice(rs.getBigDecimal("price"));
 				book.setDescription(rs.getString("description"));
-				book.setStock_quantity(rs.getInt("stock_quantity"));
-				book.setBook_img_url(rs.getString("book_img_url"));
+				book.setStockQuantity(rs.getInt("stock_quantity"));
+				book.setBookImgUrl(rs.getString("book_img_url"));
 				book.setPublisherID(rs.getInt("publisherID"));
 				book.setAuthorName(rs.getString("author_name")); // Set the author name from the query
 
 				System.out.println("SEARCH DEBUG: Found book #" + count + ": " + book.getBookID() + " - "
-						+ book.getBook_title() + " by " + book.getAuthorName());
+						+ book.getBookTitle() + " by " + book.getAuthorName());
 
 				books.add(book);
 			}
@@ -96,12 +96,12 @@ public class BookServiceImpl implements BookService {
 				while (rs.next()) {
 					BookCartModel book = new BookCartModel();
 					book.setBookID(rs.getInt("bookID"));
-					book.setBook_title(rs.getString("book_title"));
+					book.setBookTitle(rs.getString("book_title"));
 					book.setIsbn(rs.getString("isbn"));
 					book.setPrice(rs.getBigDecimal("price"));
 					book.setDescription(rs.getString("description"));
-					book.setStock_quantity(rs.getInt("stock_quantity"));
-					book.setBook_img_url(rs.getString("book_img_url"));
+					book.setStockQuantity(rs.getInt("stock_quantity"));
+					book.setBookImgUrl(rs.getString("book_img_url"));
 
 					// Set a default author name since we're not joining with author table
 					book.setAuthorName("Unknown");
@@ -157,7 +157,7 @@ public class BookServiceImpl implements BookService {
 				.println("WARNING: BookServiceImpl.addBook does NOT currently handle author relationships correctly!");
 		// (Existing code that only inserts into 'book' table - Author info is ignored
 		// on insert)
-		if (book == null || book.getBook_title() == null || book.getBook_title().trim().isEmpty()
+		if (book == null || book.getBookTitle() == null || book.getBookTitle().trim().isEmpty()
 				|| book.getPrice() == null || book.getPrice().compareTo(BigDecimal.ZERO) < 0)
 			throw new Exception("Invalid book data.");
 
@@ -168,10 +168,10 @@ public class BookServiceImpl implements BookService {
 		try {
 			conn = DbConfiguration.getDbConnection();
 			ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			ps.setString(1, book.getBook_title().trim());
+			ps.setString(1, book.getBookTitle().trim());
 			ps.setString(2, book.getDescription());
 			ps.setBigDecimal(3, book.getPrice());
-			ps.setString(4, book.getBook_img_url());
+			ps.setString(4, book.getBookImgUrl());
 			int rows = ps.executeUpdate();
 			if (rows > 0) {
 				keys = ps.getGeneratedKeys();
@@ -213,9 +213,9 @@ public class BookServiceImpl implements BookService {
 			while (rs.next()) {
 				BookCartModel book = new BookCartModel(); // Changed to BookCartModel
 				book.setBookID(rs.getInt("bookID"));
-				book.setBook_title(rs.getString("book_title"));
+				book.setBookTitle(rs.getString("book_title"));
 				book.setPrice(rs.getBigDecimal("price"));
-				book.setBook_img_url(rs.getString("book_img_url"));
+				book.setBookImgUrl(rs.getString("book_img_url"));
 				topBooks.add(book);
 			}
 			System.out.println("Found " + topBooks.size() + " top books in service.");
@@ -258,9 +258,9 @@ public class BookServiceImpl implements BookService {
 			while (rs.next()) {
 				BookCartModel book = new BookCartModel(); // Changed to BookCartModel
 				book.setBookID(rs.getInt("bookID"));
-				book.setBook_title(rs.getString("book_title"));
+				book.setBookTitle(rs.getString("book_title"));
 				book.setPrice(rs.getBigDecimal("price"));
-				book.setBook_img_url(rs.getString("book_img_url"));
+				book.setBookImgUrl(rs.getString("book_img_url"));
 				randomBooks.add(book);
 			}
 			System.out.println("Found " + randomBooks.size() + " random books in service.");
@@ -309,17 +309,17 @@ public class BookServiceImpl implements BookService {
 				count++;
 				BookCartModel book = new BookCartModel();
 				book.setBookID(rs.getInt("bookID"));
-				book.setBook_title(rs.getString("book_title"));
+				book.setBookTitle(rs.getString("book_title"));
 				book.setIsbn(rs.getString("isbn"));
 				book.setPrice(rs.getBigDecimal("price"));
 				book.setDescription(rs.getString("description"));
-				book.setStock_quantity(rs.getInt("stock_quantity"));
-				book.setBook_img_url(rs.getString("book_img_url"));
+				book.setStockQuantity(rs.getInt("stock_quantity"));
+				book.setBookImgUrl(rs.getString("book_img_url"));
 				book.setPublisherID(rs.getInt("publisherID"));
 				book.setAuthorName(rs.getString("author_name"));
 
 				System.out.println("CATEGORY SEARCH DEBUG: Found book #" + count + ": " + book.getBookID() + " - "
-						+ book.getBook_title());
+						+ book.getBookTitle());
 
 				books.add(book);
 			}
@@ -351,18 +351,18 @@ public class BookServiceImpl implements BookService {
 		System.err.println(
 				"WARNING: BookServiceImpl.updateBook does NOT currently handle author relationships correctly!");
 
-		if (book == null || book.getBookID() <= 0 || book.getBook_title() == null
-				|| book.getBook_title().trim().isEmpty() || book.getPrice() == null
+		if (book == null || book.getBookID() <= 0 || book.getBookTitle() == null
+				|| book.getBookTitle().trim().isEmpty() || book.getPrice() == null
 				|| book.getPrice().compareTo(BigDecimal.ZERO) < 0)
 			throw new Exception("Invalid book data for update.");
 
 		String sql = "UPDATE book SET book_title = ?, description = ?, price = ?, book_img_url = ? WHERE bookID = ?";
 
 		try (Connection conn = DbConfiguration.getDbConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-			ps.setString(1, book.getBook_title().trim());
+			ps.setString(1, book.getBookTitle().trim());
 			ps.setString(2, book.getDescription());
 			ps.setBigDecimal(3, book.getPrice());
-			ps.setString(4, book.getBook_img_url());
+			ps.setString(4, book.getBookImgUrl());
 			ps.setInt(5, book.getBookID());
 			return ps.executeUpdate() > 0;
 		} catch (SQLException | ClassNotFoundException e) {
@@ -393,14 +393,14 @@ public class BookServiceImpl implements BookService {
 	private BookCartModel mapRowToBookCartModel(ResultSet rs) throws SQLException {
 		BookCartModel book = new BookCartModel();
 		book.setBookID(rs.getInt("bookID"));
-		book.setBook_title(rs.getString("book_title"));
+		book.setBookTitle(rs.getString("book_title"));
 		book.setIsbn(rs.getString("isbn"));
-		book.setPublication_date(rs.getDate("publication_date"));
+		book.setPublicationDate(rs.getDate("publication_date"));
 		book.setPrice(rs.getBigDecimal("price"));
 		book.setDescription(rs.getString("description"));
-		book.setStock_quantity(rs.getInt("stock_quantity"));
-		book.setPage_count(rs.getInt("page_count"));
-		book.setBook_img_url(rs.getString("book_img_url"));
+		book.setStockQuantity(rs.getInt("stock_quantity"));
+		book.setPageCount(rs.getInt("page_count"));
+		book.setBookImgUrl(rs.getString("book_img_url"));
 		book.setPublisherID(rs.getInt("publisherID"));
 		// Get the comma-separated author list from the 'authors' alias created by
 		// GROUP_CONCAT

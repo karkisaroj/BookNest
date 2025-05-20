@@ -9,7 +9,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BookNest - ${book.book_title}</title>
+<title>BookNest - ${book.bookTitle}</title>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/product-page.css">
 </head>
@@ -21,17 +21,17 @@
 		<div class="product">
 			<div class="gallery">
 				<c:choose>
-					<c:when test="${not empty book.book_img_url}">
+					<c:when test="${not empty book.bookImgUrl}">
 						<c:choose>
-							<c:when test="${book.book_img_url.startsWith('resources/')}">
+							<c:when test="${book.bookImgUrl.startsWith('resources/')}">
 								<img
-									src="${pageContext.request.contextPath}/${book.book_img_url}"
-									alt="${book.book_title}">
+									src="${pageContext.request.contextPath}/${book.bookImgUrl}"
+									alt="${book.bookTitle}">
 							</c:when>
 							<c:otherwise>
 								<img
-									src="${pageContext.request.contextPath}/${book.book_img_url}"
-									alt="${book.book_title}">
+									src="${pageContext.request.contextPath}/${book.bookImgUrl}"
+									alt="${book.bookTitle}">
 							</c:otherwise>
 						</c:choose>
 					</c:when>
@@ -43,7 +43,7 @@
 				</c:choose>
 			</div>
 			<div class="details">
-				<h1>${book.book_title}</h1>
+				<h1>${book.bookTitle}</h1>
 
 				<c:if test="${not empty book.authorName}">
 					<p class="author">By: ${book.authorName}</p>
@@ -53,10 +53,10 @@
 					<p class="isbn">ISBN: ${book.isbn}</p>
 				</c:if>
 
-				<c:if test="${not empty book.publication_date}">
+				<c:if test="${not empty book.publicationDate}">
 					<p class="publication-date">
 						Publication Date:
-						<fmt:formatDate value="${book.publication_date}"
+						<fmt:formatDate value="${book.publicationDate}"
 							pattern="yyyy-MM-dd" />
 					</p>
 				</c:if>
@@ -68,8 +68,8 @@
 					</div>
 				</c:if>
 
-				<c:if test="${book.page_count > 0}">
-					<p class="page-count">Pages: ${book.page_count}</p>
+				<c:if test="${book.pageCount > 0}">
+					<p class="page-count">Pages: ${book.pageCount}</p>
 				</c:if>
 
 				<h2>
@@ -77,10 +77,10 @@
 						currencySymbol="Rs " />
 				</h2>
 
-				<c:if test="${book.stock_quantity > 0}">
-					<p class="stock">In Stock (${book.stock_quantity} available)</p>
+				<c:if test="${book.stockQuantity > 0}">
+					<p class="stock">In Stock (${book.stockQuantity} available)</p>
 				</c:if>
-				<c:if test="${book.stock_quantity <= 0}">
+				<c:if test="${book.stockQuantity <= 0}">
 					<p class="out-of-stock">Out of Stock</p>
 				</c:if>
 
@@ -89,7 +89,7 @@
 						type="hidden" name="bookId" value="${book.bookID}"> <input
 						type="hidden" name="sourceUrl"
 						value="${pageContext.request.contextPath}/product?bookId=${book.bookID}">
-					<button type="submit" ${book.stock_quantity <= 0 ? 'disabled' : ''}>Add
+					<button type="submit" ${book.stockQuantity <= 0 ? 'disabled' : ''}>Add
 						to Cart</button>
 				</form>
 

@@ -173,6 +173,7 @@
       }
     });
     
+<<<<<<< HEAD
     // Function to display search results
     function displaySearchResults(books) {
       const previewItemsContainer = document.querySelector('.preview-items');
@@ -208,5 +209,13 @@
     }
   </script>
 
+=======
+ 
+  </script>
+
+
+
+
+>>>>>>> 9f24d56869f1d1ce2b548576ec6bf8771138780a
 </body>
 </html>
