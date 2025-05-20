@@ -89,6 +89,7 @@
 							<form action="<c:url value='/cart'/>" method="POST">
 								<input type="hidden" name="action" value="add"> <input
 									type="hidden" name="bookId" value="${book.bookID}"> <input
+									type="hidden" name="sourceUrl"
 									value="${pageContext.request.contextPath}/books">
 								<button type="submit">Add To Cart</button>
 							</form>

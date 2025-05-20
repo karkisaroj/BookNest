@@ -50,13 +50,9 @@
 
 
 
-<<<<<<< HEAD
+
 	<%-- Section 2 - Books (Uses randomBooks from HomeController) --%>
 	<section class="sec-2" id="featured-books">
-=======
-	<%-- Section 2 - Books --%>
-	<section class="sec-2">
->>>>>>> 774867103170dcb667793c5aa28430b8da31ba9e
 		<div class="container">
 			<h3 class="topic">Books</h3>
 			<div class="divider"></div>
@@ -128,13 +124,9 @@
 			</div>
 		</div>
 	</section>
-<<<<<<< HEAD
+
 	<%-- Section 3 - Popular (Uses popularBooks from HomeController) --%>
 	<section class="sec-3" id="popular-books">
-=======
-	<%-- Section 3 - Popular --%>
-	<section class="sec-3">
->>>>>>> 774867103170dcb667793c5aa28430b8da31ba9e
 		<div class="container">
 			<h3 class="topic">Popular</h3>
 			<div class="divider"></div>
