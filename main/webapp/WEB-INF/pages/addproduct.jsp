@@ -24,8 +24,13 @@
 
 </head>
 
+<<<<<<< HEAD
 <body>
+=======
+<body class="has-dashboard">
+>>>>>>> 8632c10e264845ac5085b0d135fc04162c671989
     <jsp:include page="header.jsp" />
+    
     <div class="add-product-page">
         <div class="form-container">
             <div class="form-header">
@@ -195,7 +200,12 @@
                 </div>
             </form>
         </div>
+<<<<<<< HEAD
     </div>
+=======
+        </div>
+    
+>>>>>>> 8632c10e264845ac5085b0d135fc04162c671989
     <jsp:include page="footer.jsp" />
 
     <script>
@@ -208,7 +218,11 @@
             // If a file is selected, show its name and preview
             if (fileInput.files.length > 0) {
                 const file = fileInput.files[0];
+<<<<<<< HEAD
                 fileNameDisplay.textContent = `Selected file: ${file.name}`;
+=======
+                fileNameDisplay.textContent = ⁠ Selected file: ${file.name} ⁠;
+>>>>>>> 8632c10e264845ac5085b0d135fc04162c671989
 
                 const reader = new FileReader();
                 reader.onload = function (e) {

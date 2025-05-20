@@ -10,6 +10,10 @@
 </head>
 <body>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8632c10e264845ac5085b0d135fc04162c671989
 	<div class="sidebar">
 		<ul class="sidebar-menu">
 			<li><a href="${pageContext.request.contextPath}/admindashboard">Dashboard</a></li>
@@ -19,7 +23,11 @@
 			<li><a href="${pageContext.request.contextPath}/adminorder">Orders</a></li>
 		</ul>
 	</div>
+<<<<<<< HEAD
 =======
+=======
+
+>>>>>>> 8632c10e264845ac5085b0d135fc04162c671989
         <!-- Admin Sidebar -->
 <div class="admin-sidebar">
     <div class="sidebar-brand">
@@ -52,6 +60,10 @@
         </li>
     </ul>
 </div>
+<<<<<<< HEAD
 >>>>>>> 538349da78bbb473991d119abc58e0f40b02b281
+=======
+
+>>>>>>> 8632c10e264845ac5085b0d135fc04162c671989
 </body>
 </html>

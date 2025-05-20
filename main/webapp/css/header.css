@@ -26,6 +26,10 @@
 	font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+html{
+	scroll-behavior: smooth;
+}
+
 body {
 	background-color: #fff;
 	color: var(--text-color);
