@@ -33,10 +33,11 @@
 
 			<nav id="main-nav">
 				<ul class="navigation">
-					<li class=""><a href="${pageContext.request.contextPath}/home">Home</a></li>
-					<li class=""><a href="${pageContext.request.contextPath}/books">Books</a></li>
-					<li class=""><a href="${pageContext.request.contextPath}/aboutus">About</a></li>
-					<li class=""><a href="${pageContext.request.contextPath}/contactus">Contact Us</a></li>
+					<li><a href="${pageContext.request.contextPath}/home">Home</a></li>
+					<li><a href="${pageContext.request.contextPath}/books">Books</a></li>
+					<li><a href="${pageContext.request.contextPath}/aboutus">About</a></li>
+					<li><a href="${pageContext.request.contextPath}/contactus">Contact
+							Us</a></li>
 				</ul>
 			</nav>
 
@@ -158,6 +159,8 @@
       }
     });
     
+
+  
     // Live search functionality - without AJAX
     let searchTimeout;
     searchInput.addEventListener('input', () => {
@@ -173,49 +176,11 @@
       }
     });
     
-<<<<<<< HEAD
-    // Function to display search results
-    function displaySearchResults(books) {
-      const previewItemsContainer = document.querySelector('.preview-items');
-      previewItemsContainer.innerHTML = '';
-      
-      if (books.length > 0) {
-        // Show the results container
-        searchResultsPreview.classList.add('active');
-        
-        // Add book items to the container
-        books.forEach(book => {
-          const bookItem = document.createElement('div');
-          bookItem.className = 'preview-item';
-          
-          bookItem.innerHTML = `
-            <div class="preview-item-img" style="background-image: url('${book.book_img_url}')"></div>
-            <div class="preview-item-title">${book.book_title}</div>
-            <div class="preview-item-price">Rs ${book.price}</div>
-          `;
-          
-          bookItem.style.cursor = 'pointer';
-          bookItem.addEventListener('click', () => {
-            window.location.href = '${pageContext.request.contextPath}/product?bookId=' + book.bookID;
-          });
-          
-          previewItemsContainer.appendChild(bookItem);
-        });
-      } else {
-        // Show no results message
-        searchResultsPreview.classList.add('active');
-        previewItemsContainer.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: #777;">No results found for your search.</p>';
-      }
-    }
-  </script>
-
-=======
  
   </script>
 
 
 
 
->>>>>>> 9f24d56869f1d1ce2b548576ec6bf8771138780a
 </body>
 </html>

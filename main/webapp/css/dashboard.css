@@ -11,7 +11,7 @@
   left: 0;
   top: 0;
   padding-top: 0; /* Adjusted from original */
-  z-index: 100;
+  z-index: 99;
   transition: transform 0.3s ease; /* Changed from width to transform for better performance */
 }
 
