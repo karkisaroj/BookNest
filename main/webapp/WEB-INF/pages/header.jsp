@@ -21,7 +21,7 @@
 				</div>
 			</div>
 
-			<button cl ass="mobile-menu-btn" id="mobile-menu-toggle">
+			<button class="mobile-menu-btn" id="mobile-menu-toggle">
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 					viewBox="0 0 24 24" fill="none" stroke="currentColor"
 					stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -158,8 +158,6 @@
       }
     });
     
-
-  
     // Live search functionality - without AJAX
     let searchTimeout;
     searchInput.addEventListener('input', () => {
@@ -175,8 +173,6 @@
       }
     });
     
-
-    
     // Function to display search results
     function displaySearchResults(books) {
       const previewItemsContainer = document.querySelector('.preview-items');
@@ -191,14 +187,12 @@
           const bookItem = document.createElement('div');
           bookItem.className = 'preview-item';
           
-          // FIXED: Use the correct property names (book_img_url, book_title)
           bookItem.innerHTML = `
             <div class="preview-item-img" style="background-image: url('${book.book_img_url}')"></div>
             <div class="preview-item-title">${book.book_title}</div>
             <div class="preview-item-price">Rs ${book.price}</div>
           `;
           
-          // FIXED: Make the item link to the product page with the correct bookId
           bookItem.style.cursor = 'pointer';
           bookItem.addEventListener('click', () => {
             window.location.href = '${pageContext.request.contextPath}/product?bookId=' + book.bookID;
@@ -213,9 +207,6 @@
       }
     }
   </script>
-
-
-    </script>
 
 </body>
 </html>
