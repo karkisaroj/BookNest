@@ -1,12 +1,11 @@
 /* Encapsulating styles for the page to avoid collisions with header CSS */
 .add-product-page {
-	background-color: #f5f5f5;
-	min-height: 100vh;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding-top: 100px; /* Prevent overlapping with header */
-	padding-bottom: 50px; /* Prevent overlapping with footer */
+    background-color: #f5f5f5;
+    min-height: 100vh;
+    display: flex;
+    padding-top: 100px; /* Prevent overlapping with header */
+    padding-bottom: 50px; /* Prevent overlapping with footer */
+    padding-left: 250px; /* Add left padding to accommodate the fixed dashboard menu */
 }
 
 /* Styling for the image preview */
@@ -20,16 +19,15 @@
 }
 
 .form-container {
-	background-color: white;
-	padding: 40px;
-	border-radius: 10px;
-	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-	width: 90%;
-	max-width: 1200px;
-	margin: 0 auto; /* Center the form horizontally */
-	animation: fadeIn 1s ease-in-out;
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto; /* Center the form horizontally */
+    animation: fadeIn 1s ease-in-out;
 }
-
 .form-header {
 	text-align: center;
 	margin-bottom: 30px;
