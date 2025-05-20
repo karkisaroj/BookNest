@@ -12,17 +12,7 @@
 <title>Search Results - BookNest</title>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/search-result.css">
-<style>
-.notification {
-	background-color: #d8eed8;
-	color: #155724;
-	text-align: center;
-	padding: 15px;
-	margin-bottom: 20px;
-	border-radius: 4px;
-	width: 100%;
-}
-</style>
+
 </head>
 <body>
 	<jsp:include page="header.jsp" />
