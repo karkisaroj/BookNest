@@ -25,7 +25,7 @@
     </script>
 </head>
 
-<body>
+<body >
     <!-- Include Header -->
     <jsp:include page="header.jsp" />
     <div class="container1">
