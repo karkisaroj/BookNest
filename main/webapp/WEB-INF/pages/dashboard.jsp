@@ -11,16 +11,6 @@
 <body>
 
 
-	<div class="sidebar">
-		<ul class="sidebar-menu">
-			<li><a href="${pageContext.request.contextPath}/admindashboard">Dashboard</a></li>
-			<li><a href="${pageContext.request.contextPath}/admincustomer">Customers</a></li>
-			<li><a href="${pageContext.request.contextPath}/adminproduct">Add
-					Books</a></li>
-			<li><a href="${pageContext.request.contextPath}/adminorder">Orders</a></li>
-		</ul>
-	</div>
-
 
         <!-- Admin Sidebar -->
 <div class="admin-sidebar">
