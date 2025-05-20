@@ -22,13 +22,6 @@ public class LoginController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final String emptyMessage = "Empty Fields. Fill all the fields before logging in ";
 	private final String alphanumericmessage = "User Name should start from alphabet and can contain only letters and numbers";
-
-
-
-
-
-
-
 	private final String loginFailedMessage = "Invalid credentials. Please try again.";
 	private final String connectionErrorMessage = "Connection error. Please try again later.";
 
@@ -88,11 +81,11 @@ public class LoginController extends HttpServlet {
 			if (userInfo != null) {
 				// Adding user details to the session created 
 				SessionUtil.setAttribute(req, "userID", userInfo.getId());
-				SessionUtil.setAttribute(req, "firstName", userInfo.getFirst_name());
-				SessionUtil.setAttribute(req, "lastName", userInfo.getLast_name());
-				SessionUtil.setAttribute(req, "userName", userInfo.getUser_name());
+				SessionUtil.setAttribute(req, "firstName", userInfo.getFirstName());
+				SessionUtil.setAttribute(req, "lastName", userInfo.getLastName());
+				SessionUtil.setAttribute(req, "userName", userInfo.getUserName());
 				SessionUtil.setAttribute(req, "email", userInfo.getEmail());
-				SessionUtil.setAttribute(req, "phoneNumber", userInfo.getPhone_number());
+				SessionUtil.setAttribute(req, "phoneNumber", userInfo.getPhoneNumber());
 				SessionUtil.setAttribute(req, "address", userInfo.getAddress());
 
 				SessionUtil.setAttribute(req, "rolename", userInfo.getRoleName());

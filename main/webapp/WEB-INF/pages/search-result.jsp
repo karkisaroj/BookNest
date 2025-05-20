@@ -130,7 +130,7 @@
 												<c:otherwise>
 													<img
 														src="${pageContext.request.contextPath}${book.bookImgUrl}"
-														alt="<c:out value='${book.book_title}'/>">
+														alt="<c:out value='${book.bookTitle}'/>">
 												</c:otherwise>
 											</c:choose>
 										</c:when>
@@ -143,7 +143,7 @@
 
 									<!-- Book Details -->
 									<h3>
-										<c:out value="${book.book_title}" />
+										<c:out value="${book.bookTitle}" />
 									</h3>
 									<p class="book-author">
 										By:

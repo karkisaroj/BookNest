@@ -4,49 +4,49 @@ public class UserModel {
 
 	private int id;
 
-	private String first_name;
-	private String last_name;
-	private String user_name;
+	private String firstName;
+	private String lastName;
+	private String userName;
 	private String password;
 	private String email;
-	private String phone_number;
+	private String phoneNumber;
 	private String address;
-	private String user_img_url;
+	private String userImgUrl;
 	private int roleID;
 	private String roleName; // Added to store the user's role name
 
 	// Constructor with all fields
-	public UserModel(String first_name, String last_name, String user_name, String password, String email,
-			String phone_number, String address, int roleID, String roleName, String user_img_url) {
-		this.first_name = first_name;
-		this.last_name = last_name;
-		this.user_name = user_name;
+	public UserModel(String firstName, String lastName, String userName, String password, String email,
+			String phoneNumber, String address, int roleID, String roleName, String userImgUrl) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.userName = userName;
 		this.password = password;
 		this.email = email;
-		this.phone_number = phone_number;
+		this.phoneNumber = phoneNumber;
 		this.address = address;
 		this.roleID = roleID;
 		this.roleName = roleName;
-		this.user_img_url = user_img_url;
+		this.userImgUrl = userImgUrl;
 	}
 
-	public UserModel(String first_name, String last_name, String user_name, String password, String email,
-			String phone_number, String address) {
+	public UserModel(String firstName, String lastName, String userName, String password, String email,
+			String phoneNumber, String address) {
 		super();
-		this.first_name = first_name;
-		this.last_name = last_name;
-		this.user_name = user_name;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.userName = userName;
 		this.password = password;
 		this.email = email;
-		this.phone_number = phone_number;
+		this.phoneNumber = phoneNumber;
 		this.address = address;
 
 //		this.user_img_url = user_img_url;
 	}
 
 	// Constructor for minimal fields
-	public UserModel(String user_name, String password) {
-		this.user_name = user_name;
+	public UserModel(String userName, String password) {
+		this.userName = userName;
 		this.password = password;
 	}
 
@@ -56,28 +56,28 @@ public class UserModel {
 	}
 
 	// Getters and Setters
-	public String getFirst_name() {
-		return first_name;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setFirst_name(String first_name) {
-		this.first_name = first_name;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
-	public String getLast_name() {
-		return last_name;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setLast_name(String last_name) {
-		this.last_name = last_name;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
-	public String getUser_name() {
-		return user_name;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setUser_name(String user_name) {
-		this.user_name = user_name;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getPassword() {
@@ -96,12 +96,12 @@ public class UserModel {
 		this.email = email;
 	}
 
-	public String getPhone_number() {
-		return phone_number;
+	public String getPhoneNumber() {
+		return phoneNumber;
 	}
 
-	public void setPhone_number(String phone_number) {
-		this.phone_number = phone_number;
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	public String getAddress() {
@@ -112,12 +112,12 @@ public class UserModel {
 		this.address = address;
 	}
 
-	public String getUser_img_url() {
-		return user_img_url;
+	public String getUserImgUrl() {
+		return userImgUrl;
 	}
 
-	public void setUser_img_url(String user_img_url) {
-		this.user_img_url = user_img_url;
+	public void setUserImgUrl(String UserImgUrl) {
+		this.userImgUrl = UserImgUrl;
 	}
 
 	public int getId() {

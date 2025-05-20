@@ -43,7 +43,7 @@ public class RegistrationSerivce {
 
 		}
 		// Check for existing user
-		if (isUserExists(userModel.getUser_name(), userModel.getEmail())) {
+		if (isUserExists(userModel.getUserName(), userModel.getEmail())) {
 			throw new Exception("A user already exists with this username or email.");
 		}
 
@@ -57,12 +57,12 @@ public class RegistrationSerivce {
 					
 			}
 
-			insertStmt.setString(1, userModel.getFirst_name());
-			insertStmt.setString(2, userModel.getLast_name());
-			insertStmt.setString(3, userModel.getUser_name());
+			insertStmt.setString(1, userModel.getFirstName());
+			insertStmt.setString(2, userModel.getLastName());
+			insertStmt.setString(3, userModel.getUserName());
 			insertStmt.setString(4, hashedPassword);
 			insertStmt.setString(5, userModel.getEmail());
-			insertStmt.setString(6, userModel.getPhone_number());
+			insertStmt.setString(6, userModel.getPhoneNumber());
 			insertStmt.setString(7, userModel.getAddress());
 			return insertStmt.executeUpdate() > 0;
 		} catch (SQLException e) {

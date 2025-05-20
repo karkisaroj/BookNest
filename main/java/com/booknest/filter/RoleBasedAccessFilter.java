@@ -35,7 +35,8 @@ public class RoleBasedAccessFilter implements Filter {
 	private static final String ADMIN_CUSTOMER = "/admincustomer";
 	private static final String ADMIN_ORDER = "/adminorder";
 	private static final String ADMIN_PRODUCT = "/adminproduct";
-
+	private static final String ADMIN_UPDATE_BOOK = "/adminupdatebook";
+	private static final String SEARCH = "/search";
 	// Common paths
 	private static final String LOGIN = "/login";
 	private static final String REGISTER = "/register";
@@ -80,7 +81,7 @@ public class RoleBasedAccessFilter implements Filter {
 				// Admin is logged in
 				if (uri.contains(HOME) || uri.contains(PRODUCTPAGE) || uri.contains(BOOKS) || uri.contains(CART)
 						|| uri.contains(LOGIN) || uri.contains(REGISTER) || uri.contains(CHECKOUT)
-						|| uri.contains(CONTACTUS)) {
+						|| uri.contains(CONTACTUS)|| uri.contains(SEARCH) ) {
 					resp.sendRedirect(contextPath + ADMIN_DASHBOARD);
 				} else {
 					chain.doFilter(request, response);
@@ -88,7 +89,7 @@ public class RoleBasedAccessFilter implements Filter {
 			} else {
 				// User is logged in
 				if (uri.contains(ADMIN_DASHBOARD) || uri.contains(ADMIN_CUSTOMER) || uri.contains(ADMIN_ORDER)
-						|| uri.contains(ADMIN_PRODUCT)|| uri.contains(LOGIN) || uri.contains(REGISTER)) {
+						|| uri.contains(ADMIN_PRODUCT)|| uri.contains(ADMIN_UPDATE_BOOK)|| uri.contains(LOGIN) || uri.contains(REGISTER)) {
 					resp.sendRedirect(contextPath + HOME);
 				} else {
 					chain.doFilter(request, response);

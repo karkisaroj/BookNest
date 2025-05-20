@@ -44,7 +44,7 @@ public class LoginService {
 
         String query = "SELECT password FROM user WHERE user_name = ?";
         try (PreparedStatement stmt = dbConn.prepareStatement(query)) {
-            stmt.setString(1, userModel.getUser_name());
+            stmt.setString(1, userModel.getUserName());
             try (ResultSet result = stmt.executeQuery()) {
                 if (result.next()) {
   
