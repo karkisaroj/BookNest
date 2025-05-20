@@ -46,25 +46,25 @@
                 
                 <div class="payment-social">
                     <div class="payment-methods">
-                    <a href="https://fonepay.com/" >
+                    <a href="https://fonepay.com/" target="_blank">
                         <img src="${pageContext.request.contextPath}/resources/images/system/fonepay.png" alt="fonepay">
                     </a>
-                    <a href="https://khalti.com/" >
+                    <a href="https://khalti.com/" target="_blank">
                         <img src="${pageContext.request.contextPath}/resources/images/system/khalti.png" alt="khalti">
                     </a>
-                    <a href="https://esewa.com.np/#/home" >
+                    <a href="https://esewa.com.np/#/home" target="_blank" >
                         <img src="${pageContext.request.contextPath}/resources/images/system/esewa.png" alt="esewa">
                     </a>
                     </div>
                     
                     <div class="social-links">
-                        <a href="https://www.facebook.com/" class="social-icon facebook">
+                        <a href="https://www.facebook.com/" class="social-icon facebook" target="_blank">
                             <img class="img-size" src="${pageContext.request.contextPath}/resources/images/system/facebook.png" alt="Facebook">
                         </a>
-                        <a href="https://www.instagram.com/" class="social-icon instagram">
+                        <a href="https://www.instagram.com/" class="social-icon instagram" target="_blank">
                             <img class="img-size" src="${pageContext.request.contextPath}/resources/images/system/insta.png" alt="Instagram">
                         </a>
-                        <a href="https://www.whatsapp.com/" class="social-icon whatsapp">
+                        <a href="https://www.whatsapp.com/" class="social-icon whatsapp" target="_blank">
                             <img class="img-size" src="${pageContext.request.contextPath}/resources/images/system/whatsapp.png" alt="WhatsApp">
                         </a>
                     </div>
