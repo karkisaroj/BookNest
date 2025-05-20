@@ -4,20 +4,32 @@ import com.booknest.util.imageUtil;
 import jakarta.servlet.http.Part;
 import java.io.IOException;
 
+/**
+ * Service for handling image validation, uploads, and related operations. This
+ * service provides methods for working with profile images and other image
+ * uploads.
+ * 
+ * @author Saroj Pratap Karki 23047612
+ */
 public class ImageService {
 
 	private static final long MAX_FILE_SIZE = 3 * 1024 * 1024; // 3MB
 	private final imageUtil util;
 
+	/**
+	 * Default constructor that initializes the image utility.
+	 */
 	public ImageService() {
 		this.util = new imageUtil();
 	}
 
 	/**
-	 * Validate if a file is valid for upload
+	 * Validates if an uploaded file is a valid image within size constraints.
+	 * Checks for null, empty files, size limits, and ensures content type is an
+	 * image.
 	 * 
-	 * @param filePart The uploaded file part
-	 * @return True if valid, false otherwise
+	 * @param filePart The uploaded file part to validate
+	 * @return True if the image is valid for upload, false otherwise
 	 */
 	public boolean validateImage(Part filePart) {
 		if (filePart == null || filePart.getSize() <= 0) {
@@ -33,11 +45,11 @@ public class ImageService {
 	}
 
 	/**
-	 * Upload an image to the server
+	 * Uploads a profile image to the server after validation.
 	 * 
-	 * @param filePart The uploaded file part
-	 * @return The relative path to the saved image, or null if failed
-	 * @throws IOException If an I/O error occurs
+	 * @param filePart The uploaded file part containing the image
+	 * @return The relative path to the saved image if successful, null if failed
+	 * @throws IOException If an I/O error occurs during file processing
 	 */
 	public String uploadProfileImage(Part filePart) throws IOException {
 		if (!validateImage(filePart)) {
@@ -56,7 +68,7 @@ public class ImageService {
 	}
 
 	/**
-	 * Get the maximum allowed file size
+	 * Gets the maximum allowed file size for uploads in bytes.
 	 * 
 	 * @return The maximum file size in bytes
 	 */
@@ -65,9 +77,9 @@ public class ImageService {
 	}
 
 	/**
-	 * Get formatted max file size for display
+	 * Gets a user-friendly formatted string of the maximum file size.
 	 * 
-	 * @return The maximum file size as a string (e.g. "3 MB")
+	 * @return The maximum file size as a formatted string (e.g. "3 MB")
 	 */
 	public String getFormattedMaxFileSize() {
 		return (MAX_FILE_SIZE / (1024 * 1024)) + " MB";

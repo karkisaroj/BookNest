@@ -8,6 +8,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of PaymentService interface for handling payment operations.
+ * This service manages payment creation, retrieval, and status updates.
+ * 
+ * @author Saroj Pratap Karki 23047612
+ */
 public class PaymentServiceImpl implements PaymentService {
 
 	// --- SQL Query Constants ---
@@ -28,6 +34,16 @@ public class PaymentServiceImpl implements PaymentService {
 	public static final String PAYMENT_STATUS_FAILED = "Failed";
 	public static final String PAYMENT_STATUS_CANCELLED = "Cancelled";
 
+	/**
+	 * Creates a new payment record in the database.
+	 *
+	 * @param orderId The ID of the order associated with this payment
+	 * @param amount  The payment amount
+	 * @param method  The payment method used
+	 * @param status  The payment status
+	 * @return The ID of the created payment record
+	 * @throws SQLException If a database error occurs
+	 */
 	@Override
 	public int createPayment(int orderId, BigDecimal amount, String method, String status) throws SQLException {
 		int generatedPaymentId = -1;
@@ -84,6 +100,13 @@ public class PaymentServiceImpl implements PaymentService {
 		return generatedPaymentId;
 	}
 
+	/**
+	 * Retrieves a payment record by its ID.
+	 *
+	 * @param paymentId The ID of the payment to retrieve
+	 * @return The payment model if found, null otherwise
+	 * @throws SQLException If a database error occurs
+	 */
 	@Override
 	public PaymentModel getPaymentById(int paymentId) throws SQLException {
 		PaymentModel payment = null;
@@ -110,6 +133,14 @@ public class PaymentServiceImpl implements PaymentService {
 		return payment;
 	}
 
+	/**
+	 * Updates the status of a payment record.
+	 *
+	 * @param paymentId The ID of the payment to update
+	 * @param newStatus The new status to set
+	 * @return true if successful, false otherwise
+	 * @throws SQLException If a database error occurs
+	 */
 	@Override
 	public boolean updatePaymentStatus(int paymentId, String newStatus) throws SQLException {
 		if (newStatus == null || newStatus.trim().isEmpty()) {
@@ -150,12 +181,12 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	/**
-	 * Update payment status for an order
+	 * Updates payment status for all payments associated with an order.
 	 * 
-	 * @param orderId   Order ID to update payment status for
-	 * @param newStatus New payment status
-	 * @return true if successful
-	 * @throws SQLException if database error occurs
+	 * @param orderId   The ID of the order to update payment status for
+	 * @param newStatus The new payment status
+	 * @return true if successful, false otherwise
+	 * @throws SQLException If a database error occurs
 	 */
 	public boolean updatePaymentStatusByOrderId(int orderId, String newStatus) throws SQLException {
 		if (newStatus == null || newStatus.trim().isEmpty()) {
@@ -197,27 +228,34 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	/**
-	 * Mark a payment as completed
+	 * Marks a payment as completed by updating its status.
 	 * 
-	 * @param paymentId Payment ID to mark as completed
-	 * @return true if successful
-	 * @throws SQLException if database error occurs
+	 * @param paymentId The ID of the payment to mark as completed
+	 * @return true if successful, false otherwise
+	 * @throws SQLException If a database error occurs
 	 */
 	public boolean markPaymentAsCompleted(int paymentId) throws SQLException {
 		return updatePaymentStatus(paymentId, PAYMENT_STATUS_COMPLETED);
 	}
 
 	/**
-	 * Mark all payments for an order as completed
+	 * Marks all payments for an order as completed.
 	 * 
-	 * @param orderId Order ID to mark payments as completed
-	 * @return true if successful
-	 * @throws SQLException if database error occurs
+	 * @param orderId The ID of the order to mark payments as completed
+	 * @return true if successful, false otherwise
+	 * @throws SQLException If a database error occurs
 	 */
 	public boolean markOrderPaymentsAsCompleted(int orderId) throws SQLException {
 		return updatePaymentStatusByOrderId(orderId, PAYMENT_STATUS_COMPLETED);
 	}
 
+	/**
+	 * Retrieves all payments for a specific order.
+	 *
+	 * @param orderId The ID of the order to retrieve payments for
+	 * @return List of payment models associated with the order
+	 * @throws SQLException If a database error occurs
+	 */
 	@Override
 	public List<PaymentModel> getPaymentsByOrderId(int orderId) throws SQLException {
 		List<PaymentModel> payments = new ArrayList<>();
@@ -245,7 +283,13 @@ public class PaymentServiceImpl implements PaymentService {
 		return payments;
 	}
 
-	// Helper method to map a ResultSet to a PaymentModel
+	/**
+	 * Maps a database result set row to a PaymentModel object.
+	 * 
+	 * @param rs The ResultSet containing payment data
+	 * @return A populated PaymentModel object
+	 * @throws SQLException If a database error occurs
+	 */
 	private PaymentModel mapResultSetToPayment(ResultSet rs) throws SQLException {
 		PaymentModel payment = new PaymentModel();
 
@@ -260,10 +304,10 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	/**
-	 * Capitalize first letter of status for consistency
+	 * Standardizes the capitalization of payment status values.
 	 * 
-	 * @param status Input status string
-	 * @return Properly capitalized status
+	 * @param status The payment status string to format
+	 * @return Properly capitalized status string
 	 */
 	private String capitalizeStatus(String status) {
 		if (status == null || status.isEmpty()) {

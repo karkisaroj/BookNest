@@ -18,7 +18,7 @@
 <body>
 	<jsp:include page="header.jsp" />
 
-	<!-- Hero Section (sec-1 as provided by you) -->
+	<!-- First Section -->
 	<section class="sec-1">
 		<div class="container flex">
 			<div class="sec-right">
@@ -50,8 +50,13 @@
 
 
 
+<<<<<<< HEAD
 	<%-- Section 2 - Books (Uses randomBooks from HomeController) --%>
 	<section class="sec-2" id="featured-books">
+=======
+	<%-- Section 2 - Books --%>
+	<section class="sec-2">
+>>>>>>> 774867103170dcb667793c5aa28430b8da31ba9e
 		<div class="container">
 			<h3 class="topic">Books</h3>
 			<div class="divider"></div>
@@ -69,8 +74,7 @@
 										<c:choose>
 											<c:when test="${not empty book.bookImgUrl}">
 												<c:choose>
-													<c:when
-														test="${book.bookImgUrl.startsWith('resources/')}">
+													<c:when test="${book.bookImgUrl.startsWith('resources/')}">
 														<img
 															src="${pageContext.request.contextPath}/${book.bookImgUrl}"
 															alt="<c:out value='${book.bookTitle}'/>" />
@@ -124,8 +128,13 @@
 			</div>
 		</div>
 	</section>
+<<<<<<< HEAD
 	<%-- Section 3 - Popular (Uses popularBooks from HomeController) --%>
 	<section class="sec-3" id="popular-books">
+=======
+	<%-- Section 3 - Popular --%>
+	<section class="sec-3">
+>>>>>>> 774867103170dcb667793c5aa28430b8da31ba9e
 		<div class="container">
 			<h3 class="topic">Popular</h3>
 			<div class="divider"></div>
@@ -143,8 +152,7 @@
 										<c:choose>
 											<c:when test="${not empty book.bookImgUrl}">
 												<c:choose>
-													<c:when
-														test="${book.bookImgUrl.startsWith('resources/')}">
+													<c:when test="${book.bookImgUrl.startsWith('resources/')}">
 														<img
 															src="${pageContext.request.contextPath}/${book.bookImgUrl}"
 															alt="<c:out value='${book.bookTitle}'/>" />
@@ -198,7 +206,7 @@
 		</div>
 	</section>
 
-	<!-- Why Choose Us Section (sec-4 as provided by you) -->
+	<!-- Why Choose Us Section -->
 	<section class="sec-4">
 		<div class="container">
 			<h2 class="choose-us">Why Choose Us</h2>
@@ -233,7 +241,7 @@
 		</div>
 	</section>
 
-	<%-- Script section (as provided by you) --%>
+	<%-- Script section  --%>
 	<script>
         // Your existing JavaScript for animations
         document.addEventListener('DOMContentLoaded', function() {

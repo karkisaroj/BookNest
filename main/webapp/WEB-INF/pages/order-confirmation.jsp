@@ -47,7 +47,7 @@
 				</div>
 			</div>
 
-			<!-- Total display with proper null check and improved styling -->
+			<!-- Total display section -->
 			<div class="total-box">
 				<span class="total-label">Total:</span> <span class="total-amount">
 					Rs. <c:choose>

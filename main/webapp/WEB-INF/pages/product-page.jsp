@@ -24,13 +24,11 @@
 					<c:when test="${not empty book.bookImgUrl}">
 						<c:choose>
 							<c:when test="${book.bookImgUrl.startsWith('resources/')}">
-								<img
-									src="${pageContext.request.contextPath}/${book.bookImgUrl}"
+								<img src="${pageContext.request.contextPath}/${book.bookImgUrl}"
 									alt="${book.bookTitle}">
 							</c:when>
 							<c:otherwise>
-								<img
-									src="${pageContext.request.contextPath}/${book.bookImgUrl}"
+								<img src="${pageContext.request.contextPath}/${book.bookImgUrl}"
 									alt="${book.bookTitle}">
 							</c:otherwise>
 						</c:choose>

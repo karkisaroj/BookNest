@@ -75,7 +75,7 @@ public class LoginController extends HttpServlet {
 		if (loginStatus) {
 			// Fetching user information with role using the service method
 			UserModel userInfo = loginService.getUserInfoWithRole(userName);
-			System.out.println(userInfo.getRoleName());
+			
 
 
 			if (userInfo != null) {
@@ -89,7 +89,7 @@ public class LoginController extends HttpServlet {
 				SessionUtil.setAttribute(req, "address", userInfo.getAddress());
 
 				SessionUtil.setAttribute(req, "rolename", userInfo.getRoleName());
-				System.out.println(userInfo.getRoleName());
+				
 			}
 			if ("Admin".equals(userInfo.getRoleName())) {
 

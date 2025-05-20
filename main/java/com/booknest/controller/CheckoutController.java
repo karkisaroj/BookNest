@@ -21,25 +21,38 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author Saroj Karki 23047612
+ */
+
+/**
+ * CheckoutController handles the checkout process for orders. Manages
+ * displaying the checkout page and processing order submissions.
+ */
 @WebServlet("/checkout")
 public class CheckoutController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final CheckoutService checkoutService;
 	private final CartService cartService;
 
+	/**
+	 * Constructor initializes required services.
+	 */
 	public CheckoutController() {
 		super();
 		this.checkoutService = new CheckoutServiceImpl();
 		this.cartService = new CartServiceImpl();
 	}
 
+	/**
+	 * Handles GET requests to display the checkout page.
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("CheckoutController - doGet method called");
-
 		HttpSession session = request.getSession();
 		Integer userId = (Integer) session.getAttribute("userID");
 
+		// Redirect to login if user is not logged in
 		if (userId == null) {
 			response.sendRedirect(request.getContextPath() + "/login");
 			return;
@@ -50,10 +63,12 @@ public class CheckoutController extends HttpServlet {
 		try {
 			cartItems = cartService.getCartContents(userId);
 		} catch (CartServiceException e) {
-			e.printStackTrace();
+			request.setAttribute("errorMessage", "Error retrieving cart: " + e.getMessage());
+			request.getRequestDispatcher("/WEB-INF/pages/cart.jsp").forward(request, response);
+			return;
 		}
-		System.out.println("CartItems size: " + (cartItems != null ? cartItems.size() : 0));
 
+		// Verify cart has items
 		if (cartItems == null || cartItems.isEmpty()) {
 			request.setAttribute("errorMessage", "Your cart is empty. Please add items before checkout.");
 			request.getRequestDispatcher("/WEB-INF/pages/cart.jsp").forward(request, response);
@@ -71,21 +86,18 @@ public class CheckoutController extends HttpServlet {
 		request.setAttribute("shippingCost", shippingCost);
 		request.setAttribute("orderTotal", total);
 
-		// Debug logs to verify values
-		System.out.println("Sending to checkout page - Subtotal: " + subtotal);
-		System.out.println("Sending to checkout page - Shipping: " + shippingCost);
-		System.out.println("Sending to checkout page - Total: " + total);
-
 		request.getRequestDispatcher("/WEB-INF/pages/checkout.jsp").forward(request, response);
 	}
 
+	/**
+	 * Handles POST requests to process order submissions.
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("CheckoutController - doPost method called");
-
 		HttpSession session = request.getSession();
 		Integer userId = (Integer) session.getAttribute("userID");
 
+		// Redirect to login if user is not logged in
 		if (userId == null) {
 			response.sendRedirect(request.getContextPath() + "/login");
 			return;
@@ -94,7 +106,6 @@ public class CheckoutController extends HttpServlet {
 		try {
 			// Get cart contents
 			List<CartItem> cartItems = cartService.getCartContents(userId);
-			System.out.println("Cart items found for checkout: " + (cartItems != null ? cartItems.size() : 0));
 
 			if (cartItems == null || cartItems.isEmpty()) {
 				request.setAttribute("errorMessage", "Your cart is empty. Please add items before checkout.");
@@ -113,11 +124,7 @@ public class CheckoutController extends HttpServlet {
 			String paymentMethodParam = request.getParameter("paymentMethod");
 			String paymentMethod = checkoutService.formatPaymentMethod(paymentMethodParam);
 
-			System.out.println("Payment method selected: " + paymentMethod);
-			System.out.println(
-					"Address parameters received: " + streetAddress + ", " + city + ", " + state + " " + zipCode);
-
-			// Validate using service
+			// Validate address information
 			if (!checkoutService.validateAddressInfo(streetAddress, city, state, zipCode, phone)) {
 				request.setAttribute("errorMessage", "Please fill in all required address fields.");
 				doGet(request, response);
@@ -133,10 +140,6 @@ public class CheckoutController extends HttpServlet {
 				// Calculate totals for display and payment
 				BigDecimal orderTotal = checkoutService.calculateOrderTotal(cartItems);
 
-				// Create payment record
-				int paymentId = checkoutService.createPaymentRecord(orderId, orderTotal, paymentMethod);
-				System.out.println("Payment record created with ID: " + paymentId + " for order ID: " + orderId);
-
 				// Format current date for order display
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				String currentDate = sdf.format(new Date());
@@ -145,10 +148,8 @@ public class CheckoutController extends HttpServlet {
 				session.setAttribute("orderId", orderId);
 				session.setAttribute("orderTotal", orderTotal);
 				session.setAttribute("orderDate", currentDate);
-				session.setAttribute("paymentMethod", paymentMethod); // Store payment method for confirmation page
+				session.setAttribute("paymentMethod", paymentMethod);
 				session.setAttribute("flashSuccessMessage", "Order placed successfully! Thank you for your purchase.");
-
-				System.out.println("Order created successfully with ID: " + orderId);
 
 				// Redirect to order confirmation page
 				response.sendRedirect(request.getContextPath() + "/order-confirmation");
@@ -159,18 +160,12 @@ public class CheckoutController extends HttpServlet {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("SQL Error: " + e.getMessage());
 			request.setAttribute("errorMessage", "Error processing your order: " + e.getMessage());
 			doGet(request, response);
 		} catch (CartServiceException e) {
-			e.printStackTrace();
-			System.err.println("Cart Service Error: " + e.getMessage());
 			request.setAttribute("errorMessage", "Error retrieving your cart: " + e.getMessage());
 			doGet(request, response);
 		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println("General Error: " + e.getMessage());
 			request.setAttribute("errorMessage", "Unexpected error: " + e.getMessage());
 			doGet(request, response);
 		}
