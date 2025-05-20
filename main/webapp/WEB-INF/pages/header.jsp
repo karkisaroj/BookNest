@@ -194,10 +194,10 @@
           const bookItem = document.createElement('div');
           bookItem.className = 'preview-item';
           
-          // FIXED: Use the correct property names (book_img_url, book_title)
+          // FIXED: Use the correct property names (bookImgUrl, bookTitle)
           bookItem.innerHTML = `
-            <div class="preview-item-img" style="background-image: url('${book.book_img_url}')"></div>
-            <div class="preview-item-title">${book.book_title}</div>
+            <div class="preview-item-img" style="background-image: url('${book.bookImgUrl}')"></div>
+            <div class="preview-item-title">${book.bookTitle}</div>
             <div class="preview-item-price">Rs ${book.price}</div>
           `;
           

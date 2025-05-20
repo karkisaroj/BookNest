@@ -87,7 +87,6 @@ public class CartController extends HttpServlet {
 
 		// --- Login Check ---
 		if (userId == null) {
-			System.out.println("CartController [doPost]: User not logged in. Redirecting to login.");
 			// Use session for flash message before redirect
 			session.setAttribute("flashErrorMessage", "Please log in to modify your cart.");
 			resp.sendRedirect(req.getContextPath() + "/login");

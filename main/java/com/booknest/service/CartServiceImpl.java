@@ -132,9 +132,9 @@ public class CartServiceImpl implements CartService {
 
 				BookCartModel book = new BookCartModel();
 				book.setBookID(rs.getInt("bookID"));
-				book.setBook_title(rs.getString("book_title")); // Ensure BookModel has setBook_title
+				book.setBookTitle(rs.getString("book_title")); // Ensure BookModel has setBook_title
 				book.setPrice(rs.getBigDecimal("price")); // Ensure BookModel has setPrice
-				book.setBook_img_url(rs.getString("book_img_url")); // Ensure BookModel has setBook_img_url
+				book.setBookImgUrl(rs.getString("book_img_url")); // Ensure BookModel has setBook_img_url
 				book.setAuthorName(rs.getString("authors")); // Set the aggregated author names
 
 				cartItem.setBookModel(book); // Associate the populated BookModel with the CartItem

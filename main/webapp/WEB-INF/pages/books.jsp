@@ -49,17 +49,17 @@
 								<a
 									href="${pageContext.request.contextPath}/product?bookId=${book.bookID}"
 									class="book-link"> <c:choose>
-										<c:when test="${not empty book.book_img_url}">
+										<c:when test="${not empty book.bookImgUrl}">
 											<c:choose>
-												<c:when test="${book.book_img_url.startsWith('resources/')}">
+												<c:when test="${book.bookImgUrl.startsWith('resources/')}">
 													<img
-														src="${pageContext.request.contextPath}/${book.book_img_url}"
-														alt="<c:out value='${book.book_title}'/>">
+														src="${pageContext.request.contextPath}/${book.bookImgUrl}"
+														alt="<c:out value='${book.bookTitle}'/>">
 												</c:when>
 												<c:otherwise>
 													<img
-														src="${pageContext.request.contextPath}/${book.book_img_url}"
-														alt="<c:out value='${book.book_title}'/>">
+														src="${pageContext.request.contextPath}/${book.bookImgUrl}"
+														alt="<c:out value='${book.bookTitle}'/>">
 												</c:otherwise>
 											</c:choose>
 										</c:when>
@@ -71,7 +71,7 @@
 									</c:choose>
 
 									<h3>
-										<c:out value="${book.book_title}" />
+										<c:out value="${book.bookTitle}" />
 									</h3>
 								</a>
 

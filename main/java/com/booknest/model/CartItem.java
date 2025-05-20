@@ -66,6 +66,6 @@ public class CartItem {
 	@Override
 	public String toString() {
 		return "CartItem{cartItemId=" + cartItemId + ", userId=" + userId + ", bookId=" + bookId + ", quantity="
-				+ quantity + ", bookTitle=" + (bookModel != null ? bookModel.getBook_title() : "null") + '}';
+				+ quantity + ", bookTitle=" + (bookModel != null ? bookModel.getBookTitle() : "null") + '}';
 	}
 }

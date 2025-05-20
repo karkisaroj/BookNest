@@ -73,30 +73,30 @@
 		</form>
 
 		<!-- Category Filters -->
-		<div class="category-filters">
+		<div class="category-section">
 			<h3>Popular Categories</h3>
-			<div class="category-buttons">
+			<div class="category-list">
 				<!-- Use hardcoded category buttons since there's an error with description column -->
 				<a href="${pageContext.request.contextPath}/search?categoryId=1"
-					class="category-btn ${selectedCategoryId == 1 ? 'active' : ''}">Fiction</a>
+					class="category-link ${selectedCategoryId == 1 ? 'active' : ''}">Fiction</a>
 				<a href="${pageContext.request.contextPath}/search?categoryId=2"
-					class="category-btn ${selectedCategoryId == 2 ? 'active' : ''}">Non-Fiction</a>
+					class="category-link ${selectedCategoryId == 2 ? 'active' : ''}">Non-Fiction</a>
 				<a href="${pageContext.request.contextPath}/search?categoryId=3"
-					class="category-btn ${selectedCategoryId == 3 ? 'active' : ''}">Science</a>
+					class="category-link ${selectedCategoryId == 3 ? 'active' : ''}">Science</a>
 				<a href="${pageContext.request.contextPath}/search?categoryId=4"
-					class="category-btn ${selectedCategoryId == 4 ? 'active' : ''}">History</a>
+					class="category-link ${selectedCategoryId == 4 ? 'active' : ''}">History</a>
 				<a href="${pageContext.request.contextPath}/search?categoryId=5"
-					class="category-btn ${selectedCategoryId == 5 ? 'active' : ''}">Biography</a>
+					class="category-link ${selectedCategoryId == 5 ? 'active' : ''}">Biography</a>
 				<a href="${pageContext.request.contextPath}/search?categoryId=6"
-					class="category-btn ${selectedCategoryId == 6 ? 'active' : ''}">Fantasy</a>
+					class="category-link ${selectedCategoryId == 6 ? 'active' : ''}">Fantasy</a>
 				<a href="${pageContext.request.contextPath}/search?categoryId=7"
-					class="category-btn ${selectedCategoryId == 7 ? 'active' : ''}">Self-Help</a>
+					class="category-link ${selectedCategoryId == 7 ? 'active' : ''}">Self-Help</a>
 				<a href="${pageContext.request.contextPath}/search?categoryId=8"
-					class="category-btn ${selectedCategoryId == 8 ? 'active' : ''}">Technology</a>
+					class="category-link ${selectedCategoryId == 8 ? 'active' : ''}">Technology</a>
 				<a href="${pageContext.request.contextPath}/search?categoryId=9"
-					class="category-btn ${selectedCategoryId == 9 ? 'active' : ''}">Business</a>
+					class="category-link ${selectedCategoryId == 9 ? 'active' : ''}">Business</a>
 				<a href="${pageContext.request.contextPath}/search?categoryId=10"
-					class="category-btn ${selectedCategoryId == 10 ? 'active' : ''}">Education</a>
+					class="category-link ${selectedCategoryId == 10 ? 'active' : ''}">Education</a>
 			</div>
 		</div>
 
@@ -115,21 +115,21 @@
 				<c:choose>
 					<c:when
 						test="${not empty searchResults && searchResults.size() > 0}">
-						<div class="book-list">
+						<div class="book-grid">
 							<c:forEach var="book" items="${searchResults}">
-								<div class="book-item">
+								<div class="book-card">
 									<!-- Book Image -->
 									<c:choose>
-										<c:when test="${not empty book.book_img_url}">
+										<c:when test="${not empty book.bookImgUrl}">
 											<c:choose>
-												<c:when test="${book.book_img_url.startsWith('resources/')}">
+												<c:when test="${book.bookImgUrl.startsWith('resources/')}">
 													<img
-														src="${pageContext.request.contextPath}/${book.book_img_url}"
-														alt="<c:out value='${book.book_title}'/>">
+														src="${pageContext.request.contextPath}/${book.bookImgUrl}"
+														alt="<c:out value='${book.bookTitle}'/>">
 												</c:when>
 												<c:otherwise>
 													<img
-														src="${pageContext.request.contextPath}${book.book_img_url}"
+														src="${pageContext.request.contextPath}${book.bookImgUrl}"
 														alt="<c:out value='${book.book_title}'/>">
 												</c:otherwise>
 											</c:choose>
@@ -145,7 +145,7 @@
 									<h3>
 										<c:out value="${book.book_title}" />
 									</h3>
-									<p class="author">
+									<p class="book-author">
 										By:
 										<c:choose>
 											<c:when
@@ -175,14 +175,14 @@
 												<input type="hidden" name="action" value="add"> <input
 													type="hidden" name="bookId" value="${book.bookID}">
 												<input type="hidden" name="quantity" value="1">
-												<button type="submit" class="add-to-cart-btn"
+												<button type="submit" class="cart-button"
 													onclick="showNotification(); return false;">Add To
 													Cart</button>
 											</form>
 										</c:when>
 										<c:otherwise>
 											<a href="${pageContext.request.contextPath}/login"
-												class="login-to-buy-btn">Login to Buy</a>
+												class="login-button">Login to Buy</a>
 										</c:otherwise>
 									</c:choose>
 								</div>
@@ -194,8 +194,7 @@
 							<h3>No books found</h3>
 							<c:choose>
 								<c:when test="${not empty selectedCategoryName}">
-									<p>We couldn't find any books in the
-										selected category.</p>
+									<p>We couldn't find any books in the selected category.</p>
 								</c:when>
 								<c:otherwise>
 									<p>We couldn't find any books matching your search.</p>

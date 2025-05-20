@@ -48,7 +48,7 @@ public class ProductPage extends HttpServlet {
 				return;
 			}
 
-			System.out.println("ProductPage Controller - Book found: " + book.getBook_title());
+			System.out.println("ProductPage Controller - Book found: " + book.getBookTitle());
 			request.setAttribute("book", book);
 
 			// Forward to product page
