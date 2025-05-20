@@ -48,30 +48,10 @@
         </div>
     </section>
 
-    <!-- Stats Section -->
-    <section class="stats-section">
-        <div class="stats-container">
-            <div class="stat-item">
-                <div class="stat-number">10,000+</div>
-                <div class="stat-label">Book Titles</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">50+</div>
-                <div class="stat-label">Literary Events</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">5,000+</div>
-                <div class="stat-label">Happy Readers</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">7</div>
-                <div class="stat-label">Years of Service</div>
-            </div>
-        </div>
-    </section>
+    
     
     <!-- Team Section -->
-    <section class="team-section">
+    <section class="team-section" id="our-team">
         <div class="container">
             <div class="team-header">
                 <span class="section-label">Our Team</span>

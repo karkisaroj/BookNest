@@ -51,7 +51,7 @@
 
 
 	<%-- Section 2 - Books (Uses randomBooks from HomeController) --%>
-	<section class="sec-2">
+	<section class="sec-2" id="featured-books">
 		<div class="container">
 			<h3 class="topic">Books</h3>
 			<div class="divider"></div>
@@ -125,7 +125,7 @@
 		</div>
 	</section>
 	<%-- Section 3 - Popular (Uses popularBooks from HomeController) --%>
-	<section class="sec-3">
+	<section class="sec-3" id="popular-books">
 		<div class="container">
 			<h3 class="topic">Popular</h3>
 			<div class="divider"></div>
