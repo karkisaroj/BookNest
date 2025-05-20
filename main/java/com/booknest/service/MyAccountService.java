@@ -9,16 +9,25 @@ import com.booknest.util.imageUtil;
 import jakarta.servlet.http.Part;
 import java.io.IOException;
 
+/**
+ * Service for handling user account profile image operations. This service
+ * provides methods to retrieve, update, and manage user profile images.
+ * 
+ * @author Saroj Pratap Karki 23047612
+ */
 public class MyAccountService {
 	private final imageUtil imageUtil;
 	private static final int MAX_FILE_SIZE = 3 * 1024 * 1024; // 3 MB
 
+	/**
+	 * Default constructor that initializes the image utility.
+	 */
 	public MyAccountService() {
 		this.imageUtil = new imageUtil();
 	}
 
 	/**
-	 * Retrieves the profile image URL for a user
+	 * Retrieves the profile image URL for a user from the database.
 	 * 
 	 * @param userName The username of the user
 	 * @return The profile image URL or null if not found
@@ -48,7 +57,7 @@ public class MyAccountService {
 	}
 
 	/**
-	 * Updates the user's profile image URL in the database
+	 * Updates the user's profile image URL in the database.
 	 * 
 	 * @param userName  The username of the user
 	 * @param imagePath The relative path of the image
@@ -77,7 +86,7 @@ public class MyAccountService {
 	}
 
 	/**
-	 * Checks if the file size is within the allowed limit
+	 * Checks if the file size is within the allowed limit.
 	 * 
 	 * @param filePart The uploaded file part
 	 * @return true if file size is valid, false otherwise
@@ -87,11 +96,11 @@ public class MyAccountService {
 	}
 
 	/**
-	 * Uploads a profile image to the server
+	 * Uploads a profile image to the server.
 	 * 
 	 * @param filePart The uploaded file part
 	 * @return The relative path of the uploaded image or null if upload failed
-	 * @throws IOException if an I/O error occurs
+	 * @throws IOException if an I/O error occurs during file processing
 	 */
 	public String uploadProfileImage(Part filePart) throws IOException {
 		String saveFolder = "/profile"; // Based on your actual file structure
@@ -106,7 +115,8 @@ public class MyAccountService {
 	}
 
 	/**
-	 * Gets the default profile image path
+	 * Gets the default profile image path for users who haven't uploaded a profile
+	 * image.
 	 * 
 	 * @return The path to the default profile image
 	 */
@@ -115,7 +125,10 @@ public class MyAccountService {
 	}
 
 	/**
-	 * Helper method to close database resources
+	 * Helper method to close database resources safely.
+	 * 
+	 * @param ps   The PreparedStatement to close
+	 * @param conn The Connection to close
 	 */
 	private void closeResources(PreparedStatement ps, Connection conn) {
 		try {
@@ -124,7 +137,7 @@ public class MyAccountService {
 			if (conn != null)
 				conn.close();
 		} catch (SQLException e) {
-			// Ignore
+			// Ignore closing errors
 		}
 	}
 }

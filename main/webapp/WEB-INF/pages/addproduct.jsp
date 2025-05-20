@@ -27,7 +27,7 @@
 <body class="has-dashboard">
     <jsp:include page="header.jsp" />
     
-    <div >
+    <div class="add-product-page">
     <jsp:include page="dashboard.jsp" />
         <div class="form-container">
             <div class="form-header">
@@ -211,7 +211,7 @@
             // If a file is selected, show its name and preview
             if (fileInput.files.length > 0) {
                 const file = fileInput.files[0];
-                fileNameDisplay.textContent = `Selected file: ${file.name}`;
+                fileNameDisplay.textContent = ⁠ Selected file: ${file.name} ⁠;
 
                 const reader = new FileReader();
                 reader.onload = function (e) {

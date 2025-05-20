@@ -6,26 +6,47 @@ import com.booknest.config.DbConfiguration;
 import com.booknest.model.BookCartModel;
 import com.booknest.model.CartItem;
 
+/**
+ * Implementation of CartService interface that handles shopping cart operations
+ * with the database.
+ * 
+ * @author Saroj Pratap Karki 23047612
+ */
 public class CartServiceImpl implements CartService {
 
 	private final BookService bookService;
 
+	/**
+	 * Default constructor that initializes with a new BookServiceImpl.
+	 */
 	public CartServiceImpl() {
-		// Consider dependency injection later, but this works for now
 		this.bookService = new BookServiceImpl();
 	}
 
-	// Constructor for potential dependency injection later
+	/**
+	 * Constructor for dependency injection.
+	 * 
+	 * @param bookService The BookService implementation to use
+	 */
 	public CartServiceImpl(BookService bookService) {
 		this.bookService = bookService;
 	}
 
+	/**
+	 * Adds an item to a user's cart.
+	 *
+	 * @param uId User ID
+	 * @param bId Book ID to add to cart
+	 * @param q   Quantity to add
+	 * @return The CartItem that was added or updated
+	 * @throws CartServiceException If there's an error adding the item
+	 */
 	@Override
 	public CartItem addItemToCart(int uId, int bId, int q) throws CartServiceException {
 		try {
+			// Get book details
 			BookCartModel book;
 			try {
-				// Ensure getBookById fetches necessary details if not already done
 				book = bookService.getBookById(bId);
 				if (book == null) {
 					throw new CartServiceException("Book with ID " + bId + " not found.");
@@ -33,85 +54,103 @@ public class CartServiceImpl implements CartService {
 			} catch (Exception e) {
 				throw new CartServiceException("Cannot add item: " + e.getMessage(), e);
 			}
+
+			// Check if item already exists in cart
 			Optional<CartItem> existing = findCartItemByUserIdAndBookId(uId, bId);
 			CartItem result;
+
 			if (existing.isPresent()) {
+				// Update existing item quantity
 				int nq = existing.get().getQuantity() + q;
 				boolean upd = updateCartItemQuantityInternal(existing.get().getCartItemId(), nq);
-				if (!upd)
+				if (!upd) {
 					throw new CartServiceException("Failed to update quantity for existing cart item.");
+				}
 				existing.get().setQuantity(nq);
 				result = existing.get();
 			} else {
+				// Insert new cart item
 				result = insertCartItem(uId, bId);
-				if (result == null)
+				if (result == null) {
 					throw new CartServiceException("Failed to insert new cart item.");
-				if (q > 1) { // Only update quantity if it's more than the default 1 added during insert
+				}
+				if (q > 1) {
 					boolean upd = updateCartItemQuantityInternal(result.getCartItemId(), q);
-					if (!upd)
+					if (!upd) {
 						throw new CartServiceException("Failed to update quantity after inserting new cart item.");
+					}
 					result.setQuantity(q);
 				}
 			}
+
 			result.setBookModel(book);
 			return result;
 		} catch (SQLException e) {
-			System.err.println("SQL Error in addItemToCart: " + e.getMessage());
-			e.printStackTrace(); // Consider more robust logging
 			throw new CartServiceException("Database error while adding item to cart.", e);
 		} catch (CartServiceException e) {
-			// Re-throw CartServiceExceptions directly
 			throw e;
 		} catch (Exception e) {
-			e.printStackTrace(); // Consider more robust logging
 			throw new CartServiceException("An unexpected error occurred while adding item to cart.", e);
 		}
 	}
 
+	/**
+	 * Updates the quantity of an item in the cart.
+	 *
+	 * @param uId User ID
+	 * @param cId Cart item ID
+	 * @param nq  New quantity
+	 * @return true if successful, false otherwise
+	 * @throws CartServiceException If there's an error updating the item
+	 */
 	@Override
 	public boolean updateCartItemQuantity(int uId, int cId, int nq) throws CartServiceException {
 		if (nq <= 0) {
-			// Instead of throwing error, handle removal if quantity is 0 or less
-			System.out.println("Quantity is zero or less, removing item: " + cId);
+			// If quantity is zero or less, remove the item
 			return this.removeItemFromCart(uId, cId);
-			// throw new CartServiceException("Quantity must be positive.");
 		}
+
 		try {
-			// Optional: Add a check to ensure the cart item belongs to the user 'uId'
-			// before updating
 			return updateCartItemQuantityInternal(cId, nq);
 		} catch (SQLException e) {
-			System.err.println("SQL Error in updateCartItemQuantity: " + e.getMessage());
-			e.printStackTrace();
 			throw new CartServiceException("Database error while updating cart item quantity.", e);
 		}
 	}
 
+	/**
+	 * Removes an item from the cart.
+	 *
+	 * @param uId User ID
+	 * @param cId Cart item ID
+	 * @return true if successful, false otherwise
+	 * @throws CartServiceException If there's an error removing the item
+	 */
 	@Override
 	public boolean removeItemFromCart(int uId, int cId) throws CartServiceException {
 		try {
-			// Optional: Add a check to ensure the cart item 'cId' belongs to the user 'uId'
-			// before deleting
 			return deleteCartItemInternal(cId);
 		} catch (SQLException e) {
-			System.err.println("SQL Error in removeItemFromCart: " + e.getMessage());
-			e.printStackTrace();
 			throw new CartServiceException("Database error while removing item from cart.", e);
 		}
 	}
 
-	// --- NEW IMPLEMENTATION for getCartContents ---
+	/**
+	 * Gets all items in a user's cart.
+	 *
+	 * @param userId The ID of the user
+	 * @return List of CartItem objects representing items in the cart
+	 * @throws CartServiceException If there's an error retrieving cart contents
+	 */
 	@Override
 	public List<CartItem> getCartContents(int userId) throws CartServiceException {
 		List<CartItem> items = new ArrayList<>();
 
 		String sql = "SELECT ci.cart_itemID, ci.userID, ci.quantity, ci.updated_at, "
 				+ "b.bookID, b.book_title, b.price, b.book_img_url, "
-				+ "GROUP_CONCAT(a.author_name SEPARATOR ', ') AS authors " + // Aggregate author names
-				"FROM cart_item ci " + "JOIN book b ON ci.bookID = b.bookID "
-				+ "LEFT JOIN book_author ba ON b.bookID = ba.bookID " + // LEFT JOIN in case a book has no author linked
-				"LEFT JOIN author a ON ba.authorID = a.authorID " + // LEFT JOIN for the same reason
-				"WHERE ci.userID = ? " + "GROUP BY ci.cart_itemID, b.bookID " + "ORDER BY ci.updated_at DESC";
+				+ "GROUP_CONCAT(a.author_name SEPARATOR ', ') AS authors " + "FROM cart_item ci "
+				+ "JOIN book b ON ci.bookID = b.bookID " + "LEFT JOIN book_author ba ON b.bookID = ba.bookID "
+				+ "LEFT JOIN author a ON ba.authorID = a.authorID " + "WHERE ci.userID = ? "
+				+ "GROUP BY ci.cart_itemID, b.bookID " + "ORDER BY ci.updated_at DESC";
 
 		Connection conn = null;
 		PreparedStatement ps = null;
@@ -128,28 +167,21 @@ public class CartServiceImpl implements CartService {
 				cartItem.setUserId(rs.getInt("userID"));
 				cartItem.setQuantity(rs.getInt("quantity"));
 				cartItem.setUpdatedAt(rs.getTimestamp("updated_at"));
-				cartItem.setBookId(rs.getInt("bookID")); // Set bookId on CartItem as well
+				cartItem.setBookId(rs.getInt("bookID"));
 
 				BookCartModel book = new BookCartModel();
 				book.setBookID(rs.getInt("bookID"));
-				book.setBookTitle(rs.getString("book_title")); // Ensure BookModel has setBook_title
-				book.setPrice(rs.getBigDecimal("price")); // Ensure BookModel has setPrice
-				book.setBookImgUrl(rs.getString("book_img_url")); // Ensure BookModel has setBook_img_url
-				book.setAuthorName(rs.getString("authors")); // Set the aggregated author names
+				book.setBookTitle(rs.getString("book_title"));
+				book.setPrice(rs.getBigDecimal("price"));
+				book.setBookImgUrl(rs.getString("book_img_url"));
+				book.setAuthorName(rs.getString("authors"));
 
-				cartItem.setBookModel(book); // Associate the populated BookModel with the CartItem
+				cartItem.setBookModel(book);
 				items.add(cartItem);
 			}
-			System.out.println(
-					"CartServiceImpl [getCartContents]: Found " + items.size() + " items for UserID = " + userId); // Debug
-																													// log
 		} catch (SQLException e) {
-			System.err.println("SQL Error in getCartContents for UserID = " + userId + ": " + e.getMessage()); // Log
-																												// error
-			e.printStackTrace(); // Print stack trace
 			throw new CartServiceException("Database error retrieving cart contents.", e);
 		} catch (ClassNotFoundException e) {
-			System.err.println("Database Driver Error in getCartContents: " + e.getMessage()); // Log error
 			throw new CartServiceException("Database driver configuration error.", e);
 		} finally {
 			close(rs);
@@ -159,6 +191,12 @@ public class CartServiceImpl implements CartService {
 		return items;
 	}
 
+	/**
+	 * Clears all items from a user's cart.
+	 *
+	 * @param userId The ID of the user whose cart to clear
+	 * @throws CartServiceException If there's an error clearing the cart
+	 */
 	@Override
 	public void clearCart(Integer userId) throws CartServiceException {
 		if (userId == null) {
@@ -173,15 +211,10 @@ public class CartServiceImpl implements CartService {
 			conn = DbConfiguration.getDbConnection();
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, userId);
-
-			int rowsDeleted = ps.executeUpdate();
-			System.out.println("CartServiceImpl [clearCart]: Cleared " + rowsDeleted + " items for UserID = " + userId);
+			ps.executeUpdate();
 		} catch (SQLException e) {
-			System.err.println("SQL Error in clearCart for UserID = " + userId + ": " + e.getMessage());
-			e.printStackTrace();
 			throw new CartServiceException("Database error while clearing cart.", e);
 		} catch (ClassNotFoundException e) {
-			System.err.println("Database Driver Error in clearCart: " + e.getMessage());
 			throw new CartServiceException("Database driver configuration error.", e);
 		} finally {
 			close(ps);
@@ -189,7 +222,14 @@ public class CartServiceImpl implements CartService {
 		}
 	}
 
-	// --- Helper Methods (findCartItemByUserIdAndBookId, insertCartItem, etc.) ---
+	/**
+	 * Finds a cart item by user ID and book ID.
+	 * 
+	 * @param userId User ID
+	 * @param bookId Book ID
+	 * @return Optional containing the CartItem if found, empty otherwise
+	 * @throws SQLException If a database error occurs
+	 */
 	private Optional<CartItem> findCartItemByUserIdAndBookId(int userId, int bookId) throws SQLException {
 		String sql = "SELECT cart_itemID, userID, bookID, quantity, updated_at FROM cart_item WHERE userID = ? AND bookID = ?";
 		try (Connection conn = DbConfiguration.getDbConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -205,6 +245,14 @@ public class CartServiceImpl implements CartService {
 		return Optional.empty();
 	}
 
+	/**
+	 * Inserts a new cart item.
+	 * 
+	 * @param userId User ID
+	 * @param bookId Book ID
+	 * @return The newly created CartItem
+	 * @throws SQLException If a database error occurs
+	 */
 	private CartItem insertCartItem(int userId, int bookId) throws SQLException {
 		String sql = "INSERT INTO cart_item (userID, bookID, quantity) VALUES (?, ?, 1)";
 		CartItem newItem = null;
@@ -239,6 +287,14 @@ public class CartServiceImpl implements CartService {
 		return newItem;
 	}
 
+	/**
+	 * Updates the quantity of a cart item.
+	 * 
+	 * @param cartItemId  Cart item ID
+	 * @param newQuantity New quantity
+	 * @return true if successful, false otherwise
+	 * @throws SQLException If a database error occurs
+	 */
 	private boolean updateCartItemQuantityInternal(int cartItemId, int newQuantity) throws SQLException {
 		String sql = "UPDATE cart_item SET quantity = ?, updated_at = CURRENT_TIMESTAMP WHERE cart_itemID = ?";
 		try (Connection conn = DbConfiguration.getDbConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -250,6 +306,13 @@ public class CartServiceImpl implements CartService {
 		}
 	}
 
+	/**
+	 * Deletes a cart item.
+	 * 
+	 * @param cartItemId Cart item ID
+	 * @return true if successful, false otherwise
+	 * @throws SQLException If a database error occurs
+	 */
 	private boolean deleteCartItemInternal(int cartItemId) throws SQLException {
 		String sql = "DELETE FROM cart_item WHERE cart_itemID = ?";
 		try (Connection conn = DbConfiguration.getDbConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -260,6 +323,13 @@ public class CartServiceImpl implements CartService {
 		}
 	}
 
+	/**
+	 * Maps a ResultSet row to a CartItem object.
+	 * 
+	 * @param rs ResultSet containing cart item data
+	 * @return CartItem populated with data from the ResultSet
+	 * @throws SQLException If a database error occurs
+	 */
 	private CartItem mapRowToCartItemBasic(ResultSet rs) throws SQLException {
 		CartItem item = new CartItem();
 		item.setCartItemId(rs.getInt("cart_itemID"));
@@ -270,14 +340,17 @@ public class CartServiceImpl implements CartService {
 		return item;
 	}
 
+	/**
+	 * Safely closes a resource.
+	 * 
+	 * @param resource The resource to close
+	 */
 	private void close(AutoCloseable resource) {
 		if (resource != null)
 			try {
 				resource.close();
 			} catch (Exception e) {
-				// Consider logging this exception
-				System.err.println("Error closing resource: " + e.getMessage());
-				// e.printStackTrace();
+				// Silent close
 			}
 	}
 }

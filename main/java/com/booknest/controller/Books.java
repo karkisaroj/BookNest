@@ -12,34 +12,41 @@ import com.booknest.model.BookCartModel;
 import com.booknest.service.BookService;
 import com.booknest.service.BookServiceImpl;
 
+/**
+ * @author Saroj Karki 23047612
+ */
+/**
+ * Books servlet handles requests for displaying all available books.
+ */
 @WebServlet(asyncSupported = true, urlPatterns = { "/books" })
 public class Books extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private BookService bookService;
 
+	/**
+	 * Initializes the book service.
+	 */
 	@Override
 	public void init() throws ServletException {
 		this.bookService = new BookServiceImpl();
-		System.out.println("Books Controller Initialized.");
 	}
 
+	/**
+	 * Handles GET requests to display the list of books.
+	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("Books Controller - doGet called");
-
 		try {
-			// Add debug print to see what's happening
+			// Retrieve all books from the service
 			List<BookCartModel> books = bookService.getAllBooks();
-			System.out.println("Books Controller - Books fetched: " + (books != null ? books.size() : "null"));
 
 			// Set the books attribute for the JSP
 			request.setAttribute("books", books);
 
 		} catch (Exception e) {
-			System.err.println("Error fetching books: " + e.getMessage());
-			e.printStackTrace();
+			// Set error message on request in case of exception
 			request.setAttribute("viewErrorMessage", "Error loading books: " + e.getMessage());
 		}
 

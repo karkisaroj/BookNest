@@ -7,7 +7,10 @@ import java.util.List;
 import com.booknest.model.CartItem;
 
 /**
- * Implementation of the CheckoutService interface
+ * Implementation of the CheckoutService interface that handles the checkout
+ * process including order creation, payment processing, and cart management.
+ * 
+ * @author Saroj Pratap Karki 23047612
  */
 public class CheckoutServiceImpl implements CheckoutService {
 
@@ -24,6 +27,9 @@ public class CheckoutServiceImpl implements CheckoutService {
 	// Payment status constant
 	private static final String PAYMENT_STATUS_COMPLETED = "Completed";
 
+	/**
+	 * Default constructor that initializes required services.
+	 */
 	public CheckoutServiceImpl() {
 		this.orderService = new OrderServiceImpl();
 		this.cartService = new CartServiceImpl();
@@ -31,7 +37,11 @@ public class CheckoutServiceImpl implements CheckoutService {
 	}
 
 	/**
-	 * Constructor with dependency injection for testing
+	 * Constructor with dependency injection for testing.
+	 * 
+	 * @param orderService   The order service to use
+	 * @param cartService    The cart service to use
+	 * @param paymentService The payment service to use
 	 */
 	public CheckoutServiceImpl(OrderService orderService, CartService cartService, PaymentService paymentService) {
 		this.orderService = orderService;
@@ -39,6 +49,19 @@ public class CheckoutServiceImpl implements CheckoutService {
 		this.paymentService = paymentService;
 	}
 
+	/**
+	 * Processes a checkout by creating an order and clearing the cart.
+	 * 
+	 * @param userId        The ID of the user checking out
+	 * @param cartItems     The items in the cart
+	 * @param streetAddress The street address for delivery
+	 * @param city          The city for delivery
+	 * @param state         The state for delivery
+	 * @param zipCode       The zip code for delivery
+	 * @param phone         The contact phone number
+	 * @return The ID of the created order, or -1 if checkout failed
+	 * @throws SQLException If there's a database error
+	 */
 	@Override
 	public int processCheckout(Integer userId, List<CartItem> cartItems, String streetAddress, String city,
 			String state, String zipCode, String phone) throws SQLException {
@@ -76,6 +99,16 @@ public class CheckoutServiceImpl implements CheckoutService {
 		return orderId;
 	}
 
+	/**
+	 * Validates that all address information is present and non-empty.
+	 * 
+	 * @param streetAddress The street address
+	 * @param city          The city
+	 * @param state         The state or province
+	 * @param zipCode       The zip or postal code
+	 * @param phone         The phone number
+	 * @return true if all information is valid, false otherwise
+	 */
 	@Override
 	public boolean validateAddressInfo(String streetAddress, String city, String state, String zipCode, String phone) {
 		return streetAddress != null && city != null && state != null && zipCode != null && phone != null
@@ -83,6 +116,12 @@ public class CheckoutServiceImpl implements CheckoutService {
 				&& !zipCode.trim().isEmpty() && !phone.trim().isEmpty();
 	}
 
+	/**
+	 * Calculates the total cost of the order including shipping and discounts.
+	 * 
+	 * @param cartItems The items in the cart
+	 * @return The total order cost
+	 */
 	@Override
 	public BigDecimal calculateOrderTotal(List<CartItem> cartItems) {
 		BigDecimal subtotal = calculateSubtotal(cartItems);
@@ -94,6 +133,12 @@ public class CheckoutServiceImpl implements CheckoutService {
 		return subtotal.add(shippingCost).subtract(discount);
 	}
 
+	/**
+	 * Calculates the subtotal of all items in the cart.
+	 * 
+	 * @param cartItems The items in the cart
+	 * @return The subtotal cost
+	 */
 	@Override
 	public BigDecimal calculateSubtotal(List<CartItem> cartItems) {
 		BigDecimal subtotal = BigDecimal.ZERO;
@@ -109,18 +154,41 @@ public class CheckoutServiceImpl implements CheckoutService {
 		return subtotal;
 	}
 
+	/**
+	 * Returns the standard shipping cost.
+	 * 
+	 * @return The shipping cost
+	 */
 	@Override
 	public BigDecimal getShippingCost() {
 		// Simply return the constant, do not call this method recursively!
 		return DEFAULT_SHIPPING_COST;
 	}
 
+	/**
+	 * Formats the address components into a single string.
+	 * 
+	 * @param streetAddress The street address
+	 * @param city          The city
+	 * @param state         The state or province
+	 * @param zipCode       The zip or postal code
+	 * @return The formatted address string
+	 */
 	@Override
 	public String formatAddress(String streetAddress, String city, String state, String zipCode) {
 		// Format: Street, City, State/Province Postal Code
 		return streetAddress + ", " + city + ", " + state + " " + zipCode;
 	}
 
+	/**
+	 * Creates a payment record for an order.
+	 * 
+	 * @param orderId       The ID of the order
+	 * @param amount        The payment amount
+	 * @param paymentMethod The payment method used
+	 * @return The ID of the created payment record
+	 * @throws SQLException If there's a database error
+	 */
 	@Override
 	public int createPaymentRecord(int orderId, BigDecimal amount, String paymentMethod) throws SQLException {
 		// Always use Completed status
@@ -142,6 +210,12 @@ public class CheckoutServiceImpl implements CheckoutService {
 		}
 	}
 
+	/**
+	 * Formats the payment method parameter to a standard format.
+	 * 
+	 * @param paymentMethodParam The raw payment method string
+	 * @return The formatted payment method string
+	 */
 	@Override
 	public String formatPaymentMethod(String paymentMethodParam) {
 		if (paymentMethodParam == null) {
