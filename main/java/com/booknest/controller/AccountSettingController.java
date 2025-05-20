@@ -38,18 +38,15 @@ public class AccountSettingController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println(">>> AccountSettingController: Processing GET request");
         
         // Check if user is logged in
         if (!SessionUtil.isLoggedIn(request, USERNAME_SESSION_KEY)) {
-            System.out.println(">>> AccountSettingController: User not logged in, redirecting to login page");
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
         
         // Get the username from session
         String userName = SessionUtil.getAttribute(request, USERNAME_SESSION_KEY, String.class);
-        System.out.println(">>> AccountSettingController: Loading account settings for user: " + userName);
         
         try {
             // Use session data to pre-populate form fields
@@ -59,23 +56,19 @@ public class AccountSettingController extends HttpServlet {
             request.setAttribute("email", SessionUtil.getAttribute(request, "email", String.class));
             
         } catch (Exception e) {
-            System.err.println(">>> AccountSettingController: Error retrieving user information: " + e.getMessage());
             request.setAttribute("errorMessage", "Failed to load your account information.");
         }
         
         // Forward to the JSP
-        System.out.println(">>> AccountSettingController: Forwarding to JSP: " + ACCOUNT_SETTINGS_JSP);
         request.getRequestDispatcher(ACCOUNT_SETTINGS_JSP).forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println(">>> AccountSettingController: Processing POST request");
         
         // Check if user is logged in
         if (!SessionUtil.isLoggedIn(request, USERNAME_SESSION_KEY)) {
-            System.out.println(">>> AccountSettingController: User not logged in, redirecting to login page");
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
@@ -84,15 +77,12 @@ public class AccountSettingController extends HttpServlet {
         
         // Determine which form was submitted
         if (request.getParameter("first-name") != null) {
-            System.out.println(">>> AccountSettingController: Processing personal information update for user: " + userName);
             processPersonalInfoUpdate(request, response, userName);
             
         } else if (request.getParameter("email") != null) {
-            System.out.println(">>> AccountSettingController: Processing email update for user: " + userName);
             processEmailUpdate(request, response, userName);
             
         } else if (request.getParameter("current-password") != null) {
-            System.out.println(">>> AccountSettingController: Processing password update for user: " + userName);
             processPasswordUpdate(request, response, userName);
             
         } else {
@@ -112,13 +102,8 @@ public class AccountSettingController extends HttpServlet {
         String lastName = request.getParameter("second-name");
         String phoneNumber = request.getParameter("phone-number");
         
-        // Log received data
-        System.out.println(">>> AccountSettingController: Received form data - firstName: " + firstName 
-                + ", lastName: " + lastName + ", phoneNumber: " + phoneNumber);
-        
         // Validate inputs
         if (validationUtil.isNullOrEmpty(firstName) || validationUtil.isNullOrEmpty(lastName)) {
-            System.err.println(">>> AccountSettingController: Invalid form data - firstName or lastName is empty");
             request.setAttribute("accountInfoError", "First name and last name are required fields.");
             doGet(request, response);
             return;
@@ -136,7 +121,6 @@ public class AccountSettingController extends HttpServlet {
         boolean updated = accountSettingService.updatePersonalInfo(userName, firstName, lastName, phoneNumber);
         
         if (updated) {
-            System.out.println(">>> AccountSettingController: Successfully updated personal information for user: " + userName);
             
             // Update session attributes
             SessionUtil.setAttribute(request, "firstName", firstName);
@@ -162,12 +146,9 @@ public class AccountSettingController extends HttpServlet {
         String confirmEmail = request.getParameter("confirm-email");
         
         // Log received data
-        System.out.println(">>> AccountSettingController: Received form data - email: " + email 
-                + ", confirmEmail: " + confirmEmail);
         
         // Validate inputs
         if (validationUtil.isNullOrEmpty(email) || validationUtil.isNullOrEmpty(confirmEmail)) {
-            System.err.println(">>> AccountSettingController: Invalid form data - email or confirmEmail is empty");
             request.setAttribute("emailError", "Email and confirmation email are required fields.");
             doGet(request, response);
             return;
