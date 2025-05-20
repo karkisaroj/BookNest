@@ -24,9 +24,10 @@
 
 </head>
 
-<body>
+<body class="has-dashboard">
     <jsp:include page="header.jsp" />
-    <div class="add-product-page">
+    
+    <div >
     <jsp:include page="dashboard.jsp" />
         <div class="form-container">
             <div class="form-header">
@@ -196,7 +197,8 @@
                 </div>
             </form>
         </div>
-    </div>
+        </div>
+    
     <jsp:include page="footer.jsp" />
 
     <script>

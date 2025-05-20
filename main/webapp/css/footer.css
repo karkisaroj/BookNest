@@ -3,6 +3,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    
+    
 }
 
 .footer {
@@ -10,7 +12,9 @@
     color: white;
     padding: 2rem 0;
     width: 100%;
-    z-index: 99;
+    position:sticky;
+    z-index:199;
+    
     
 }
 
