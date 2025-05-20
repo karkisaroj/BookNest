@@ -16,7 +16,7 @@
                 <div class="logo">
                     <span style="font-family: serif; font-style: italic; font-weight: bold; font-size: 22px;">BookNest</span>
                 </div>
-                <div class="copyright">Â© 2025 - 2026 BookNest</div>
+                <div class="copyright">© 2025 - 2026 BookNest</div>
             </div>
             
             <hr class="footer-divider">
