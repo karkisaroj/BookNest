@@ -1,82 +1,70 @@
 package com.booknest.util;
 
 import java.io.File;
-import java.io.IOException;
 import jakarta.servlet.http.Part;
 
 /**
  * Utility class for handling image file uploads.
+ * 
+ * @author Saroj Pratap Karki 23047612
  */
 public class imageUtil {
 
 	/**
 	 * Extracts the file name from the given Part object.
+	 * 
+	 * @param part The uploaded file part
+	 * @return The extracted filename with spaces replaced by underscores, or
+	 *         default image name if not found
 	 */
 	public String getImageNameFromPart(Part part) {
 		String contentDisp = part.getHeader("content-disposition");
 		String[] items = contentDisp.split(";");
-		String imageName = null;
 
 		for (String s : items) {
 			if (s.trim().startsWith("filename")) {
-				imageName = s.substring(s.indexOf("=") + 2, s.length() - 1);
+				String imageName = s.substring(s.indexOf("=") + 2, s.length() - 1);
+				if (imageName != null && !imageName.isEmpty()) {
+					// Replace spaces with underscores to avoid URL encoding issues
+					return imageName.replaceAll("\\s+", "_");
+				}
+				break;
 			}
 		}
 
-		// Replace spaces with underscores to avoid URL issues
-		if (imageName != null && !imageName.isEmpty()) {
-			imageName = imageName.replaceAll("\\s+", "_");
-			return imageName;
-		}
-
+		// Return default image if no filename found
 		return "default_profile.png";
 	}
 
 	/**
 	 * Uploads an image to the specified folder.
+	 * 
+	 * @param part       The uploaded file part
+	 * @param realPath   The real path to the web application root
+	 * @param saveFolder The folder within the web application to save the file to
+	 * @return true if upload was successful, false otherwise
 	 */
 	public boolean uploadImage(Part part, String realPath, String saveFolder) {
 		try {
 			// Get the image name
 			String imageName = getImageNameFromPart(part);
 
-			// 1. Upload to the deployed location
+			// Create directory if it doesn't exist
 			String deployedPath = realPath + File.separator + saveFolder;
 			File deployedDir = new File(deployedPath);
 			if (!deployedDir.exists()) {
 				deployedDir.mkdirs();
 			}
+
+			// Write the file to the destination
 			String deployedFilePath = deployedPath + File.separator + imageName;
-			System.out.println("Writing to deployed path: " + deployedFilePath);
 			part.write(deployedFilePath);
-
-			// 2. Also upload to the source project location for persistence
-			String projectPath = "C:\\\\Users\\\\noble\\\\NewWorkSpaceCoursework\\\\BookNest\\\\src\\\\main\\\\webapp\\\\resources\\\\"
-					+ saveFolder.replace('/', File.separatorChar);
-			File projectDir = new File(projectPath);
-			if (!projectDir.exists()) {
-				projectDir.mkdirs();
-			}
-
-			// Copy the file from deployed location to project location
-			try {
-				java.nio.file.Files.copy(new File(deployedFilePath).toPath(),
-						new File(projectPath + File.separator + imageName).toPath(),
-						java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-				System.out.println("Also copied to project path: " + projectPath + File.separator + imageName);
-			} catch (Exception e) {
-				System.err.println("Warning: Could not copy to project source: " + e.getMessage());
-				// Don't fail the upload if this secondary copy fails
-			}
 
 			return true;
 		} catch (Exception e) {
+			// Silently log the error but prevent stack trace from displaying to users
 			e.printStackTrace();
 			return false;
 		}
-	}
-
-	public String getSavePath(String saveFolder) {
-		return "C:\\Users\\noble\\NewWorkSpaceCoursework\\BookNest\\src\\main\\webapp\\resources\\" + saveFolder;
 	}
 }

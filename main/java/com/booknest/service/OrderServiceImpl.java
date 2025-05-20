@@ -13,6 +13,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Implementation of the OrderService interface for managing order operations.
+ * Handles creation, retrieval and management of orders and order items.
+ * 
+ * @author Saroj Pratap Karki 23047612
+ */
 public class OrderServiceImpl implements OrderService {
 
 	// --- SQL Query Constants ---
@@ -44,6 +50,9 @@ public class OrderServiceImpl implements OrderService {
 	private static String quantityColumnName = "quantity";
 	private static String unitPriceColumnName = "unit_price";
 
+	/**
+	 * Constructor that initializes service and detects database structure
+	 */
 	public OrderServiceImpl() {
 		new BookServiceImpl();
 		// Initialize SQL statements with actual column names
@@ -51,8 +60,8 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	/**
-	 * Check the database structure of order_book table and set up SQL statements
-	 * accordingly
+	 * Dynamically determines the structure of the order_book table and constructs
+	 * appropriate SQL statements
 	 */
 	private void initializeOrderBookStructure() {
 		try (Connection conn = DbConfiguration.getDbConnection();
@@ -63,7 +72,6 @@ public class OrderServiceImpl implements OrderService {
 			while (rs.next()) {
 				String columnName = rs.getString("Field");
 				columnNames.add(columnName.toLowerCase());
-				System.out.println("Found column in order_book: " + columnName);
 
 				// Check for quantity-like columns
 				if (columnName.equalsIgnoreCase("quantity")) {
@@ -101,16 +109,11 @@ public class OrderServiceImpl implements OrderService {
 			insertSql.append(") ").append(valuesSql).append(")");
 			SQL_CREATE_ORDER_ITEM = insertSql.toString();
 
-			System.out.println("Using SQL for order items: " + SQL_CREATE_ORDER_ITEM);
-
 			// Build select query for order items
 			SQL_GET_ORDER_ITEMS = "SELECT ob.*, b.book_title, b.book_img_url FROM order_book ob "
 					+ "JOIN book b ON ob.bookID = b.bookID WHERE ob.orderID = ?";
 
 		} catch (SQLException | ClassNotFoundException e) {
-			System.err.println("Error checking order_book structure: " + e.getMessage());
-			e.printStackTrace();
-
 			// Set defaults if we couldn't determine structure
 			SQL_CREATE_ORDER_ITEM = "INSERT INTO order_book (orderID, bookID) VALUES (?, ?)";
 			SQL_GET_ORDER_ITEMS = "SELECT ob.*, b.book_title, b.book_img_url FROM order_book ob "
@@ -119,18 +122,16 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	/**
-	 * Format the shipping address to standard format: "Street, City, State/Province
-	 * Postal Code" Removes any date/time, user login, and phone information
+	 * Format the shipping address to standard format Removes any date/time, user
+	 * login, and phone information
 	 * 
 	 * @param address Original address string
-	 * @return Formatted address with standardized format
+	 * @return Formatted address
 	 */
 	private String formatShippingAddress(String address) {
 		if (address == null || address.isEmpty()) {
 			return "";
 		}
-
-		System.out.println("Original address: [" + address + "]");
 
 		// Handle the special format with login info
 		if (address.contains("Current Date and Time") && address.contains("Current User's Login")) {
@@ -138,9 +139,6 @@ public class OrderServiceImpl implements OrderService {
 			Matcher matcher = pattern.matcher(address);
 
 			if (matcher.find()) {
-				String username = matcher.group(1).trim();
-				System.out.println("Extracted username: " + username);
-
 				// Check for address part after the username
 				String remaining = matcher.group(2);
 				if (remaining != null && !remaining.trim().isEmpty()) {
@@ -164,7 +162,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	/**
-	 * Parse and format an address into standardized parts
+	 * Creates a standardized address string from components
 	 * 
 	 * @param streetAddress Street address
 	 * @param city          City
@@ -203,6 +201,18 @@ public class OrderServiceImpl implements OrderService {
 		return formattedAddress.toString();
 	}
 
+	/**
+	 * Creates a new order in the database
+	 * 
+	 * @param userId          User ID for the order
+	 * @param cartItems       Items to be included in the order
+	 * @param shippingAddress Address for delivery
+	 * @param subtotal        Subtotal amount
+	 * @param shippingCost    Shipping cost
+	 * @param discount        Discount amount
+	 * @param totalAmount     Total order amount
+	 * @return Created order ID, or -1 if failed
+	 */
 	@Override
 	public int createOrder(int userId, List<CartItem> cartItems, String shippingAddress, BigDecimal subtotal,
 			BigDecimal shippingCost, BigDecimal discount, BigDecimal totalAmount) throws SQLException {
@@ -213,7 +223,6 @@ public class OrderServiceImpl implements OrderService {
 
 		// Format the shipping address to store in standardized format
 		String formattedAddress = formatShippingAddress(shippingAddress);
-		System.out.println("Formatted address for storage: [" + formattedAddress + "]");
 
 		Connection conn = null;
 		int generatedOrderId = -1;
@@ -229,9 +238,8 @@ public class OrderServiceImpl implements OrderService {
 					ResultSet rs = stmt.executeQuery("DESCRIBE orders order_status")) {
 
 				if (rs.next()) {
-					// Get the column type and print it
+					// Get the column type
 					String columnType = rs.getString("Type");
-					System.out.println("Order status column type: " + columnType);
 
 					// Parse enum values if it's an enum
 					if (columnType.startsWith("enum(")) {
@@ -246,8 +254,6 @@ public class OrderServiceImpl implements OrderService {
 							enumValues.add(m.group(1));
 						}
 
-						System.out.println("Available order statuses: " + String.join(", ", enumValues));
-
 						// Use "in progress" if available, otherwise use the first value
 						if (enumValues.contains("in progress")) {
 							statusToUse = "in progress";
@@ -257,11 +263,8 @@ public class OrderServiceImpl implements OrderService {
 					}
 				}
 			} catch (Exception e) {
-				System.out.println("Error checking column type: " + e.getMessage());
 				// Continue with default status
 			}
-
-			System.out.println("Using order status value: " + statusToUse);
 
 			try (PreparedStatement psOrder = conn.prepareStatement(SQL_CREATE_ORDER, Statement.RETURN_GENERATED_KEYS)) {
 				psOrder.setInt(1, userId);
@@ -279,7 +282,6 @@ public class OrderServiceImpl implements OrderService {
 				try (ResultSet generatedKeys = psOrder.getGeneratedKeys()) {
 					if (generatedKeys.next()) {
 						generatedOrderId = generatedKeys.getInt(1);
-						System.out.println("OrderServiceImpl: Created order with ID: " + generatedOrderId);
 					} else {
 						throw new SQLException("Creating order failed, no ID obtained.");
 					}
@@ -315,7 +317,6 @@ public class OrderServiceImpl implements OrderService {
 
 					psItem.addBatch();
 				}
-				System.out.println("Executing batch insert into order_book table");
 				psItem.executeBatch();
 			}
 
@@ -329,23 +330,12 @@ public class OrderServiceImpl implements OrderService {
 			conn.commit();
 
 		} catch (SQLException | ClassNotFoundException e) {
-			System.err.println("Database error creating order for user ID: " + userId);
-			e.printStackTrace();
-
-			// Print more detailed error info
-			if (e instanceof SQLException) {
-				SQLException sqlEx = (SQLException) e;
-				System.err.println("SQL State: " + sqlEx.getSQLState());
-				System.err.println("Error Code: " + sqlEx.getErrorCode());
-				System.err.println("Message: " + sqlEx.getMessage());
-			}
-
 			// Attempt to roll back
 			if (conn != null) {
 				try {
 					conn.rollback();
 				} catch (SQLException ex) {
-					System.err.println("Error rolling back transaction: " + ex.getMessage());
+					// Silent rollback error
 				}
 			}
 			if (e instanceof SQLException) {
@@ -360,7 +350,7 @@ public class OrderServiceImpl implements OrderService {
 					conn.setAutoCommit(true);
 					conn.close();
 				} catch (SQLException e) {
-					System.err.println("Error closing connection: " + e.getMessage());
+					// Silent close error
 				}
 			}
 		}
@@ -369,11 +359,11 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	/**
-	 * Update shipping address for an existing order
+	 * Updates shipping address for an existing order
 	 * 
 	 * @param orderId    Order ID to update
 	 * @param newAddress New shipping address
-	 * @return true if update was successful
+	 * @return true if successful, false otherwise
 	 */
 	public boolean updateShippingAddress(int orderId, String newAddress) throws SQLException {
 		if (newAddress == null) {
@@ -394,8 +384,6 @@ public class OrderServiceImpl implements OrderService {
 			rowsUpdated = ps.executeUpdate();
 
 		} catch (SQLException | ClassNotFoundException e) {
-			System.err.println("Database error updating shipping address for order ID: " + orderId);
-			e.printStackTrace();
 			if (e instanceof SQLException) {
 				throw (SQLException) e;
 			} else {
@@ -406,6 +394,12 @@ public class OrderServiceImpl implements OrderService {
 		return rowsUpdated > 0;
 	}
 
+	/**
+	 * Retrieves an order by its ID, including all details
+	 * 
+	 * @param orderId Order ID to retrieve
+	 * @return Order model or null if not found
+	 */
 	@Override
 	public OrderModel getOrderById(int orderId) throws SQLException {
 		OrderModel order = null;
@@ -425,8 +419,6 @@ public class OrderServiceImpl implements OrderService {
 				}
 			}
 		} catch (SQLException | ClassNotFoundException e) {
-			System.err.println("Database error retrieving order ID: " + orderId);
-			e.printStackTrace();
 			if (e instanceof SQLException) {
 				throw (SQLException) e;
 			} else {
@@ -437,6 +429,12 @@ public class OrderServiceImpl implements OrderService {
 		return order;
 	}
 
+	/**
+	 * Retrieves all order items for a specific order
+	 * 
+	 * @param orderId Order ID to retrieve items for
+	 * @return List of order items
+	 */
 	@Override
 	public List<OrderItemModel> getOrderItems(int orderId) throws SQLException {
 		// Initialize SQL if needed
@@ -503,8 +501,6 @@ public class OrderServiceImpl implements OrderService {
 				}
 			}
 		} catch (SQLException | ClassNotFoundException e) {
-			System.err.println("Database error retrieving order items for order ID: " + orderId);
-			e.printStackTrace();
 			if (e instanceof SQLException) {
 				throw (SQLException) e;
 			} else {
@@ -515,6 +511,13 @@ public class OrderServiceImpl implements OrderService {
 		return orderItems;
 	}
 
+	/**
+	 * Updates the status of an order
+	 * 
+	 * @param orderId   Order ID to update
+	 * @param newStatus New status to set
+	 * @return true if successful, false otherwise
+	 */
 	@Override
 	public boolean updateOrderStatus(int orderId, String newStatus) throws SQLException {
 		if (newStatus == null || newStatus.trim().isEmpty()) {
@@ -542,8 +545,6 @@ public class OrderServiceImpl implements OrderService {
 			rowsUpdated = ps.executeUpdate();
 
 		} catch (SQLException | ClassNotFoundException e) {
-			System.err.println("Database error updating order status for ID: " + orderId);
-			e.printStackTrace();
 			if (e instanceof SQLException) {
 				throw (SQLException) e;
 			} else {
@@ -554,6 +555,12 @@ public class OrderServiceImpl implements OrderService {
 		return rowsUpdated > 0;
 	}
 
+	/**
+	 * Retrieves all orders for a specific user
+	 * 
+	 * @param userId User ID to retrieve orders for
+	 * @return List of orders for the user
+	 */
 	@Override
 	public List<OrderModel> getOrdersByUserId(int userId) throws SQLException {
 		List<OrderModel> orders = new ArrayList<>();
@@ -570,8 +577,6 @@ public class OrderServiceImpl implements OrderService {
 				}
 			}
 		} catch (SQLException | ClassNotFoundException e) {
-			System.err.println("Database error retrieving orders for user ID: " + userId);
-			e.printStackTrace();
 			if (e instanceof SQLException) {
 				throw (SQLException) e;
 			} else {
@@ -582,7 +587,12 @@ public class OrderServiceImpl implements OrderService {
 		return orders;
 	}
 
-
+	/**
+	 * Maps a database result set to an order model
+	 * 
+	 * @param rs Result set to map
+	 * @return Populated OrderModel
+	 */
 	private OrderModel mapResultSetToOrder(ResultSet rs) throws SQLException {
 		OrderModel order = new OrderModel();
 

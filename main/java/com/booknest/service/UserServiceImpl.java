@@ -11,6 +11,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat; // For formatting file size message
 
+/**
+ * Implementation of UserService interface that handles user profile operations.
+ * Provides functionality for managing user profile images including retrieval,
+ * update, validation and saving operations.
+ * 
+ * @author Saroj Pratap Karki 23047612
+ */
 public class UserServiceImpl implements UserService {
 
 	// --- Configuration Constants ---
@@ -23,10 +30,20 @@ public class UserServiceImpl implements UserService {
 	private final imageUtil imgUtil;
 	private static final DecimalFormat df = new DecimalFormat("#.##");
 
+	/**
+	 * Default constructor that initializes image utility.
+	 */
 	public UserServiceImpl() {
 		this.imgUtil = new imageUtil();
 	}
 
+	/**
+	 * Retrieves the profile image URL for a specific user. If no image is found or
+	 * an error occurs, returns the default profile image URL.
+	 * 
+	 * @param userName The username of the user whose profile image URL to retrieve
+	 * @return The URL of the user's profile image or default image if not found
+	 */
 	@Override
 	public String getProfileImageUrl(String userName) {
 		String profileImageUrl = DEFAULT_PROFILE_IMAGE;
@@ -62,6 +79,15 @@ public class UserServiceImpl implements UserService {
 		return profileImageUrl;
 	}
 
+	/**
+	 * Updates a user's profile image URL in the database. Ensures path separators
+	 * are standardized to forward slashes.
+	 * 
+	 * @param userName The username of the user whose profile image to update
+	 * @param imageUrl The new profile image URL to set
+	 * @return true if update was successful, false otherwise
+	 * @throws SQLException If a database error occurs
+	 */
 	@Override
 	public boolean updateProfileImageUrl(String userName, String imageUrl) throws SQLException {
 		String sql = "UPDATE user SET user_img_url = ? WHERE user_name = ?";
@@ -91,6 +117,13 @@ public class UserServiceImpl implements UserService {
 
 	// --- Image Handling Methods ---
 
+	/**
+	 * Validates a profile image file part. Checks if the file exists and doesn't
+	 * exceed maximum allowed file size.
+	 * 
+	 * @param filePart The uploaded file part to validate
+	 * @throws IllegalArgumentException If the file is empty or exceeds size limit
+	 */
 	@Override
 	public void validateProfileImage(Part filePart) throws IllegalArgumentException {
 		if (filePart == null || filePart.getSize() == 0) {
@@ -106,7 +139,15 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	// --- saveProfileImage - NO CHANGES ---
+	/**
+	 * Saves a profile image to the server. Uses imageUtil to handle the actual file
+	 * saving operation.
+	 * 
+	 * @param filePart The uploaded file part containing the image
+	 * @return The relative path to the saved image
+	 * @throws IOException              If an error occurs during file saving
+	 * @throws IllegalArgumentException If the file part is invalid
+	 */
 	@Override
 	public String saveProfileImage(Part filePart) throws IOException, IllegalArgumentException {
 		if (filePart == null || filePart.getSize() == 0) {
