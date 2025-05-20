@@ -30,6 +30,7 @@ body {
 	background-color: #fff;
 	color: var(--text-color);
 	line-height: 1.6;
+	padding-top: 70px; /* Add padding to body equal to header height */
 }
 
 .container {
@@ -44,11 +45,14 @@ body {
 header {
 	background-color: #26548A;
 	box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
-	position: sticky;
+	position: fixed; /* Changed from sticky to fixed */
 	top: 0;
+	left: 0;
+	width: 100%; /* Ensure header takes full width */
 	z-index: 1000;
 	padding: 0.5rem 0;
 	transition: var(--transition);
+	height: 70px; /* Fixed height for the header */
 }
 
 header.scrolled {
@@ -60,6 +64,7 @@ header .container {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	height: 100%; /* Ensure container takes full height of header */
 }
 
 .logo-container {
@@ -163,8 +168,8 @@ nav {
    Search Panel Styles
    ========================================================================== */
 .search-panel {
-	position: absolute;
-	top: 100%;
+	position: fixed; /* Changed from absolute to fixed */
+	top: 70px; /* Position right below the fixed header */
 	left: 0;
 	width: 100%;
 	background-color: #fff;
@@ -328,6 +333,7 @@ nav {
 .preview-item-title {
 	font-size: 0.85rem;
 	font-weight: 500;
+	color: #000; /* Add text color for preview items */
 }
 
 .preview-item-price {
@@ -347,11 +353,11 @@ nav {
 		display: block;
 	}
 	nav {
-		position: absolute;
-		top: 100%;
+		position: fixed; /* Changed from absolute to fixed */
+		top: 70px; /* Position right below the fixed header */
 		left: 0;
 		width: 100%;
-		background-color: #fff;
+		background-color: #26548A; /* Match header color */
 		padding: 1rem;
 		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 		transform: translateY(-100%);
@@ -378,5 +384,18 @@ nav {
 	}
 	.preview-items {
 		grid-template-columns: repeat(2, 1fr);
+	}
+	
+	/* Adjust body padding for mobile */
+	body {
+		padding-top: 60px; /* Slightly less padding on mobile */
+	}
+	
+	header {
+		height: 60px; /* Slightly shorter header on mobile */
+	}
+	
+	.search-panel, nav {
+		top: 60px; /* Match the mobile header height */
 	}
 }

@@ -27,6 +27,7 @@
 <body>
     <jsp:include page="header.jsp" />
     <div class="add-product-page">
+    <jsp:include page="dashboard.jsp" />
         <div class="form-container">
             <div class="form-header">
                 <h1>
