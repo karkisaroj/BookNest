@@ -25,6 +25,7 @@
 </head>
 
 <body>
+
 	<jsp:include page="header.jsp" />
 	<div class="add-product-page">
 		<div class="form-container">
@@ -38,6 +39,22 @@
 				<p class="highlight">
 					<c:choose>
 						<c:when test="${action == 'update'}">
+
+    <jsp:include page="header.jsp" />
+    <div class="add-product-page">
+    <jsp:include page="dashboard.jsp" />
+        <div class="form-container">
+            <div class="form-header">
+                <h1>
+                    <c:choose>
+                        <c:when test="${action == 'update'}">Update Book</c:when>
+                        <c:otherwise>Add New Book</c:otherwise>
+                    </c:choose>
+                </h1>
+                <p class="highlight">
+                    <c:choose>
+                        <c:when test="${action == 'update'}">
+
                             Complete the form to update the product details.
                         </c:when>
 						<c:otherwise>
