@@ -1,4 +1,4 @@
-package com.booknest.controller; // Assuming this is your controller package
+package com.booknest.controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,23 +13,33 @@ import com.booknest.model.BookCartModel;
 import com.booknest.service.BookService;
 import com.booknest.service.BookServiceImpl;
 
+/**
+ * HomeController handles requests to the home page of the BookNest application.
+ * Displays featured books including random selections and popular books.
+ * 
+ * @author Saroj Karki 23047612
+ */
 @WebServlet(asyncSupported = true, urlPatterns = { "/home", "/" })
 public class HomeController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private BookService bookService;
 
+	/**
+	 * Initializes the book service.
+	 */
 	@Override
 	public void init() throws ServletException {
 		this.bookService = new BookServiceImpl();
-
 	}
 
+	/**
+	 * Handles GET requests to display the home page with featured books. Shows
+	 * random books and popular books (most added to cart).
+	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-
 		List<BookCartModel> booksForBookSection = Collections.emptyList();
 		List<BookCartModel> booksForPopularSection = Collections.emptyList();
 		boolean errorOccurred = false;
@@ -39,9 +49,7 @@ public class HomeController extends HttpServlet {
 		try {
 			booksForBookSection = bookService.getRandomBooks(4);
 			request.setAttribute("randomBooks", booksForBookSection);
-
 		} catch (Exception e) {
-			e.printStackTrace();
 			errorOccurred = true;
 			errorMessage = "Could not load some book sections.";
 		}
@@ -52,41 +60,35 @@ public class HomeController extends HttpServlet {
 
 			// 3. Implement Fallback Logic for "Popular" section
 			if (popularResult == null || popularResult.isEmpty()) {
-
 				// If no popular books found, fetch random ones instead
-				try { // --- Start Inner Try for Fallback ---
-					booksForPopularSection = bookService.getRandomBooks(4); // Fetch another random set
+				try {
+					booksForPopularSection = bookService.getRandomBooks(4);
 				} catch (Exception e) {
-					System.err.println("HomeController: Error fetching fallback random books for popular section - "
-							+ e.getMessage());
-					e.printStackTrace();
 					errorOccurred = true;
-					if (errorMessage == null)
+					if (errorMessage == null) {
 						errorMessage = "Could not load popular books section.";
+					}
 					// If fallback fails, ensure the list is empty
 					booksForPopularSection = Collections.emptyList();
-				} // --- End Inner Try for Fallback ---
+				}
 			} else {
 				// Popular books were found, use them
 				booksForPopularSection = popularResult;
 			}
 			request.setAttribute("popularBooks", booksForPopularSection);
-
-		} catch (Exception e) { // Catch for initial popular books fetch
-			e.printStackTrace();
+		} catch (Exception e) {
 			errorOccurred = true;
-			if (errorMessage == null)
+			if (errorMessage == null) {
 				errorMessage = "An unexpected error occurred.";
-			request.setAttribute("popularBooks", Collections.emptyList()); // Ensure empty on error
-		} // --- THIS IS THE CORRECTED CLOSING BRACE for the outer try-catch ---
+			}
+			request.setAttribute("popularBooks", Collections.emptyList());
+		}
 
 		// Set error message if any step failed
 		if (errorOccurred) {
 			request.setAttribute("homeErrorMessage", errorMessage);
 		}
 
-
 		request.getRequestDispatcher("/WEB-INF/pages/home.jsp").forward(request, response);
-	
 	}
 }

@@ -51,7 +51,7 @@
 
 					<div class="form-group">
 						<label for="phone">Phone Number*</label> <input type="tel"
-							id="phone" name="phone" required> 
+							id="phone" name="phone" required>
 					</div>
 
 					<h2 class="payment-title">Payment Information</h2>

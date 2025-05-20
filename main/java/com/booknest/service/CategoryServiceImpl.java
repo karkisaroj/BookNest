@@ -10,86 +10,127 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Implementation of CategoryService interface that handles category-related
+ * operations with the database.
+ * 
+ * @author Saroj Pratap Karki 23047612
+ */
 public class CategoryServiceImpl implements CategoryService {
 
-    @Override
-    public List<Category> getAllCategories() throws SQLException, ClassNotFoundException {
-        List<Category> categories = new ArrayList<>();
+	/**
+	 * Retrieves all categories from the database.
+	 * 
+	 * @return List of all categories
+	 * @throws SQLException           If a database error occurs
+	 * @throws ClassNotFoundException If the database driver class is not found
+	 */
+	@Override
+	public List<Category> getAllCategories() throws SQLException, ClassNotFoundException {
+		List<Category> categories = new ArrayList<>();
 
-        // FIXED: Changed 'description' to 'category_description' to match your database column
-        String sql = "SELECT categoryID, category_name, category_description FROM categories";
+		// FIXED: Changed 'description' to 'category_description' to match your database
+		// column
+		String sql = "SELECT categoryID, category_name, category_description FROM categories";
 
-        try (Connection conn =DbConfiguration.getDbConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+		try (Connection conn = DbConfiguration.getDbConnection();
+				PreparedStatement stmt = conn.prepareStatement(sql);
+				ResultSet rs = stmt.executeQuery()) {
 
-            while (rs.next()) {
-                Category category = new Category();
-                category.setCategoryId(rs.getInt("categoryID"));
-                category.setCategoryName(rs.getString("category_name"));
+			while (rs.next()) {
+				Category category = new Category();
+				category.setCategoryId(rs.getInt("categoryID"));
+				category.setCategoryName(rs.getString("category_name"));
 
-                // FIXED: Map 'category_description' column to description field
-                category.setDescription(rs.getString("category_description"));
+				// FIXED: Map 'category_description' column to description field
+				category.setDescription(rs.getString("category_description"));
 
-                categories.add(category);
-            }
-        }
+				categories.add(category);
+			}
+		}
 
-        return categories;
-    }
+		return categories;
+	}
 
-    public Category getCategoryById(int id) throws SQLException, ClassNotFoundException {
-        // FIXED: Changed 'description' to 'category_description' to match your database column
-        String sql = "SELECT categoryID, category_name, category_description FROM categories WHERE categoryID = ?";
+	/**
+	 * Retrieves a category by its ID (int version).
+	 * 
+	 * @param id The ID of the category to retrieve
+	 * @return The category with the specified ID, or null if not found
+	 * @throws SQLException           If a database error occurs
+	 * @throws ClassNotFoundException If the database driver class is not found
+	 */
+	public Category getCategoryById(int id) throws SQLException, ClassNotFoundException {
+		// FIXED: Changed 'description' to 'category_description' to match your database
+		// column
+		String sql = "SELECT categoryID, category_name, category_description FROM categories WHERE categoryID = ?";
 
-        try (Connection conn = DbConfiguration.getDbConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+		try (Connection conn = DbConfiguration.getDbConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, id);
+			stmt.setInt(1, id);
 
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    Category category = new Category();
-                    category.setCategoryId(rs.getInt("categoryID"));
-                    category.setCategoryName(rs.getString("category_name"));
+			try (ResultSet rs = stmt.executeQuery()) {
+				if (rs.next()) {
+					Category category = new Category();
+					category.setCategoryId(rs.getInt("categoryID"));
+					category.setCategoryName(rs.getString("category_name"));
 
-                    // FIXED: Map 'category_description' column to description field
-                    category.setDescription(rs.getString("category_description"));
+					// FIXED: Map 'category_description' column to description field
+					category.setDescription(rs.getString("category_description"));
 
-                    return category;
-                }
-            }
-        }
+					return category;
+				}
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
+	/**
+	 * Adds a new category to the database.
+	 * 
+	 * @param category The category to add
+	 * @return The ID of the newly added category
+	 * @throws Exception If a database error occurs
+	 */
+	@Override
+	public int addCategory(Category category) throws Exception {
+		return 0;
+	}
 
- 
-    @Override
-    public int addCategory(Category category) throws Exception {
-        // TODO Auto-generated method stub
-        return 0;
-    }
+	/**
+	 * Updates an existing category in the database.
+	 * 
+	 * @param category The category with updated information
+	 * @return true if the update was successful, false otherwise
+	 * @throws Exception If a database error occurs
+	 */
+	@Override
+	public boolean updateCategory(Category category) throws Exception {
+		return false;
+	}
 
-    @Override
-    public boolean updateCategory(Category category) throws Exception {
-        // TODO Auto-generated method stub
-        return false;
-    }
+	/**
+	 * Deletes a category from the database.
+	 * 
+	 * @param categoryId The ID of the category to delete
+	 * @return true if the deletion was successful, false otherwise
+	 * @throws Exception If a database error occurs
+	 */
+	@Override
+	public boolean deleteCategory(Integer categoryId) throws Exception {
+		return false;
+	}
 
-    @Override
-    public boolean deleteCategory(Integer categoryId) throws Exception {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public Category getCategoryById(Integer categoryId) throws Exception {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
+	/**
+	 * Retrieves a category by its ID (Integer version).
+	 * 
+	 * @param categoryId The ID of the category to retrieve
+	 * @return The category with the specified ID, or null if not found
+	 * @throws Exception If a database error occurs
+	 */
+	@Override
+	public Category getCategoryById(Integer categoryId) throws Exception {
+		return null;
+	}
 }

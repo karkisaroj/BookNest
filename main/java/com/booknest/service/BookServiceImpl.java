@@ -7,7 +7,20 @@ import java.sql.*;
 import java.util.*;
 import java.math.BigDecimal;
 
+/**
+ * Implementation of BookService interface that handles book-related operations
+ * with the database.
+ * 
+ * @author Saroj Karki 23047612
+ */
 public class BookServiceImpl implements BookService {
+	/**
+	 * Searches for books with titles containing the given search term.
+	 *
+	 * @param title The search term to look for in book titles
+	 * @return A list of books matching the search criteria
+	 * @throws Exception If a database error occurs
+	 */
 	@Override
 	public List<BookCartModel> searchBooksByTitle(String title) throws Exception {
 		List<BookCartModel> books = new ArrayList<>();
@@ -15,11 +28,8 @@ public class BookServiceImpl implements BookService {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 
-		System.out.println("SEARCH DEBUG: Starting search for title: '" + title + "'");
-
 		try {
 			conn = DbConfiguration.getDbConnection();
-			System.out.println("SEARCH DEBUG: Database connection established: " + (conn != null));
 
 			// Updated SQL query to include author information
 			String sql = "SELECT b.*, GROUP_CONCAT(DISTINCT a.author_name SEPARATOR ', ') AS author_name "
@@ -27,14 +37,11 @@ public class BookServiceImpl implements BookService {
 					+ "LEFT JOIN author a ON ba.authorID = a.authorID " + "WHERE b.book_title LIKE ? "
 					+ "GROUP BY b.bookID";
 
-			System.out.println("SEARCH DEBUG: Using SQL: " + sql);
 
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, "%" + title + "%");
-			System.out.println("SEARCH DEBUG: Search parameter: %" + title + "%");
 
 			rs = stmt.executeQuery();
-			System.out.println("SEARCH DEBUG: Query executed successfully");
 
 			int count = 0;
 			while (rs.next()) {
@@ -50,34 +57,29 @@ public class BookServiceImpl implements BookService {
 				book.setPublisherID(rs.getInt("publisherID"));
 				book.setAuthorName(rs.getString("author_name")); // Set the author name from the query
 
-				System.out.println("SEARCH DEBUG: Found book #" + count + ": " + book.getBookID() + " - "
-						+ book.getBookTitle() + " by " + book.getAuthorName());
 
 				books.add(book);
 			}
 
-			System.out.println("SEARCH DEBUG: Total books found: " + count);
+
 
 		} catch (Exception e) {
 			System.err.println("SEARCH ERROR: " + e.getClass().getName() + ": " + e.getMessage());
 			e.printStackTrace();
+			throw new Exception("Failed to search books by title: " + e.getMessage(), e);
 		} finally {
-			try {
-				if (rs != null)
-					rs.close();
-				if (stmt != null)
-					stmt.close();
-				if (conn != null)
-					conn.close();
-				System.out.println("SEARCH DEBUG: Resources closed properly");
-			} catch (SQLException e) {
-				System.err.println("SEARCH ERROR: Failed to close resources: " + e.getMessage());
-			}
+			closeResources(rs, stmt, conn);
 		}
 
 		return books;
 	}
 
+	/**
+	 * Retrieves all books from the database.
+	 *
+	 * @return A list of all books
+	 * @throws ClassNotFoundException If the database driver class is not found
+	 */
 	@Override
 	public List<BookCartModel> getAllBooks() throws ClassNotFoundException {
 		List<BookCartModel> books = new ArrayList<>();
@@ -107,10 +109,9 @@ public class BookServiceImpl implements BookService {
 					book.setAuthorName("Unknown");
 
 					books.add(book);
-					
+
 				}
 
-				
 			}
 		} catch (SQLException e) {
 			System.err.println("Error getting all books (simple query): " + e.getMessage());
@@ -120,6 +121,13 @@ public class BookServiceImpl implements BookService {
 		return books;
 	}
 
+	/**
+	 * Retrieves a book by its ID.
+	 *
+	 * @param bookId The ID of the book to retrieve
+	 * @return The book with the specified ID
+	 * @throws Exception If the book is not found or a database error occurs
+	 */
 	@Override
 	public BookCartModel getBookById(int bookId) throws Exception {
 		if (bookId <= 0)
@@ -151,6 +159,13 @@ public class BookServiceImpl implements BookService {
 		return book;
 	}
 
+	/**
+	 * Adds a new book to the database.
+	 *
+	 * @param book The book to add
+	 * @return The added book with its generated ID
+	 * @throws Exception If the book data is invalid or a database error occurs
+	 */
 	@Override
 	public BookCartModel addBook(BookCartModel book) throws Exception {
 		System.err
@@ -191,6 +206,13 @@ public class BookServiceImpl implements BookService {
 		}
 	}
 
+	/**
+	 * Retrieves the most frequently added books to carts.
+	 *
+	 * @param limit The maximum number of books to retrieve
+	 * @return A list of the most popular books
+	 * @throws Exception If a database error occurs
+	 */
 	@Override
 	public List<BookCartModel> getTopAddedToCartBooks(int limit) throws Exception { // Changed return type to
 																					// BookCartModel
@@ -232,6 +254,13 @@ public class BookServiceImpl implements BookService {
 		return topBooks;
 	}
 
+	/**
+	 * Retrieves a random selection of books.
+	 *
+	 * @param limit The maximum number of books to retrieve
+	 * @return A list of random books
+	 * @throws Exception If a database error occurs
+	 */
 	@Override
 	public List<BookCartModel> getRandomBooks(int limit) throws Exception { // Changed return type to BookCartModel
 		List<BookCartModel> randomBooks = new ArrayList<>();
@@ -276,6 +305,13 @@ public class BookServiceImpl implements BookService {
 		return randomBooks;
 	}
 
+	/**
+	 * Retrieves books belonging to a specific category.
+	 *
+	 * @param categoryId The ID of the category to filter by
+	 * @return A list of books in the specified category
+	 * @throws Exception If a database error occurs
+	 */
 	@Override
 	public List<BookCartModel> getBooksByCategory(Integer categoryId) throws Exception {
 		List<BookCartModel> books = new ArrayList<>();
@@ -283,11 +319,9 @@ public class BookServiceImpl implements BookService {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 
-		System.out.println("CATEGORY SEARCH DEBUG: Starting search for category ID: " + categoryId);
 
 		try {
 			conn = DbConfiguration.getDbConnection();
-			System.out.println("CATEGORY SEARCH DEBUG: Database connection established: " + (conn != null));
 
 			// Modified SQL to properly handle multiple authors per book using GROUP_CONCAT
 			String sql = "SELECT b.*, GROUP_CONCAT(DISTINCT a.author_name SEPARATOR ', ') AS author_name "
@@ -296,13 +330,10 @@ public class BookServiceImpl implements BookService {
 					+ "LEFT JOIN author a ON ba.authorID = a.authorID " + "WHERE bc.categoryID = ? "
 					+ "GROUP BY b.bookID";
 
-			System.out.println("CATEGORY SEARCH DEBUG: Using SQL: " + sql);
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, categoryId);
-			System.out.println("CATEGORY SEARCH DEBUG: Parameter set: categoryId=" + categoryId);
 
 			rs = stmt.executeQuery();
-			System.out.println("CATEGORY SEARCH DEBUG: Query executed successfully");
 
 			int count = 0;
 			while (rs.next()) {
@@ -318,42 +349,33 @@ public class BookServiceImpl implements BookService {
 				book.setPublisherID(rs.getInt("publisherID"));
 				book.setAuthorName(rs.getString("author_name"));
 
-				System.out.println("CATEGORY SEARCH DEBUG: Found book #" + count + ": " + book.getBookID() + " - "
-						+ book.getBookTitle());
 
 				books.add(book);
 			}
 
-			System.out.println("CATEGORY SEARCH DEBUG: Total books found for category " + categoryId + ": " + count);
-
 		} catch (Exception e) {
-			System.err.println("CATEGORY SEARCH ERROR: " + e.getClass().getName() + ": " + e.getMessage());
 			e.printStackTrace();
 		} finally {
-			try {
-				if (rs != null)
-					rs.close();
-				if (stmt != null)
-					stmt.close();
-				if (conn != null)
-					conn.close();
-				System.out.println("CATEGORY SEARCH DEBUG: Resources closed properly");
-			} catch (SQLException e) {
-				System.err.println("CATEGORY SEARCH ERROR: Failed to close resources: " + e.getMessage());
-			}
+			closeResources(rs, stmt, conn);
 		}
 
 		return books;
 	}
 
+	/**
+	 * Updates an existing book in the database.
+	 *
+	 * @param book The book with updated information
+	 * @return true if the update was successful, false otherwise
+	 * @throws Exception If the book data is invalid or a database error occurs
+	 */
 	@Override
 	public boolean updateBook(BookCartModel book) throws Exception { // Changed parameter type to BookCartModel
 		System.err.println(
 				"WARNING: BookServiceImpl.updateBook does NOT currently handle author relationships correctly!");
 
-		if (book == null || book.getBookID() <= 0 || book.getBookTitle() == null
-				|| book.getBookTitle().trim().isEmpty() || book.getPrice() == null
-				|| book.getPrice().compareTo(BigDecimal.ZERO) < 0)
+		if (book == null || book.getBookID() <= 0 || book.getBookTitle() == null || book.getBookTitle().trim().isEmpty()
+				|| book.getPrice() == null || book.getPrice().compareTo(BigDecimal.ZERO) < 0)
 			throw new Exception("Invalid book data for update.");
 
 		String sql = "UPDATE book SET book_title = ?, description = ?, price = ?, book_img_url = ? WHERE bookID = ?";
@@ -370,6 +392,13 @@ public class BookServiceImpl implements BookService {
 		}
 	}
 
+	/**
+	 * Deletes a book from the database.
+	 *
+	 * @param bookId The ID of the book to delete
+	 * @return true if the deletion was successful, false otherwise
+	 * @throws Exception If the book ID is invalid or a database error occurs
+	 */
 	@Override
 	public boolean deleteBook(int bookId) throws Exception {
 		// This might need adjustment if book_author has foreign key constraints
@@ -390,6 +419,13 @@ public class BookServiceImpl implements BookService {
 		}
 	}
 
+	/**
+	 * Maps a ResultSet row to a BookCartModel object.
+	 *
+	 * @param rs The ResultSet containing book data
+	 * @return A BookCartModel populated with data from the ResultSet
+	 * @throws SQLException If a database error occurs
+	 */
 	private BookCartModel mapRowToBookCartModel(ResultSet rs) throws SQLException {
 		BookCartModel book = new BookCartModel();
 		book.setBookID(rs.getInt("bookID"));
@@ -408,7 +444,11 @@ public class BookServiceImpl implements BookService {
 		return book;
 	}
 
-	// Helper method to safely close JDBC resources
+	/**
+	 * Helper method to safely close JDBC resources.
+	 *
+	 * @param resource The resource to close
+	 */
 	private void close(AutoCloseable resource) {
 		if (resource != null)
 			try {
@@ -418,15 +458,60 @@ public class BookServiceImpl implements BookService {
 			}
 	}
 
+	/**
+	 * Safely closes JDBC resources.
+	 * 
+	 * @param rs   ResultSet to close
+	 * @param stmt PreparedStatement to close
+	 * @param conn Connection to close
+	 */
+	private void closeResources(ResultSet rs, PreparedStatement stmt, Connection conn) {
+		if (rs != null) {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				// Silently close resource
+			}
+		}
+		if (stmt != null) {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				// Silently close resource
+			}
+		}
+		if (conn != null) {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// Silently close resource
+			}
+		}
+	}
+
+	/**
+	 * Searches for books by category names.
+	 *
+	 * @param categories Array of category names to search for
+	 * @return A list of books matching the specified categories
+	 * @throws Exception If a database error occurs
+	 */
 	@Override
 	public List<BookCartModel> searchBooksByCategories(String[] categories) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * Searches for books matching both title and categories.
+	 *
+	 * @param title      The title search term
+	 * @param categories Array of category names to filter by
+	 * @return A list of books matching both title and categories
+	 * @throws Exception If a database error occurs
+	 */
 	@Override
 	public List<BookCartModel> searchBooksByTitleAndCategories(String title, String[] categories) throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
