@@ -79,19 +79,19 @@
 										<div class="book-item">
 											<%-- UPDATED: Use the same image path handling logic as in home.jsp --%>
 											<c:choose>
-												<c:when test="${not empty item.bookModel.book_img_url}">
+												<c:when test="${not empty item.bookModel.bookImgUrl}">
 													<c:choose>
 														<c:when
-															test="${item.bookModel.book_img_url.startsWith('resources/')}">
+															test="${item.bookModel.bookImgUrl.startsWith('resources/')}">
 															<img
-																src="${pageContext.request.contextPath}/${item.bookModel.book_img_url}"
-																alt="<c:out value='${item.bookModel.book_title}'/>"
+																src="${pageContext.request.contextPath}/${item.bookModel.bookImgUrl}"
+																alt="<c:out value='${item.bookModel.bookTitle}'/>"
 																class="book-image">
 														</c:when>
 														<c:otherwise>
 															<img
-																src="${pageContext.request.contextPath}${item.bookModel.book_img_url}"
-																alt="<c:out value='${item.bookModel.book_title}'/>"
+																src="${pageContext.request.contextPath}${item.bookModel.bookImgUrl}"
+																alt="<c:out value='${item.bookModel.bookTitle}'/>"
 																class="book-image">
 														</c:otherwise>
 													</c:choose>
@@ -106,7 +106,7 @@
 												<%-- Access properties via item.bookModel --%>
 												<%-- Display Author Name fetched by the service --%>
 												<h3>${item.bookModel.authorName}</h3>
-												<p>${item.bookModel.book_title}</p>
+												<p>${item.bookModel.bookTitle}</p>
 												<div class="price">
 													Rs.
 													<fmt:formatNumber value="${item.bookModel.price}"

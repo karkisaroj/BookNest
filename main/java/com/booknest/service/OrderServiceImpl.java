@@ -582,7 +582,7 @@ public class OrderServiceImpl implements OrderService {
 		return orders;
 	}
 
-	// Helper method to map a ResultSet to an OrderModel with safe column access
+
 	private OrderModel mapResultSetToOrder(ResultSet rs) throws SQLException {
 		OrderModel order = new OrderModel();
 

@@ -21,17 +21,7 @@
 
     <link rel="stylesheet"
         href="${pageContext.request.contextPath}/css/addproduct.css">
-    <style>
-        /* Styling for the image preview */
-        .image-preview {
-            margin-top: 10px;
-            width: 150px; /* Set the width of the preview image */
-            height: auto; /* Maintain aspect ratio */
-            border: 1px solid #ddd;
-            padding: 5px;
-            display: none; /* Initially hide the preview */
-        }
-    </style>
+
 </head>
 
 <body>
