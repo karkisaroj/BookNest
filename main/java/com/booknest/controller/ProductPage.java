@@ -22,6 +22,21 @@ public class ProductPage extends HttpServlet {
 
 	private BookService bookService;
 
+	// Path constants
+	private static final String BOOKS_PAGE_PATH = "/books";
+	private static final String PRODUCT_PAGE_JSP_PATH = "/WEB-INF/pages/product-page.jsp";
+
+	// Parameter constants
+	private static final String BOOK_ID_PARAM = "bookId";
+	private static final String BOOK_ATTR = "book";
+	private static final String FLASH_ERROR_MESSAGE_KEY = "flashErrorMessage";
+
+	// Message constants
+	private static final String NO_BOOK_SELECTED_MESSAGE = "No book selected. Please choose a book.";
+	private static final String BOOK_NOT_FOUND_MESSAGE = "The requested book could not be found.";
+	private static final String INVALID_BOOK_ID_MESSAGE = "Invalid book ID format.";
+	private static final String BOOK_LOAD_ERROR_PREFIX = "Error loading book details: ";
+
 	/**
 	 * Initializes the book service.
 	 */
@@ -38,12 +53,12 @@ public class ProductPage extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String bookIdParam = request.getParameter("bookId");
+		String bookIdParam = request.getParameter(BOOK_ID_PARAM);
 
 		// Validate book ID parameter
 		if (bookIdParam == null || bookIdParam.trim().isEmpty()) {
-			request.getSession().setAttribute("flashErrorMessage", "No book selected. Please choose a book.");
-			response.sendRedirect(request.getContextPath() + "/books");
+			request.getSession().setAttribute(FLASH_ERROR_MESSAGE_KEY, NO_BOOK_SELECTED_MESSAGE);
+			response.sendRedirect(request.getContextPath() + BOOKS_PAGE_PATH);
 			return;
 		}
 
@@ -54,23 +69,23 @@ public class ProductPage extends HttpServlet {
 
 			// Check if book exists
 			if (book == null) {
-				request.getSession().setAttribute("flashErrorMessage", "The requested book could not be found.");
-				response.sendRedirect(request.getContextPath() + "/books");
+				request.getSession().setAttribute(FLASH_ERROR_MESSAGE_KEY, BOOK_NOT_FOUND_MESSAGE);
+				response.sendRedirect(request.getContextPath() + BOOKS_PAGE_PATH);
 				return;
 			}
 
 			// Set book as request attribute
-			request.setAttribute("book", book);
+			request.setAttribute(BOOK_ATTR, book);
 
 			// Forward to product page
-			request.getRequestDispatcher("/WEB-INF/pages/product-page.jsp").forward(request, response);
+			request.getRequestDispatcher(PRODUCT_PAGE_JSP_PATH).forward(request, response);
 
 		} catch (NumberFormatException e) {
-			request.getSession().setAttribute("flashErrorMessage", "Invalid book ID format.");
-			response.sendRedirect(request.getContextPath() + "/books");
+			request.getSession().setAttribute(FLASH_ERROR_MESSAGE_KEY, INVALID_BOOK_ID_MESSAGE);
+			response.sendRedirect(request.getContextPath() + BOOKS_PAGE_PATH);
 		} catch (Exception e) {
-			request.getSession().setAttribute("flashErrorMessage", "Error loading book details: " + e.getMessage());
-			response.sendRedirect(request.getContextPath() + "/books");
+			request.getSession().setAttribute(FLASH_ERROR_MESSAGE_KEY, BOOK_LOAD_ERROR_PREFIX + e.getMessage());
+			response.sendRedirect(request.getContextPath() + BOOKS_PAGE_PATH);
 		}
 	}
 }

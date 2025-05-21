@@ -22,7 +22,6 @@ public class UserServiceImpl implements UserService {
 
 	// --- Configuration Constants ---
 	private static final String DEFAULT_PROFILE_IMAGE = "resources/images/system/person.png";
-	// *** RE-ADD MAX FILE SIZE ***
 	private static final long MAX_FILE_SIZE_BYTES = 3 * 1024 * 1024;
 	private static final String PROFILE_IMAGE_SAVE_SUBFOLDER = "/profile";
 	private static final String PROFILE_IMAGE_RELATIVE_BASE_PATH = "resources/images/system";

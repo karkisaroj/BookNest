@@ -45,7 +45,13 @@ public class CheckoutController extends HttpServlet {
 	}
 
 	/**
-	 * Handles GET requests to display the checkout page.
+	 * Handles GET requests to display the checkout page. Retrieves the user's cart
+	 * items, calculates totals, and forwards to the checkout JSP page.
+	 * 
+	 * @param request  The HttpServletRequest object containing client request
+	 * @param response The HttpServletResponse object for sending the response
+	 * @throws ServletException if a servlet-specific error occurs
+	 * @throws IOException      if an I/O error occurs during response handling
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -90,7 +96,16 @@ public class CheckoutController extends HttpServlet {
 	}
 
 	/**
-	 * Handles POST requests to process order submissions.
+	 * Handles POST requests to process order submissions. Validates user
+	 * authentication, cart contents, and address information before processing the
+	 * checkout. Creates an order record and redirects to order confirmation on
+	 * success.
+	 * 
+	 * @param request  The HttpServletRequest object containing order details and
+	 *                 address information
+	 * @param response The HttpServletResponse object for sending the response
+	 * @throws ServletException if a servlet-specific error occurs
+	 * @throws IOException      if an I/O error occurs during response handling
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

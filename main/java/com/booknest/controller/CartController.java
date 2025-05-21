@@ -26,6 +26,27 @@ public class CartController extends HttpServlet {
 	private static final long serialVersionUID = 3L;
 	private CartService cartService;
 	private static final String USER_ID_SESSION_KEY = "userID";
+	
+	// Path constants
+	private final String loginPagePath = "/login";
+	private final String cartPagePath = "/WEB-INF/pages/cart.jsp";
+	private final String homePagePath = "/home";
+	
+	// Message constants
+	private final String loginToViewCartMessage = "Please log in to view your cart";
+	private final String loginToModifyCartMessage = "Please log in to modify your cart.";
+	private final String missingActionMessage = "Invalid request: Missing action.";
+	private final String invalidCartOperationMessage = "Invalid cart operation.";
+	private final String invalidInputMessage = "Invalid input provided (e.g., non-numeric quantity).";
+	private final String unexpectedErrorMessage = "An unexpected server error occurred.";
+	private final String itemAddedMessage = "Item added to cart!";
+	private final String quantityUpdatedMessage = "Cart quantity updated.";
+	private final String quantityUpdateFailedMessage = "Could not update cart quantity.";
+	private final String missingCartItemIdMessage = "Missing cartItemId parameter for remove action.";
+	private final String itemRemovedMessage = "Item removed from cart.";
+	private final String itemRemoveFailedMessage = "Could not remove item from cart.";
+	private final String cartLoadErrorPrefix = "Could not load cart: ";
+	private final String unexpectedCartLoadErrorMessage = "Unexpected error loading cart.";
 
 	/**
 	 * Initializes the cart service.
@@ -43,7 +64,7 @@ public class CartController extends HttpServlet {
 		Integer userId = SessionUtil.getAttribute(req, USER_ID_SESSION_KEY, Integer.class);
 
 		if (userId == null) {
-			resp.sendRedirect(req.getContextPath() + "/login?message=Please+log+in+to+view+your+cart");
+			resp.sendRedirect(req.getContextPath() + loginPagePath + "?message=" + loginToViewCartMessage);
 			return;
 		}
 
@@ -64,12 +85,12 @@ public class CartController extends HttpServlet {
 			}
 			req.setAttribute("cartTotal", total);
 		} catch (CartServiceException e) {
-			req.setAttribute("errorMessage", "Could not load cart: " + e.getMessage());
+			req.setAttribute("errorMessage", cartLoadErrorPrefix + e.getMessage());
 		} catch (Exception e) {
-			req.setAttribute("errorMessage", "Unexpected error loading cart.");
+			req.setAttribute("errorMessage", unexpectedCartLoadErrorMessage);
 		}
 
-		req.getRequestDispatcher("/WEB-INF/pages/cart.jsp").forward(req, resp);
+		req.getRequestDispatcher(cartPagePath).forward(req, resp);
 	}
 
 	/**
@@ -85,15 +106,15 @@ public class CartController extends HttpServlet {
 
 		// User authentication check
 		if (userId == null) {
-			session.setAttribute("flashErrorMessage", "Please log in to modify your cart.");
-			resp.sendRedirect(req.getContextPath() + "/login");
+			session.setAttribute("flashErrorMessage", loginToModifyCartMessage);
+			resp.sendRedirect(req.getContextPath() + loginPagePath);
 			return;
 		}
 
 		// Validate action parameter
 		if (action == null || action.trim().isEmpty()) {
-			session.setAttribute("flashErrorMessage", "Invalid request: Missing action.");
-			resp.sendRedirect(req.getContextPath() + "/home");
+			session.setAttribute("flashErrorMessage", missingActionMessage);
+			resp.sendRedirect(req.getContextPath() + homePagePath);
 			return;
 		}
 
@@ -110,7 +131,7 @@ public class CartController extends HttpServlet {
 						&& !sourceUrl.contains("/WEB-INF/")) {
 					redirectUrl = sourceUrl;
 				} else {
-					redirectUrl = contextPath + "/home";
+					redirectUrl = contextPath + homePagePath;
 				}
 				break;
 
@@ -125,8 +146,8 @@ public class CartController extends HttpServlet {
 				break;
 
 			default:
-				session.setAttribute("flashErrorMessage", "Invalid cart operation.");
-				redirectUrl = contextPath + "/home";
+				session.setAttribute("flashErrorMessage", invalidCartOperationMessage);
+				redirectUrl = contextPath + homePagePath;
 			}
 		} catch (CartServiceException e) {
 			session.setAttribute("flashErrorMessage", "Error: " + e.getMessage());
@@ -135,20 +156,20 @@ public class CartController extends HttpServlet {
 			redirectUrl = req.getParameter("sourceUrl");
 			if (redirectUrl == null || redirectUrl.trim().isEmpty() || !redirectUrl.startsWith(contextPath)
 					|| redirectUrl.contains("/WEB-INF/")) {
-				redirectUrl = contextPath + "/home";
+				redirectUrl = contextPath + homePagePath;
 			}
 		} catch (NumberFormatException e) {
-			session.setAttribute("flashErrorMessage", "Invalid input provided (e.g., non-numeric quantity).");
+			session.setAttribute("flashErrorMessage", invalidInputMessage);
 
 			// Try to use sourceUrl as fallback for redirect
 			redirectUrl = req.getParameter("sourceUrl");
 			if (redirectUrl == null || redirectUrl.trim().isEmpty() || !redirectUrl.startsWith(contextPath)
 					|| redirectUrl.contains("/WEB-INF/")) {
-				redirectUrl = contextPath + "/home";
+				redirectUrl = contextPath + homePagePath;
 			}
 		} catch (Exception e) {
-			session.setAttribute("flashErrorMessage", "An unexpected server error occurred.");
-			redirectUrl = contextPath + "/home";
+			session.setAttribute("flashErrorMessage", unexpectedErrorMessage);
+			redirectUrl = contextPath + homePagePath;
 		}
 
 		resp.sendRedirect(redirectUrl);
@@ -183,7 +204,7 @@ public class CartController extends HttpServlet {
 		}
 
 		cartService.addItemToCart(userId, bookId, quantity);
-		session.setAttribute("flashSuccessMessage", "Item added to cart!");
+		session.setAttribute("flashSuccessMessage", itemAddedMessage);
 	}
 
 	/**
@@ -209,9 +230,9 @@ public class CartController extends HttpServlet {
 
 		boolean success = cartService.updateCartItemQuantity(userId, cartItemId, newQuantity);
 		if (success) {
-			session.setAttribute("flashSuccessMessage", "Cart quantity updated.");
+			session.setAttribute("flashSuccessMessage", quantityUpdatedMessage);
 		} else {
-			session.setAttribute("flashErrorMessage", "Could not update cart quantity.");
+			session.setAttribute("flashErrorMessage", quantityUpdateFailedMessage);
 		}
 	}
 
@@ -230,16 +251,16 @@ public class CartController extends HttpServlet {
 		// Ensure cartItemId parameter is present
 		String cartItemIdParam = request.getParameter("cartItemId");
 		if (cartItemIdParam == null || cartItemIdParam.trim().isEmpty()) {
-			throw new NumberFormatException("Missing cartItemId parameter for remove action.");
+			throw new NumberFormatException(missingCartItemIdMessage);
 		}
 
 		int cartItemId = Integer.parseInt(cartItemIdParam);
 		boolean success = cartService.removeItemFromCart(userId, cartItemId);
 
 		if (success) {
-			session.setAttribute("flashSuccessMessage", "Item removed from cart.");
+			session.setAttribute("flashSuccessMessage", itemRemovedMessage);
 		} else {
-			session.setAttribute("flashErrorMessage", "Could not remove item from cart.");
+			session.setAttribute("flashErrorMessage", itemRemoveFailedMessage);
 		}
 	}
 }
