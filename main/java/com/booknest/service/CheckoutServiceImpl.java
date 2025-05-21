@@ -39,6 +39,11 @@ public class CheckoutServiceImpl implements CheckoutService {
 	private static final String ERROR_CART_CLEAR_FAILED = "Failed to clear cart: %s";
 	private static final String ERROR_PAYMENT_CREATION_FAILED = "Failed to create payment record: %s";
 
+	// Log message constants
+	private static final String LOG_CART_CLEARED = "Cart cleared for user ID: %d";
+	private static final String LOG_CREATING_PAYMENT = "Creating payment record for order ID: %d with amount: %s, method: %s, status: %s";
+	private static final String LOG_PAYMENT_CREATED = "Payment record created with ID: %d";
+
 	/**
 	 * Default constructor that initializes required services.
 	 */
@@ -122,8 +127,19 @@ public class CheckoutServiceImpl implements CheckoutService {
 
 			// If order was created successfully
 			if (orderId > 0) {
+				// Format payment method
+				String formattedPaymentMethod = formatPaymentMethod(paymentMethod);
+				System.out.println(String.format(LOG_CREATING_PAYMENT, orderId, totalAmount, formattedPaymentMethod,
+						PAYMENT_STATUS_COMPLETED));
+
+				// Create payment record
+				int paymentId = createPaymentRecord(orderId, totalAmount, formattedPaymentMethod);
+				System.out.println(String.format(LOG_PAYMENT_CREATED, paymentId));
+
+				// Clear the cart
 				try {
 					cartService.clearCart(userId);
+					System.out.println(String.format(LOG_CART_CLEARED, userId));
 				} catch (CartServiceException e) {
 					System.err.println(String.format(ERROR_CART_CLEAR_FAILED, e.getMessage()));
 					// Don't fail the checkout process if cart clearing fails

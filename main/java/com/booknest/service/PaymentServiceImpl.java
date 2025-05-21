@@ -60,12 +60,15 @@ public class PaymentServiceImpl implements PaymentService {
 			// Set default status as Pending if not provided
 			if (status == null || status.trim().isEmpty()) {
 				status = PAYMENT_STATUS_PENDING;
-
+				System.out.println("Using default payment status: " + status);
 			} else {
 				// Ensure status is properly capitalized
 				status = capitalizeStatus(status);
-
+				System.out.println("Using provided payment status: " + status);
 			}
+
+			System.out.println("Creating payment record - Order ID: " + orderId + ", Amount: " + amount + ", Method: "
+					+ method + ", Status: " + status);
 
 			// Get connection and disable auto-commit for transaction
 			conn = DbConfiguration.getDbConnection();
@@ -80,6 +83,8 @@ public class PaymentServiceImpl implements PaymentService {
 				ps.setString(3, method);
 				ps.setString(4, status);
 
+				System.out.println("Executing SQL: " + ps.toString());
+
 				int affectedRows = ps.executeUpdate();
 				if (affectedRows == 0) {
 					conn.rollback();
@@ -90,7 +95,7 @@ public class PaymentServiceImpl implements PaymentService {
 				try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
 					if (generatedKeys.next()) {
 						generatedPaymentId = generatedKeys.getInt(1);
-
+						System.out.println("Payment created successfully with ID: " + generatedPaymentId);
 					} else {
 						conn.rollback();
 						System.err.println(ERROR_CREATE_NO_ID);
@@ -100,7 +105,7 @@ public class PaymentServiceImpl implements PaymentService {
 
 				// Commit transaction
 				conn.commit();
-
+				System.out.println("Transaction committed successfully");
 			}
 		} catch (SQLException e) {
 			// Rollback transaction in case of error
@@ -125,7 +130,7 @@ public class PaymentServiceImpl implements PaymentService {
 				try {
 					conn.setAutoCommit(true);
 					conn.close();
-
+					System.out.println("Database connection closed");
 				} catch (SQLException e) {
 					System.err.println("Error closing connection: " + e.getMessage());
 				}
@@ -151,12 +156,14 @@ public class PaymentServiceImpl implements PaymentService {
 				PreparedStatement ps = conn.prepareStatement(getPaymentByIdSql)) {
 
 			ps.setInt(1, paymentId);
-			;
+			System.out.println("Fetching payment with ID: " + paymentId);
 
 			try (ResultSet rs = ps.executeQuery()) {
 				if (rs.next()) {
 					payment = mapResultSetToPayment(rs);
-
+					System.out.println("Found payment with ID: " + paymentId);
+				} else {
+					System.out.println("No payment found with ID: " + paymentId);
 				}
 			}
 		} catch (SQLException e) {
@@ -200,14 +207,15 @@ public class PaymentServiceImpl implements PaymentService {
 				ps.setString(1, newStatus);
 				ps.setInt(2, paymentId);
 
+				System.out.println("Updating payment ID " + paymentId + " status to: " + newStatus);
 				rowsUpdated = ps.executeUpdate();
 
 				if (rowsUpdated > 0) {
 					conn.commit();
-
+					System.out.println("Successfully updated payment status for ID: " + paymentId);
 				} else {
 					conn.rollback();
-
+					System.out.println("No records updated for payment ID: " + paymentId);
 				}
 			}
 		} catch (SQLException e) {
@@ -266,14 +274,16 @@ public class PaymentServiceImpl implements PaymentService {
 				ps.setString(1, newStatus);
 				ps.setInt(2, orderId);
 
+				System.out.println("Updating payment status for order ID " + orderId + " to: " + newStatus);
 				rowsUpdated = ps.executeUpdate();
 
 				if (rowsUpdated > 0) {
 					conn.commit();
-
+					System.out.println("Successfully updated payment status for order ID: " + orderId
+							+ " (affected rows: " + rowsUpdated + ")");
 				} else {
 					conn.rollback();
-
+					System.out.println("No records updated for order ID: " + orderId);
 				}
 			}
 		} catch (SQLException e) {
@@ -342,13 +352,14 @@ public class PaymentServiceImpl implements PaymentService {
 				PreparedStatement ps = conn.prepareStatement(getPaymentsByOrderIdSql)) {
 
 			ps.setInt(1, orderId);
+			System.out.println("Retrieving payments for order ID: " + orderId);
 
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
 					PaymentModel payment = mapResultSetToPayment(rs);
 					payments.add(payment);
 				}
-
+				System.out.println("Found " + payments.size() + " payments for order ID: " + orderId);
 			}
 		} catch (SQLException e) {
 			System.err.println("Database error retrieving payments for order ID: " + orderId);

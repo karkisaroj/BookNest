@@ -2,7 +2,6 @@ package com.booknest.controller;
 
 import com.booknest.service.UserService;
 import com.booknest.service.UserServiceImpl;
-import com.booknest.util.SessionUtil;
 import com.booknest.util.imageUtil;
 
 import jakarta.servlet.ServletException;
@@ -15,6 +14,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 
 import java.io.IOException;
+import java.io.File;
 
 /**
  * Controller for handling user account operations including profile image
@@ -48,7 +48,6 @@ public class MyAccountController extends HttpServlet {
 
 	// Path constants
 	private static final String LOGIN_PAGE_PATH = "/login";
-	// Fix this path to match your project structure
 	private static final String MYACCOUNT_JSP_PATH = "/WEB-INF/pages/myaccount.jsp";
 
 	// Resource path constants
@@ -94,7 +93,15 @@ public class MyAccountController extends HttpServlet {
 
 		// Get profile image URL from service
 		String profileImageUrl = userService.getProfileImageUrl(userName);
-		System.out.println("Profile image URL: " + profileImageUrl);
+		System.out.println("Original profile image URL: " + profileImageUrl);
+
+		// FIX 1: Format the image URL correctly - remove leading slash if present
+		if (profileImageUrl != null) {
+			if (profileImageUrl.startsWith("/")) {
+				profileImageUrl = profileImageUrl.substring(1);
+			}
+			System.out.println("Formatted profile image URL: " + profileImageUrl);
+		}
 
 		// Set attributes for the JSP
 		request.setAttribute(USERNAME_SESSION_KEY, userName);
@@ -105,7 +112,24 @@ public class MyAccountController extends HttpServlet {
 		request.setAttribute(ADDRESS_SESSION_KEY, address);
 		request.setAttribute(PROFILE_IMAGE_URL_PARAM, profileImageUrl);
 
-		// Forward to the JSP with correct path
+		// FIX 2: Clear any success message immediately after setting it to request
+		String successMessage = (String) session.getAttribute(SUCCESS_MESSAGE_KEY);
+		if (successMessage != null) {
+			request.setAttribute(SUCCESS_MESSAGE_KEY, successMessage);
+			// Immediately remove from session
+			session.removeAttribute(SUCCESS_MESSAGE_KEY);
+			System.out.println("Set success message to request and removed from session: " + successMessage);
+		}
+
+		String errorMessage = (String) session.getAttribute(ERROR_MESSAGE_KEY);
+		if (errorMessage != null) {
+			request.setAttribute(ERROR_MESSAGE_KEY, errorMessage);
+			// Immediately remove from session
+			session.removeAttribute(ERROR_MESSAGE_KEY);
+			System.out.println("Set error message to request and removed from session: " + errorMessage);
+		}
+
+		// Forward to the JSP
 		System.out.println("Forwarding to " + MYACCOUNT_JSP_PATH);
 		request.getRequestDispatcher(MYACCOUNT_JSP_PATH).forward(request, response);
 	}
@@ -127,6 +151,10 @@ public class MyAccountController extends HttpServlet {
 		}
 
 		try {
+			// Clear any previous messages
+			session.removeAttribute(SUCCESS_MESSAGE_KEY);
+			session.removeAttribute(ERROR_MESSAGE_KEY);
+
 			// Get uploaded file
 			Part filePart = request.getPart(IMAGE_PARAM);
 			System.out.println("File part received: " + (filePart != null ? "yes" : "no"));
@@ -142,17 +170,21 @@ public class MyAccountController extends HttpServlet {
 					return;
 				}
 
-				// Try to upload the file
-				imageUtil util = new imageUtil();
-				String realPath = getServletContext().getRealPath("");
-				System.out.println("Real path: " + realPath);
+				// Get the actual webapp path
+				String webappPath = getServletContext().getRealPath("/");
+				System.out.println("Webapp path: " + webappPath);
 
-				boolean uploaded = util.uploadImage(filePart, realPath, PROFILE_IMAGE_DIR);
+				// Upload the image
+				imageUtil util = new imageUtil();
+
+				// Use more direct path to ensure file is saved in the right location
+				boolean uploaded = util.uploadImage(filePart, webappPath, PROFILE_IMAGE_DIR);
 
 				if (uploaded) {
 					String imageName = util.getImageNameFromPart(filePart);
+					// Set the correct relative path for database
 					String relativePath = RELATIVE_IMAGE_PATH_PREFIX + imageName;
-					System.out.println("Image uploaded, path: " + relativePath);
+					System.out.println("Image uploaded successfully, path: " + relativePath);
 
 					// Update database
 					try {
@@ -166,6 +198,7 @@ public class MyAccountController extends HttpServlet {
 						}
 					} catch (Exception e) {
 						System.err.println("Error updating database: " + e.getMessage());
+						e.printStackTrace();
 						session.setAttribute(ERROR_MESSAGE_KEY, DB_UPDATE_ERROR_MESSAGE);
 					}
 				} else {

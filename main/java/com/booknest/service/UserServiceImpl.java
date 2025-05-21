@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
 	private static final String DEFAULT_PROFILE_IMAGE = "resources/images/system/person.png";
 	private static final long MAX_FILE_SIZE_BYTES = 3 * 1024 * 1024;
 	private static final String PROFILE_IMAGE_SAVE_SUBFOLDER = "/profile";
-	private static final String PROFILE_IMAGE_RELATIVE_BASE_PATH = "resources/images/system";
+	private static final String PROFILE_IMAGE_RELATIVE_BASE_PATH = "resources/images/UploadedProfilePicture";
 
 	private final imageUtil imgUtil;
 	private static final DecimalFormat df = new DecimalFormat("#.##");
