@@ -37,7 +37,7 @@ public class imageUtil {
 			String normalizedFolder = saveFolder.replace('\\', '/');
 
 			// Direct path to project directory
-			String projectPath = "C:/Users/Acer/Documents/BookNest/src/main/webapp/resources/" + normalizedFolder;
+			String projectPath = "C:\\Users\\noble\\NewWorkSpaceCoursework\\BookNest\\src\\main\\webapp\\resources\\" + normalizedFolder;
 			File projectDir = new File(projectPath);
 			if (!projectDir.exists()) {
 				projectDir.mkdirs();
