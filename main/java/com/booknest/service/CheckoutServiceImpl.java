@@ -76,12 +76,32 @@ public class CheckoutServiceImpl implements CheckoutService {
 	 * @param state         The state for delivery
 	 * @param zipCode       The zip code for delivery
 	 * @param phone         The contact phone number
+	 * @param paymentMethod The payment method to use (e.g., "cod", "online")
 	 * @return The ID of the created order, or -1 if checkout failed
 	 * @throws SQLException If there's a database error
 	 */
 	@Override
 	public int processCheckout(Integer userId, List<CartItem> cartItems, String streetAddress, String city,
 			String state, String zipCode, String phone) throws SQLException {
+		return processCheckout(userId, cartItems, streetAddress, city, state, zipCode, phone, PARAM_COD);
+	}
+
+	/**
+	 * Processes a checkout with specified payment method.
+	 * 
+	 * @param userId        The ID of the user checking out
+	 * @param cartItems     The items in the cart
+	 * @param streetAddress The street address for delivery
+	 * @param city          The city for delivery
+	 * @param state         The state for delivery
+	 * @param zipCode       The zip code for delivery
+	 * @param phone         The contact phone number
+	 * @param paymentMethod The payment method to use (e.g., "cod", "online")
+	 * @return The ID of the created order, or -1 if checkout failed
+	 * @throws SQLException If there's a database error
+	 */
+	public int processCheckout(Integer userId, List<CartItem> cartItems, String streetAddress, String city,
+			String state, String zipCode, String phone, String paymentMethod) throws SQLException {
 
 		// Validate inputs
 		if (userId == null || cartItems == null || cartItems.isEmpty()
@@ -99,18 +119,36 @@ public class CheckoutServiceImpl implements CheckoutService {
 		BigDecimal discount = ZERO_DISCOUNT; // Implement discount logic if needed
 		BigDecimal totalAmount = subtotal.add(shippingCost).subtract(discount);
 
-		// Create the order
-		int orderId = orderService.createOrder(userId, cartItems, formattedAddress, subtotal, shippingCost, discount,
-				totalAmount);
+		int orderId = -1;
+		try {
+			// Create the order
+			orderId = orderService.createOrder(userId, cartItems, formattedAddress, subtotal, shippingCost, discount,
+					totalAmount);
 
-		// If order was created successfully, clear the cart
-		if (orderId > 0) {
-			try {
-				cartService.clearCart(userId);
-			} catch (CartServiceException e) {
-				System.err.println(String.format(ERROR_CART_CLEAR_FAILED, e.getMessage()));
-				// Don't fail the checkout process if cart clearing fails
+			// If order was created successfully
+			if (orderId > 0) {
+				// Format payment method
+				String formattedPaymentMethod = formatPaymentMethod(paymentMethod);
+				System.out.println(String.format(LOG_CREATING_PAYMENT, orderId, totalAmount, formattedPaymentMethod,
+						PAYMENT_STATUS_COMPLETED));
+
+				// Create payment record
+				int paymentId = createPaymentRecord(orderId, totalAmount, formattedPaymentMethod);
+				System.out.println(String.format(LOG_PAYMENT_CREATED, paymentId));
+
+				// Clear the cart
+				try {
+					cartService.clearCart(userId);
+					System.out.println(String.format(LOG_CART_CLEARED, userId));
+				} catch (CartServiceException e) {
+					System.err.println(String.format(ERROR_CART_CLEAR_FAILED, e.getMessage()));
+					// Don't fail the checkout process if cart clearing fails
+				}
 			}
+		} catch (SQLException e) {
+			System.err.println("Error during checkout process: " + e.getMessage());
+			e.printStackTrace();
+			throw e;
 		}
 
 		return orderId;
@@ -208,11 +246,13 @@ public class CheckoutServiceImpl implements CheckoutService {
 		// Always use Completed status
 		String paymentStatus = PAYMENT_STATUS_COMPLETED;
 
+		System.out.println("Creating payment record for order ID: " + orderId + " with amount: " + amount + ", method: "
+				+ paymentMethod + ", status: " + paymentStatus);
 
 		try {
 			// Create payment using the payment service
 			int paymentId = paymentService.createPayment(orderId, amount, paymentMethod, paymentStatus);
-
+			System.out.println("Created payment record with ID: " + paymentId);
 			return paymentId;
 		} catch (SQLException e) {
 			System.err.println(String.format(ERROR_PAYMENT_CREATION_FAILED, e.getMessage()));

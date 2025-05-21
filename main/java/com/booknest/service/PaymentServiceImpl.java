@@ -43,53 +43,98 @@ public class PaymentServiceImpl implements PaymentService {
 	@Override
 	public int createPayment(int orderId, BigDecimal amount, String method, String status) throws SQLException {
 		int generatedPaymentId = -1;
+		Connection conn = null;
 
-		if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
-			throw new IllegalArgumentException(ERROR_AMOUNT_INVALID);
-		}
-
-		if (method == null || method.trim().isEmpty()) {
-			throw new IllegalArgumentException(ERROR_METHOD_EMPTY);
-		}
-
-		// Set default status as Pending if not provided
-		if (status == null || status.trim().isEmpty()) {
-			status = PAYMENT_STATUS_PENDING;
-		} else {
-			// Ensure status is properly capitalized
-			status = capitalizeStatus(status);
-		}
-
-		String createPaymentSql = "INSERT INTO payment (orderID, payment_date, payment_amount, payment_method, payment_status) "
-				+ "VALUES (?, NOW(), ?, ?, ?)";
-
-		try (Connection conn = DbConfiguration.getDbConnection();
-				PreparedStatement ps = conn.prepareStatement(createPaymentSql, Statement.RETURN_GENERATED_KEYS)) {
-
-			ps.setInt(1, orderId);
-			ps.setBigDecimal(2, amount);
-			ps.setString(3, method);
-			ps.setString(4, status);
-
-			int affectedRows = ps.executeUpdate();
-			if (affectedRows == 0) {
-				throw new SQLException(ERROR_CREATE_NO_ROWS);
+		try {
+			// Validate input parameters
+			if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+				System.err.println("Invalid payment amount: " + (amount == null ? "null" : amount.toString()));
+				throw new IllegalArgumentException(ERROR_AMOUNT_INVALID);
 			}
 
-			try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
-				if (generatedKeys.next()) {
-					generatedPaymentId = generatedKeys.getInt(1);
-				} else {
-					throw new SQLException(ERROR_CREATE_NO_ID);
+			if (method == null || method.trim().isEmpty()) {
+				System.err.println("Invalid payment method: empty or null");
+				throw new IllegalArgumentException(ERROR_METHOD_EMPTY);
+			}
+
+			// Set default status as Pending if not provided
+			if (status == null || status.trim().isEmpty()) {
+				status = PAYMENT_STATUS_PENDING;
+				System.out.println("Using default payment status: " + status);
+			} else {
+				// Ensure status is properly capitalized
+				status = capitalizeStatus(status);
+				System.out.println("Using provided payment status: " + status);
+			}
+
+			System.out.println("Creating payment record - Order ID: " + orderId + ", Amount: " + amount + ", Method: "
+					+ method + ", Status: " + status);
+
+			// Get connection and disable auto-commit for transaction
+			conn = DbConfiguration.getDbConnection();
+			conn.setAutoCommit(false);
+
+			String createPaymentSql = "INSERT INTO payment (orderID, payment_date, payment_amount, payment_method, payment_status) "
+					+ "VALUES (?, NOW(), ?, ?, ?)";
+
+			try (PreparedStatement ps = conn.prepareStatement(createPaymentSql, Statement.RETURN_GENERATED_KEYS)) {
+				ps.setInt(1, orderId);
+				ps.setBigDecimal(2, amount);
+				ps.setString(3, method);
+				ps.setString(4, status);
+
+				System.out.println("Executing SQL: " + ps.toString());
+
+				int affectedRows = ps.executeUpdate();
+				if (affectedRows == 0) {
+					conn.rollback();
+					System.err.println(ERROR_CREATE_NO_ROWS);
+					throw new SQLException(ERROR_CREATE_NO_ROWS);
 				}
+
+				try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+					if (generatedKeys.next()) {
+						generatedPaymentId = generatedKeys.getInt(1);
+						System.out.println("Payment created successfully with ID: " + generatedPaymentId);
+					} else {
+						conn.rollback();
+						System.err.println(ERROR_CREATE_NO_ID);
+						throw new SQLException(ERROR_CREATE_NO_ID);
+					}
+				}
+
+				// Commit transaction
+				conn.commit();
+				System.out.println("Transaction committed successfully");
 			}
 		} catch (SQLException e) {
-			System.err.println("Database error creating payment for order ID: " + orderId);
+			// Rollback transaction in case of error
+			if (conn != null) {
+				try {
+					conn.rollback();
+					System.err.println("Transaction rolled back due to error");
+				} catch (SQLException ex) {
+					System.err.println("Failed to rollback transaction: " + ex.getMessage());
+				}
+			}
+			System.err.println("Database error creating payment for order ID " + orderId + ": " + e.getMessage());
 			e.printStackTrace();
 			throw e;
 		} catch (ClassNotFoundException e) {
 			System.err.println("Database connection error: " + e.getMessage());
+			e.printStackTrace();
 			throw new SQLException(ERROR_DB_CONNECTION, e);
+		} finally {
+			// Reset auto-commit and close connection
+			if (conn != null) {
+				try {
+					conn.setAutoCommit(true);
+					conn.close();
+					System.out.println("Database connection closed");
+				} catch (SQLException e) {
+					System.err.println("Error closing connection: " + e.getMessage());
+				}
+			}
 		}
 
 		return generatedPaymentId;
@@ -111,10 +156,14 @@ public class PaymentServiceImpl implements PaymentService {
 				PreparedStatement ps = conn.prepareStatement(getPaymentByIdSql)) {
 
 			ps.setInt(1, paymentId);
+			System.out.println("Fetching payment with ID: " + paymentId);
 
 			try (ResultSet rs = ps.executeQuery()) {
 				if (rs.next()) {
 					payment = mapResultSetToPayment(rs);
+					System.out.println("Found payment with ID: " + paymentId);
+				} else {
+					System.out.println("No payment found with ID: " + paymentId);
 				}
 			}
 		} catch (SQLException e) {
@@ -147,23 +196,51 @@ public class PaymentServiceImpl implements PaymentService {
 		newStatus = capitalizeStatus(newStatus);
 
 		int rowsUpdated = 0;
+		Connection conn = null;
 
-		String updatePaymentStatusSql = "UPDATE payment SET payment_status = ? WHERE paymentID = ?";
-		try (Connection conn = DbConfiguration.getDbConnection();
-				PreparedStatement ps = conn.prepareStatement(updatePaymentStatusSql)) {
+		try {
+			conn = DbConfiguration.getDbConnection();
+			conn.setAutoCommit(false);
 
-			ps.setString(1, newStatus);
-			ps.setInt(2, paymentId);
+			String updatePaymentStatusSql = "UPDATE payment SET payment_status = ? WHERE paymentID = ?";
+			try (PreparedStatement ps = conn.prepareStatement(updatePaymentStatusSql)) {
+				ps.setString(1, newStatus);
+				ps.setInt(2, paymentId);
 
-			rowsUpdated = ps.executeUpdate();
+				System.out.println("Updating payment ID " + paymentId + " status to: " + newStatus);
+				rowsUpdated = ps.executeUpdate();
 
+				if (rowsUpdated > 0) {
+					conn.commit();
+					System.out.println("Successfully updated payment status for ID: " + paymentId);
+				} else {
+					conn.rollback();
+					System.out.println("No records updated for payment ID: " + paymentId);
+				}
+			}
 		} catch (SQLException e) {
+			if (conn != null) {
+				try {
+					conn.rollback();
+				} catch (SQLException ex) {
+					// Ignore
+				}
+			}
 			System.err.println("Database error updating payment status for ID: " + paymentId);
 			e.printStackTrace();
 			throw e;
 		} catch (ClassNotFoundException e) {
 			System.err.println("Database connection error: " + e.getMessage());
 			throw new SQLException(ERROR_DB_CONNECTION, e);
+		} finally {
+			if (conn != null) {
+				try {
+					conn.setAutoCommit(true);
+					conn.close();
+				} catch (SQLException e) {
+					// Ignore
+				}
+			}
 		}
 
 		return rowsUpdated > 0;
@@ -186,22 +263,52 @@ public class PaymentServiceImpl implements PaymentService {
 		newStatus = capitalizeStatus(newStatus);
 
 		int rowsUpdated = 0;
+		Connection conn = null;
 
-		String updateOrderPaymentStatusSql = "UPDATE payment SET payment_status = ? WHERE orderID = ?";
-		try (Connection conn = DbConfiguration.getDbConnection();
-				PreparedStatement ps = conn.prepareStatement(updateOrderPaymentStatusSql)) {
+		try {
+			conn = DbConfiguration.getDbConnection();
+			conn.setAutoCommit(false);
 
-			ps.setString(1, newStatus);
-			ps.setInt(2, orderId);
+			String updateOrderPaymentStatusSql = "UPDATE payment SET payment_status = ? WHERE orderID = ?";
+			try (PreparedStatement ps = conn.prepareStatement(updateOrderPaymentStatusSql)) {
+				ps.setString(1, newStatus);
+				ps.setInt(2, orderId);
 
-			rowsUpdated = ps.executeUpdate();
+				System.out.println("Updating payment status for order ID " + orderId + " to: " + newStatus);
+				rowsUpdated = ps.executeUpdate();
+
+				if (rowsUpdated > 0) {
+					conn.commit();
+					System.out.println("Successfully updated payment status for order ID: " + orderId
+							+ " (affected rows: " + rowsUpdated + ")");
+				} else {
+					conn.rollback();
+					System.out.println("No records updated for order ID: " + orderId);
+				}
+			}
 		} catch (SQLException e) {
+			if (conn != null) {
+				try {
+					conn.rollback();
+				} catch (SQLException ex) {
+					// Ignore
+				}
+			}
 			System.err.println("Database error updating payment status for order ID: " + orderId);
 			e.printStackTrace();
 			throw e;
 		} catch (ClassNotFoundException e) {
 			System.err.println("Database connection error: " + e.getMessage());
 			throw new SQLException(ERROR_DB_CONNECTION, e);
+		} finally {
+			if (conn != null) {
+				try {
+					conn.setAutoCommit(true);
+					conn.close();
+				} catch (SQLException e) {
+					// Ignore
+				}
+			}
 		}
 
 		return rowsUpdated > 0;
@@ -245,12 +352,14 @@ public class PaymentServiceImpl implements PaymentService {
 				PreparedStatement ps = conn.prepareStatement(getPaymentsByOrderIdSql)) {
 
 			ps.setInt(1, orderId);
+			System.out.println("Retrieving payments for order ID: " + orderId);
 
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
 					PaymentModel payment = mapResultSetToPayment(rs);
 					payments.add(payment);
 				}
+				System.out.println("Found " + payments.size() + " payments for order ID: " + orderId);
 			}
 		} catch (SQLException e) {
 			System.err.println("Database error retrieving payments for order ID: " + orderId);
