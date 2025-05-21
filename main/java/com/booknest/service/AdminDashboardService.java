@@ -12,10 +12,9 @@ import com.booknest.model.BookModel;
 
 /**
  * Service class for managing the admin dashboard, including retrieving popular
- * books.
+ * books, calculating revenue, orders, and book sales statistics.
  * 
- * @author Noble-Nepal
- * 
+ * @author 23047591 Noble-Nepal
  */
 public class AdminDashboardService {
     
@@ -31,7 +30,6 @@ public class AdminDashboardService {
         try {
             dbConn = DbConfiguration.getDbConnection();
         } catch (SQLException | ClassNotFoundException ex) {
-            ex.printStackTrace();
             isConnectionError = true;
         }
     }
@@ -107,7 +105,6 @@ public class AdminDashboardService {
      */
     public List<BookModel> getTopPopularBooks() {
         if (isConnectionError) {
-            System.out.println("Connection Error!");
             return null;
         }
 
@@ -137,8 +134,21 @@ public class AdminDashboardService {
             return popularBooks;
 
         } catch (SQLException e) {
-            e.printStackTrace();
             return null;
+        }
+    }
+    
+    /**
+     * Closes the database connection when the service is no longer needed.
+     * Should be called explicitly when done with this service.
+     */
+    public void closeConnection() {
+        try {
+            if (dbConn != null && !dbConn.isClosed()) {
+                dbConn.close();
+            }
+        } catch (SQLException ex) {
+            // Silent handling of close errors
         }
     }
 }
