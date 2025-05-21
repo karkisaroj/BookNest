@@ -37,7 +37,7 @@ public class MyAccountService {
 	// Error message constants
 	private static final String ERROR_GET_PROFILE_IMAGE = "Error retrieving profile image for user: ";
 	private static final String ERROR_UPDATE_PROFILE_IMAGE = "Error updating profile image for user: ";
-	private static final String ERROR_UPLOAD_PROFILE_IMAGE = "Error uploading profile image: ";
+	
 
 	/**
 	 * Default constructor that initializes the image utility.
