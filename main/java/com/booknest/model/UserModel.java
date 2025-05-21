@@ -41,7 +41,6 @@ public class UserModel {
 		this.phoneNumber = phoneNumber;
 		this.address = address;
 
-//		this.user_img_url = user_img_url;
 	}
 
 	// Constructor for minimal fields

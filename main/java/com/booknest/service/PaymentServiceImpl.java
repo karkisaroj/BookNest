@@ -204,14 +204,15 @@ public class PaymentServiceImpl implements PaymentService {
 				ps.setString(1, newStatus);
 				ps.setInt(2, paymentId);
 
+				System.out.println("Updating payment ID " + paymentId + " status to: " + newStatus);
 				rowsUpdated = ps.executeUpdate();
 
 				if (rowsUpdated > 0) {
 					conn.commit();
-
+					System.out.println("Successfully updated payment status for ID: " + paymentId);
 				} else {
 					conn.rollback();
-
+					System.out.println("No records updated for payment ID: " + paymentId);
 				}
 			}
 		} catch (SQLException e) {
@@ -270,14 +271,16 @@ public class PaymentServiceImpl implements PaymentService {
 				ps.setString(1, newStatus);
 				ps.setInt(2, orderId);
 
+				System.out.println("Updating payment status for order ID " + orderId + " to: " + newStatus);
 				rowsUpdated = ps.executeUpdate();
 
 				if (rowsUpdated > 0) {
 					conn.commit();
-
+					System.out.println("Successfully updated payment status for order ID: " + orderId
+							+ " (affected rows: " + rowsUpdated + ")");
 				} else {
 					conn.rollback();
-
+					System.out.println("No records updated for order ID: " + orderId);
 				}
 			}
 		} catch (SQLException e) {
@@ -346,13 +349,14 @@ public class PaymentServiceImpl implements PaymentService {
 				PreparedStatement ps = conn.prepareStatement(getPaymentsByOrderIdSql)) {
 
 			ps.setInt(1, orderId);
+			System.out.println("Retrieving payments for order ID: " + orderId);
 
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
 					PaymentModel payment = mapResultSetToPayment(rs);
 					payments.add(payment);
 				}
-
+				System.out.println("Found " + payments.size() + " payments for order ID: " + orderId);
 			}
 		} catch (SQLException e) {
 			System.err.println("Database error retrieving payments for order ID: " + orderId);

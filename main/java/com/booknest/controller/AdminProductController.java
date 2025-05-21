@@ -183,7 +183,6 @@ public class AdminProductController extends HttpServlet {
             // Get the correct real path from servlet context
             String realPath = getServletContext().getRealPath(resourcesPath);
 
-            System.out.println("Uploading book image to: " + realPath + " folder: " + uploadFolderPath);
 
             boolean uploaded = imageUtil.uploadImage(filePart, realPath, uploadFolderPath);
 
@@ -191,7 +190,6 @@ public class AdminProductController extends HttpServlet {
                 String imageName = imageUtil.getImageNameFromPart(filePart);
                 // Set the path to save in the database - consistent with profile images
                 imageUrl = dbImagePathPrefix + imageName;
-                System.out.println("Book image URL in DB: " + imageUrl);
             } else {
                 request.setAttribute("errorMessage", imageUploadErrorMessage);
                 doGet(request, response); // Reload the form with an error message
