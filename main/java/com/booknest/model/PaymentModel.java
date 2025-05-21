@@ -6,20 +6,20 @@ import java.util.Date;
 public class PaymentModel {
 	private int paymentID;
 	private int orderID;
-	private Date payment_date;
-	private BigDecimal payment_amount;
-	private String payment_method;
-	private String payment_status;
+	private Date paymentDate;
+	private BigDecimal paymentAmount;
+	private String paymentMethod;
+	private String paymentStatus;
 
 	// Constructor
-	public PaymentModel(int paymentID, int orderID, Date payment_date, BigDecimal payment_amount, String payment_method,
-			String payment_status) {
+	public PaymentModel(int paymentID, int orderID, Date paymentDate, BigDecimal paymentAmount, String paymentMethod,
+			String paymentStatus) {
 		this.paymentID = paymentID;
 		this.orderID = orderID;
-		this.payment_date = payment_date;
-		this.payment_amount = payment_amount;
-		this.payment_method = payment_method;
-		this.payment_status = payment_status;
+		this.paymentDate = paymentDate;
+		this.paymentAmount = paymentAmount;
+		this.paymentMethod = paymentMethod;
+		this.paymentStatus = paymentStatus;
 	}
 
 	// Default constructor
@@ -43,42 +43,42 @@ public class PaymentModel {
 		this.orderID = orderID;
 	}
 
-	public Date getPayment_date() {
-		return payment_date;
+	public Date getPaymentDate() {
+		return paymentDate;
 	}
 
-	public void setPayment_date(Date payment_date) {
-		this.payment_date = payment_date;
+	public void setPaymentDate(Date paymentDate) {
+		this.paymentDate = paymentDate;
 	}
 
-	public BigDecimal getPayment_amount() {
-		return payment_amount;
+	public BigDecimal getPaymentAmount() {
+		return paymentAmount;
 	}
 
-	public void setPayment_amount(BigDecimal payment_amount) {
-		this.payment_amount = payment_amount;
+	public void setPaymentAmount(BigDecimal paymentAmount) {
+		this.paymentAmount = paymentAmount;
 	}
 
-	public String getPayment_method() {
-		return payment_method;
+	public String getPaymentMethod() {
+		return paymentMethod;
 	}
 
-	public void setPayment_method(String payment_method) {
-		this.payment_method = payment_method;
+	public void setPaymentMethod(String paymentMethod) {
+		this.paymentMethod = paymentMethod;
 	}
 
-	public String getPayment_status() {
-		return payment_status;
+	public String getPaymentStatus() {
+		return paymentStatus;
 	}
 
-	public void setPayment_status(String payment_status) {
-		this.payment_status = payment_status;
+	public void setPaymentStatus(String paymentStatus) {
+		this.paymentStatus = paymentStatus;
 	}
 
 	@Override
 	public String toString() {
-		return "PaymentModel [paymentID=" + paymentID + ", orderID=" + orderID + ", payment_date=" + payment_date
-				+ ", payment_amount=" + payment_amount + ", payment_method=" + payment_method + ", payment_status="
-				+ payment_status + "]";
+		return "PaymentModel [paymentID=" + paymentID + ", orderID=" + orderID + ", payment_date=" + paymentDate
+				+ ", payment_amount=" + paymentAmount + ", payment_method=" + paymentMethod + ", payment_status="
+				+ paymentStatus + "]";
 	}
 }

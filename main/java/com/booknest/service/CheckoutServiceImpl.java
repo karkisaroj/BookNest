@@ -39,11 +39,6 @@ public class CheckoutServiceImpl implements CheckoutService {
 	private static final String ERROR_CART_CLEAR_FAILED = "Failed to clear cart: %s";
 	private static final String ERROR_PAYMENT_CREATION_FAILED = "Failed to create payment record: %s";
 
-	// Log message constants
-	private static final String LOG_CART_CLEARED = "Cart cleared for user ID: %d";
-	private static final String LOG_CREATING_PAYMENT = "Creating payment record for order ID: %d with amount: %s, method: %s, status: %s";
-	private static final String LOG_PAYMENT_CREATED = "Payment record created with ID: %d";
-
 	/**
 	 * Default constructor that initializes required services.
 	 */
@@ -76,12 +71,32 @@ public class CheckoutServiceImpl implements CheckoutService {
 	 * @param state         The state for delivery
 	 * @param zipCode       The zip code for delivery
 	 * @param phone         The contact phone number
+	 * @param paymentMethod The payment method to use (e.g., "cod", "online")
 	 * @return The ID of the created order, or -1 if checkout failed
 	 * @throws SQLException If there's a database error
 	 */
 	@Override
 	public int processCheckout(Integer userId, List<CartItem> cartItems, String streetAddress, String city,
 			String state, String zipCode, String phone) throws SQLException {
+		return processCheckout(userId, cartItems, streetAddress, city, state, zipCode, phone, PARAM_COD);
+	}
+
+	/**
+	 * Processes a checkout with specified payment method.
+	 * 
+	 * @param userId        The ID of the user checking out
+	 * @param cartItems     The items in the cart
+	 * @param streetAddress The street address for delivery
+	 * @param city          The city for delivery
+	 * @param state         The state for delivery
+	 * @param zipCode       The zip code for delivery
+	 * @param phone         The contact phone number
+	 * @param paymentMethod The payment method to use (e.g., "cod", "online")
+	 * @return The ID of the created order, or -1 if checkout failed
+	 * @throws SQLException If there's a database error
+	 */
+	public int processCheckout(Integer userId, List<CartItem> cartItems, String streetAddress, String city,
+			String state, String zipCode, String phone, String paymentMethod) throws SQLException {
 
 		// Validate inputs
 		if (userId == null || cartItems == null || cartItems.isEmpty()
@@ -99,18 +114,27 @@ public class CheckoutServiceImpl implements CheckoutService {
 		BigDecimal discount = ZERO_DISCOUNT; // Implement discount logic if needed
 		BigDecimal totalAmount = subtotal.add(shippingCost).subtract(discount);
 
-		// Create the order
-		int orderId = orderService.createOrder(userId, cartItems, formattedAddress, subtotal, shippingCost, discount,
-				totalAmount);
+		int orderId = -1;
+		try {
+			// Create the order
+			orderId = orderService.createOrder(userId, cartItems, formattedAddress, subtotal, shippingCost, discount,
+					totalAmount);
 
-		// If order was created successfully, clear the cart
-		if (orderId > 0) {
-			try {
-				cartService.clearCart(userId);
-			} catch (CartServiceException e) {
-				System.err.println(String.format(ERROR_CART_CLEAR_FAILED, e.getMessage()));
-				// Don't fail the checkout process if cart clearing fails
+			// If order was created successfully
+			if (orderId > 0) {
+				// Clear the cart
+				try {
+					cartService.clearCart(userId);
+
+				} catch (CartServiceException e) {
+					System.err.println(String.format(ERROR_CART_CLEAR_FAILED, e.getMessage()));
+					// Don't fail the checkout process if cart clearing fails
+				}
 			}
+		} catch (SQLException e) {
+			System.err.println("Error during checkout process: " + e.getMessage());
+			e.printStackTrace();
+			throw e;
 		}
 
 		return orderId;
@@ -207,7 +231,6 @@ public class CheckoutServiceImpl implements CheckoutService {
 	public int createPaymentRecord(int orderId, BigDecimal amount, String paymentMethod) throws SQLException {
 		// Always use Completed status
 		String paymentStatus = PAYMENT_STATUS_COMPLETED;
-
 
 		try {
 			// Create payment using the payment service
