@@ -193,6 +193,15 @@
 	</div>
 
 	<jsp:include page="footer.jsp" />
+<<<<<<< HEAD
+
+	<script>
+        // Display the file name and preview the image when a new file is chosen
+        const fileInput = document.getElementById('book_img_url');
+        const fileNameDisplay = document.getElementById('file-name');
+        const imagePreview = document.getElementById('image-preview');
+=======
+>>>>>>> 4ae6260175dfc53f827bdf02ae62e5ea7b4a8b40
 
 	<script>
 		// Display the file name and preview the image when a new file is chosen

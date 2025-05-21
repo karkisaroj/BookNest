@@ -10,7 +10,6 @@
 </head>
 <body>
 
-	
         <!-- Admin Sidebar -->
 <div class="admin-sidebar">
     <div class="sidebar-brand">
@@ -43,6 +42,7 @@
         </li>
     </ul>
 </div>
+
 
 </body>
 </html>

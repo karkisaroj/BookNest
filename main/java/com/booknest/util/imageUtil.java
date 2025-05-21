@@ -36,25 +36,20 @@ public class imageUtil {
 			String imageName = getImageNameFromPart(part);
 			String normalizedFolder = saveFolder.replace('\\', '/');
 
-			// Direct path to project directory - ignore realPath parameter
-			String projectPath = "C:\\Users\\noble\\NewWorkSpaceCoursework\\BookNest\\src\\main\\webapp\\resources\\" + normalizedFolder;
+			// Direct path to project directory
+			String projectPath = "C:/Users/Acer/Documents/BookNest/src/main/webapp/resources/" + normalizedFolder;
 			File projectDir = new File(projectPath);
 			if (!projectDir.exists()) {
 				projectDir.mkdirs();
 			}
 
 			String filePath = projectPath + "/" + imageName;
-			System.out.println("Writing directly to: " + filePath);
 
 			// Write directly to the project directory
 			part.write(filePath);
-
-			System.out.println("File uploaded successfully to: " + filePath);
 			return true;
 
 		} catch (Exception e) {
-			System.err.println("Error in uploadImage: " + e.getMessage());
-			e.printStackTrace();
 			return false;
 		}
 	}

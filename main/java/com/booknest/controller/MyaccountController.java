@@ -15,7 +15,6 @@ import jakarta.servlet.http.Part;
 
 import java.io.IOException;
 
-
 /**
  * @author Saroj Karki 23047612
  */
@@ -122,7 +121,7 @@ public class MyAccountController extends HttpServlet {
 			}
 
 		} catch (Exception e) {
-			
+
 			e.printStackTrace();
 			errorMessage = "An unexpected error occurred while updating your profile.";
 		}
