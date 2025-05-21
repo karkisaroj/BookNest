@@ -29,7 +29,6 @@ public class imageUtil {
 	public boolean uploadImage(Part part, String realPath, String saveFolder) {
 		try {
 			if (part == null || part.getSize() == 0) {
-				System.out.println("No file uploaded or empty file");
 				return false;
 			}
 
@@ -37,7 +36,7 @@ public class imageUtil {
 			String normalizedFolder = saveFolder.replace('\\', '/');
 
 			// Direct path to project directory
-			String projectPath = "C:\\Users\\noble\\NewWorkSpaceCoursework\\BookNest\\src\\main\\webapp\\resources\\"
+			String projectPath = "C:\\Users\\Acer\\Documents\\BookNest\\src\\main\\webapp\\resources\\"
 					+ normalizedFolder;
 			File projectDir = new File(projectPath);
 			if (!projectDir.exists()) {

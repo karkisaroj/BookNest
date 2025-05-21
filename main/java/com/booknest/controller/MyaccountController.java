@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 
 import java.io.IOException;
-import java.io.File;
 
 /**
  * Controller for handling user account operations including profile image
