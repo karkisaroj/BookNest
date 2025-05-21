@@ -14,6 +14,30 @@ import java.math.BigDecimal;
  * @author Saroj Karki 23047612
  */
 public class BookServiceImpl implements BookService {
+
+	// Error message constants
+	private static final String ERROR_INVALID_BOOK_ID = "Invalid Book ID: ";
+	private static final String ERROR_BOOK_NOT_FOUND = "Book with ID %d not found.";
+	private static final String ERROR_INVALID_BOOK_DATA = "Invalid book data.";
+	private static final String ERROR_ADD_FAILED = "Failed to add book.";
+	private static final String ERROR_GET_ID_FAILED = "Added but failed to get ID.";
+	private static final String ERROR_INVALID_UPDATE_DATA = "Invalid book data for update.";
+	private static final String ERROR_INVALID_DELETE_ID = "Invalid Book ID for deletion.";
+	private static final String ERROR_DB_CONNECTION_FAILED = "Failed to get database connection.";
+	private static final String ERROR_SEARCH_FAILED = "Failed to search books by title: ";
+	private static final String ERROR_COULD_NOT_RETRIEVE_BOOK = "Could not retrieve book ";
+	private static final String ERROR_COULD_NOT_ADD_BOOK = "Could not add book.";
+	private static final String ERROR_COULD_NOT_UPDATE_BOOK = "Could not update book ";
+	private static final String ERROR_COULD_NOT_DELETE_BOOK = "Could not delete book ";
+	private static final String ERROR_COULD_NOT_DELETE_REFERENCED = "Could not delete book %d (referenced elsewhere).";
+	private static final String ERROR_TOP_BOOKS = "Could not retrieve top added books: ";
+	private static final String ERROR_RANDOM_BOOKS = "Could not retrieve random books: ";
+
+	// Warning message constants
+	private static final String WARNING_ADD_BOOK_AUTHORS = "WARNING: BookServiceImpl.addBook does NOT currently handle author relationships correctly!";
+	private static final String WARNING_UPDATE_BOOK_AUTHORS = "WARNING: BookServiceImpl.updateBook does NOT currently handle author relationships correctly!";
+	private static final String WARNING_DELETE_BOOK_CONSTRAINTS = "WARNING: BookServiceImpl.deleteBook might fail if foreign key constraints exist on book_author table.";
+
 	/**
 	 * Searches for books with titles containing the given search term.
 	 *
@@ -30,13 +54,10 @@ public class BookServiceImpl implements BookService {
 
 		try {
 			conn = DbConfiguration.getDbConnection();
-
-			// Updated SQL query to include author information
 			String sql = "SELECT b.*, GROUP_CONCAT(DISTINCT a.author_name SEPARATOR ', ') AS author_name "
 					+ "FROM book b " + "LEFT JOIN book_author ba ON b.bookID = ba.bookID "
 					+ "LEFT JOIN author a ON ba.authorID = a.authorID " + "WHERE b.book_title LIKE ? "
 					+ "GROUP BY b.bookID";
-
 
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, "%" + title + "%");
@@ -57,16 +78,13 @@ public class BookServiceImpl implements BookService {
 				book.setPublisherID(rs.getInt("publisherID"));
 				book.setAuthorName(rs.getString("author_name")); // Set the author name from the query
 
-
 				books.add(book);
 			}
-
-
 
 		} catch (Exception e) {
 			System.err.println("SEARCH ERROR: " + e.getClass().getName() + ": " + e.getMessage());
 			e.printStackTrace();
-			throw new Exception("Failed to search books by title: " + e.getMessage(), e);
+			throw new Exception(ERROR_SEARCH_FAILED + e.getMessage(), e);
 		} finally {
 			closeResources(rs, stmt, conn);
 		}
@@ -109,9 +127,7 @@ public class BookServiceImpl implements BookService {
 					book.setAuthorName("Unknown");
 
 					books.add(book);
-
 				}
-
 			}
 		} catch (SQLException e) {
 			System.err.println("Error getting all books (simple query): " + e.getMessage());
@@ -131,7 +147,7 @@ public class BookServiceImpl implements BookService {
 	@Override
 	public BookCartModel getBookById(int bookId) throws Exception {
 		if (bookId <= 0)
-			throw new Exception("Invalid Book ID: " + bookId);
+			throw new Exception(ERROR_INVALID_BOOK_ID + bookId);
 		BookCartModel book = null;
 
 		String sql = "SELECT " + "  b.bookID, b.book_title, b.isbn, b.publication_date, b.price, b.description, "
@@ -148,13 +164,13 @@ public class BookServiceImpl implements BookService {
 				if (rs.next()) {
 					book = mapRowToBookCartModel(rs); // Updated method name
 				} else {
-					throw new Exception("Book with ID " + bookId + " not found.");
+					throw new Exception(String.format(ERROR_BOOK_NOT_FOUND, bookId));
 				}
 			}
 		} catch (SQLException | ClassNotFoundException e) {
 			System.err.println("SERVICE DB Error finding book by ID " + bookId + ": " + e.getMessage());
 			e.printStackTrace(); // Log full trace for SQL errors
-			throw new Exception("Could not retrieve book " + bookId + ".", e);
+			throw new Exception(ERROR_COULD_NOT_RETRIEVE_BOOK + bookId + ".", e);
 		}
 		return book;
 	}
@@ -168,13 +184,12 @@ public class BookServiceImpl implements BookService {
 	 */
 	@Override
 	public BookCartModel addBook(BookCartModel book) throws Exception {
-		System.err
-				.println("WARNING: BookServiceImpl.addBook does NOT currently handle author relationships correctly!");
+		System.err.println(WARNING_ADD_BOOK_AUTHORS);
 		// (Existing code that only inserts into 'book' table - Author info is ignored
 		// on insert)
 		if (book == null || book.getBookTitle() == null || book.getBookTitle().trim().isEmpty()
 				|| book.getPrice() == null || book.getPrice().compareTo(BigDecimal.ZERO) < 0)
-			throw new Exception("Invalid book data.");
+			throw new Exception(ERROR_INVALID_BOOK_DATA);
 
 		String sql = "INSERT INTO book (book_title, description, price, book_img_url) VALUES (?, ?, ?, ?)";
 		Connection conn = null;
@@ -194,11 +209,11 @@ public class BookServiceImpl implements BookService {
 					book.setBookID(keys.getInt(1));
 					return book;
 				} else
-					throw new Exception("Added but failed to get ID.");
+					throw new Exception(ERROR_GET_ID_FAILED);
 			} else
-				throw new Exception("Failed to add book.");
+				throw new Exception(ERROR_ADD_FAILED);
 		} catch (SQLException | ClassNotFoundException e) {
-			throw new Exception("Could not add book.", e);
+			throw new Exception(ERROR_COULD_NOT_ADD_BOOK, e);
 		} finally {
 			close(keys);
 			close(ps);
@@ -214,8 +229,7 @@ public class BookServiceImpl implements BookService {
 	 * @throws Exception If a database error occurs
 	 */
 	@Override
-	public List<BookCartModel> getTopAddedToCartBooks(int limit) throws Exception { // Changed return type to
-																					// BookCartModel
+	public List<BookCartModel> getTopAddedToCartBooks(int limit) throws Exception {
 		List<BookCartModel> topBooks = new ArrayList<>();
 		String sql = "SELECT b.bookID, b.book_title, b.price, b.book_img_url, COUNT(ci.bookID) AS times_added "
 				+ "FROM book b " + "JOIN cart_item ci ON b.bookID = ci.bookID "
@@ -227,24 +241,22 @@ public class BookServiceImpl implements BookService {
 		try {
 			conn = DbConfiguration.getDbConnection();
 			if (conn == null)
-				throw new Exception("Failed to get database connection.");
+				throw new Exception(ERROR_DB_CONNECTION_FAILED);
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, limit);
-			System.out.println("Executing SQL for top books: " + ps.toString());
 			rs = ps.executeQuery();
 			while (rs.next()) {
-				BookCartModel book = new BookCartModel(); // Changed to BookCartModel
+				BookCartModel book = new BookCartModel();
 				book.setBookID(rs.getInt("bookID"));
 				book.setBookTitle(rs.getString("book_title"));
 				book.setPrice(rs.getBigDecimal("price"));
 				book.setBookImgUrl(rs.getString("book_img_url"));
 				topBooks.add(book);
 			}
-			System.out.println("Found " + topBooks.size() + " top books in service.");
 		} catch (SQLException e) {
 			System.err.println("SQL Error getting top books: " + e.getMessage());
 			e.printStackTrace();
-			throw new Exception("Could not retrieve top added books: " + e.getMessage(), e);
+			throw new Exception(ERROR_TOP_BOOKS + e.getMessage(), e);
 		} finally {
 			// Close resources
 			close(rs);
@@ -262,7 +274,7 @@ public class BookServiceImpl implements BookService {
 	 * @throws Exception If a database error occurs
 	 */
 	@Override
-	public List<BookCartModel> getRandomBooks(int limit) throws Exception { // Changed return type to BookCartModel
+	public List<BookCartModel> getRandomBooks(int limit) throws Exception {
 		List<BookCartModel> randomBooks = new ArrayList<>();
 		// Query to get random books (Syntax might vary for non-MySQL DBs)
 		String sql = "SELECT bookID, book_title, price, book_img_url FROM book ORDER BY RAND() LIMIT ?"; // Using RAND()
@@ -275,28 +287,26 @@ public class BookServiceImpl implements BookService {
 		try {
 			conn = DbConfiguration.getDbConnection();
 			if (conn == null) {
-				throw new Exception("Failed to get database connection.");
+				throw new Exception(ERROR_DB_CONNECTION_FAILED);
 			}
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, limit);
 
-			System.out.println("Executing SQL for random books: " + ps.toString());
 
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
-				BookCartModel book = new BookCartModel(); // Changed to BookCartModel
+				BookCartModel book = new BookCartModel();
 				book.setBookID(rs.getInt("bookID"));
 				book.setBookTitle(rs.getString("book_title"));
 				book.setPrice(rs.getBigDecimal("price"));
 				book.setBookImgUrl(rs.getString("book_img_url"));
 				randomBooks.add(book);
 			}
-			System.out.println("Found " + randomBooks.size() + " random books in service.");
 		} catch (SQLException e) {
 			System.err.println("SQL Error getting random books: " + e.getMessage());
 			e.printStackTrace();
-			throw new Exception("Could not retrieve random books: " + e.getMessage(), e);
+			throw new Exception(ERROR_RANDOM_BOOKS + e.getMessage(), e);
 		} finally {
 			close(rs);
 			close(ps);
@@ -318,7 +328,6 @@ public class BookServiceImpl implements BookService {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-
 
 		try {
 			conn = DbConfiguration.getDbConnection();
@@ -349,7 +358,6 @@ public class BookServiceImpl implements BookService {
 				book.setPublisherID(rs.getInt("publisherID"));
 				book.setAuthorName(rs.getString("author_name"));
 
-
 				books.add(book);
 			}
 
@@ -370,13 +378,12 @@ public class BookServiceImpl implements BookService {
 	 * @throws Exception If the book data is invalid or a database error occurs
 	 */
 	@Override
-	public boolean updateBook(BookCartModel book) throws Exception { // Changed parameter type to BookCartModel
-		System.err.println(
-				"WARNING: BookServiceImpl.updateBook does NOT currently handle author relationships correctly!");
+	public boolean updateBook(BookCartModel book) throws Exception {
+		System.err.println(WARNING_UPDATE_BOOK_AUTHORS);
 
 		if (book == null || book.getBookID() <= 0 || book.getBookTitle() == null || book.getBookTitle().trim().isEmpty()
 				|| book.getPrice() == null || book.getPrice().compareTo(BigDecimal.ZERO) < 0)
-			throw new Exception("Invalid book data for update.");
+			throw new Exception(ERROR_INVALID_UPDATE_DATA);
 
 		String sql = "UPDATE book SET book_title = ?, description = ?, price = ?, book_img_url = ? WHERE bookID = ?";
 
@@ -388,7 +395,7 @@ public class BookServiceImpl implements BookService {
 			ps.setInt(5, book.getBookID());
 			return ps.executeUpdate() > 0;
 		} catch (SQLException | ClassNotFoundException e) {
-			throw new Exception("Could not update book " + book.getBookID() + ".", e);
+			throw new Exception(ERROR_COULD_NOT_UPDATE_BOOK + book.getBookID() + ".", e);
 		}
 	}
 
@@ -403,10 +410,9 @@ public class BookServiceImpl implements BookService {
 	public boolean deleteBook(int bookId) throws Exception {
 		// This might need adjustment if book_author has foreign key constraints
 		// that prevent deleting a book if it's linked to authors.
-		System.err.println(
-				"WARNING: BookServiceImpl.deleteBook might fail if foreign key constraints exist on book_author table.");
+		System.err.println(WARNING_DELETE_BOOK_CONSTRAINTS);
 		if (bookId <= 0)
-			throw new Exception("Invalid Book ID for deletion.");
+			throw new Exception(ERROR_INVALID_DELETE_ID);
 		String sql = "DELETE FROM book WHERE bookID = ?";
 		try (Connection conn = DbConfiguration.getDbConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setInt(1, bookId);
@@ -414,8 +420,8 @@ public class BookServiceImpl implements BookService {
 		} catch (SQLException | ClassNotFoundException e) {
 			if (e instanceof SQLException && ((SQLException) e).getSQLState() != null
 					&& ((SQLException) e).getSQLState().startsWith("23"))
-				throw new Exception("Could not delete book " + bookId + " (referenced elsewhere).", e);
-			throw new Exception("Could not delete book " + bookId + ".", e);
+				throw new Exception(String.format(ERROR_COULD_NOT_DELETE_REFERENCED, bookId), e);
+			throw new Exception(ERROR_COULD_NOT_DELETE_BOOK + bookId + ".", e);
 		}
 	}
 
@@ -514,5 +520,4 @@ public class BookServiceImpl implements BookService {
 	public List<BookCartModel> searchBooksByTitleAndCategories(String title, String[] categories) throws Exception {
 		return null;
 	}
-
 }

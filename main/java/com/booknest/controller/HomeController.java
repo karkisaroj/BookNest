@@ -25,6 +25,23 @@ public class HomeController extends HttpServlet {
 
 	private BookService bookService;
 
+	// Path constants
+	private final String homePagePath = "/WEB-INF/pages/home.jsp";
+
+	// Parameter constants
+	private final String randomBooksParam = "randomBooks";
+	private final String popularBooksParam = "popularBooks";
+	private final String errorMessageParam = "homeErrorMessage";
+	private final String bookCountParam = "bookCount";
+
+	// Message constants
+	private final String loadSectionErrorMessage = "Could not load some book sections.";
+	private final String popularBooksErrorMessage = "Could not load popular books section.";
+	private final String unexpectedErrorMessage = "An unexpected error occurred.";
+
+	// Configuration constants
+	private final int featuredBookCount = 4;
+
 	/**
 	 * Initializes the book service.
 	 */
@@ -47,26 +64,26 @@ public class HomeController extends HttpServlet {
 
 		// 1. Fetch Random Books for the "Books" section
 		try {
-			booksForBookSection = bookService.getRandomBooks(4);
-			request.setAttribute("randomBooks", booksForBookSection);
+			booksForBookSection = bookService.getRandomBooks(featuredBookCount);
+			request.setAttribute(randomBooksParam, booksForBookSection);
 		} catch (Exception e) {
 			errorOccurred = true;
-			errorMessage = "Could not load some book sections.";
+			errorMessage = loadSectionErrorMessage;
 		}
 
 		// 2. Fetch Popular Books (most added to cart)
 		try {
-			List<BookCartModel> popularResult = bookService.getTopAddedToCartBooks(4);
+			List<BookCartModel> popularResult = bookService.getTopAddedToCartBooks(featuredBookCount);
 
 			// 3. Implement Fallback Logic for "Popular" section
 			if (popularResult == null || popularResult.isEmpty()) {
 				// If no popular books found, fetch random ones instead
 				try {
-					booksForPopularSection = bookService.getRandomBooks(4);
+					booksForPopularSection = bookService.getRandomBooks(featuredBookCount);
 				} catch (Exception e) {
 					errorOccurred = true;
 					if (errorMessage == null) {
-						errorMessage = "Could not load popular books section.";
+						errorMessage = popularBooksErrorMessage;
 					}
 					// If fallback fails, ensure the list is empty
 					booksForPopularSection = Collections.emptyList();
@@ -75,20 +92,20 @@ public class HomeController extends HttpServlet {
 				// Popular books were found, use them
 				booksForPopularSection = popularResult;
 			}
-			request.setAttribute("popularBooks", booksForPopularSection);
+			request.setAttribute(popularBooksParam, booksForPopularSection);
 		} catch (Exception e) {
 			errorOccurred = true;
 			if (errorMessage == null) {
-				errorMessage = "An unexpected error occurred.";
+				errorMessage = unexpectedErrorMessage;
 			}
-			request.setAttribute("popularBooks", Collections.emptyList());
+			request.setAttribute(popularBooksParam, Collections.emptyList());
 		}
 
 		// Set error message if any step failed
 		if (errorOccurred) {
-			request.setAttribute("homeErrorMessage", errorMessage);
+			request.setAttribute(errorMessageParam, errorMessage);
 		}
 
-		request.getRequestDispatcher("/WEB-INF/pages/home.jsp").forward(request, response);
+		request.getRequestDispatcher(homePagePath).forward(request, response);
 	}
 }

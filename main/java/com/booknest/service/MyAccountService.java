@@ -17,7 +17,27 @@ import java.io.IOException;
  */
 public class MyAccountService {
 	private final imageUtil imageUtil;
+
+	// File size constants
 	private static final int MAX_FILE_SIZE = 3 * 1024 * 1024; // 3 MB
+
+	// SQL query constants
+	private static final String SQL_GET_PROFILE_IMAGE = "SELECT user_img_url FROM user WHERE user_name = ?";
+	private static final String SQL_UPDATE_PROFILE_IMAGE = "UPDATE user SET user_img_url = ? WHERE user_name = ?";
+
+	// File path constants
+	private static final String PROFILE_SAVE_FOLDER = "/profile";
+	private static final String PROFILE_IMAGE_PATH_PREFIX = "resources/images/system/profile/";
+	private static final String DEFAULT_PROFILE_IMAGE_PATH = "resources/images/system/default.png";
+	private static final String EMPTY_SUBFOLDER = "";
+
+	// Database column constants
+	private static final String COLUMN_USER_IMG_URL = "user_img_url";
+
+	// Error message constants
+	private static final String ERROR_GET_PROFILE_IMAGE = "Error retrieving profile image for user: ";
+	private static final String ERROR_UPDATE_PROFILE_IMAGE = "Error updating profile image for user: ";
+	private static final String ERROR_UPLOAD_PROFILE_IMAGE = "Error uploading profile image: ";
 
 	/**
 	 * Default constructor that initializes the image utility.
@@ -39,15 +59,15 @@ public class MyAccountService {
 
 		try {
 			conn = DbConfiguration.getDbConnection();
-			String sql = "SELECT user_img_url FROM user WHERE user_name = ?";
-			ps = conn.prepareStatement(sql);
+			ps = conn.prepareStatement(SQL_GET_PROFILE_IMAGE);
 			ps.setString(1, userName);
 			ResultSet rs = ps.executeQuery();
 
 			if (rs.next()) {
-				profileImageUrl = rs.getString("user_img_url");
+				profileImageUrl = rs.getString(COLUMN_USER_IMG_URL);
 			}
 		} catch (Exception e) {
+			System.err.println(ERROR_GET_PROFILE_IMAGE + userName);
 			e.printStackTrace();
 		} finally {
 			closeResources(ps, conn);
@@ -70,13 +90,13 @@ public class MyAccountService {
 
 		try {
 			conn = DbConfiguration.getDbConnection();
-			String sql = "UPDATE user SET user_img_url = ? WHERE user_name = ?";
-			ps = conn.prepareStatement(sql);
+			ps = conn.prepareStatement(SQL_UPDATE_PROFILE_IMAGE);
 			ps.setString(1, imagePath);
 			ps.setString(2, userName);
 			int rowsAffected = ps.executeUpdate();
 			success = (rowsAffected > 0);
 		} catch (Exception e) {
+			System.err.println(ERROR_UPDATE_PROFILE_IMAGE + userName);
 			e.printStackTrace();
 		} finally {
 			closeResources(ps, conn);
@@ -103,12 +123,11 @@ public class MyAccountService {
 	 * @throws IOException if an I/O error occurs during file processing
 	 */
 	public String uploadProfileImage(Part filePart) throws IOException {
-		String saveFolder = "/profile"; // Based on your actual file structure
-		boolean uploaded = imageUtil.uploadImage(filePart, "", saveFolder);
+		boolean uploaded = imageUtil.uploadImage(filePart, EMPTY_SUBFOLDER, PROFILE_SAVE_FOLDER);
 
 		if (uploaded) {
 			String imageName = imageUtil.getImageNameFromPart(filePart);
-			return "resources/images/system/profile/" + imageName; // Updated path to match your structure
+			return PROFILE_IMAGE_PATH_PREFIX + imageName;
 		}
 
 		return null;
@@ -121,7 +140,7 @@ public class MyAccountService {
 	 * @return The path to the default profile image
 	 */
 	public String getDefaultProfileImagePath() {
-		return "resources/images/system/default.png";
+		return DEFAULT_PROFILE_IMAGE_PATH;
 	}
 
 	/**

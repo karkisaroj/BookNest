@@ -21,34 +21,30 @@ import java.util.regex.Pattern;
  */
 public class OrderServiceImpl implements OrderService {
 
-	// --- SQL Query Constants ---
-	private static final String SQL_CREATE_ORDER = "INSERT INTO orders (userID, order_date, shipping_address, total_amount, order_status) "
-			+ "VALUES (?, NOW(), ?, ?, ?)";
-
 	// Default order status - based on your database schema
 	private static final String DEFAULT_ORDER_STATUS = "in progress";
 
-	// Column names will be determined dynamically
-	private static String SQL_CREATE_ORDER_ITEM = null;
+	// Order status constants
+	private static final String STATUS_COMPLETED = "completed";
+	private static final String STATUS_CANCELLED = "cancelled";
+	private static final String STATUS_IN_PROGRESS = "in progress";
 
-	private static final String SQL_GET_ORDER_BY_ID = "SELECT * FROM orders WHERE orderID = ?";
-
-	// This will be updated based on actual column names
-	private static String SQL_GET_ORDER_ITEMS = null;
-
-	private static final String SQL_UPDATE_ORDER_STATUS = "UPDATE orders SET order_status = ? WHERE orderID = ?";
-
-	private static final String SQL_GET_ORDERS_BY_USER_ID = "SELECT * FROM orders WHERE userID = ? ORDER BY order_date DESC";
-
-	private static final String SQL_CLEAR_CART = "DELETE FROM cart_item WHERE userID = ?";
-
-	private static final String SQL_UPDATE_SHIPPING_ADDRESS = "UPDATE orders SET shipping_address = ? WHERE orderID = ?";
+	// Error message constants
+	private static final String ERROR_EMPTY_CART = "Cannot create order with empty cart";
+	private static final String ERROR_NULL_ADDRESS = "Address cannot be null";
+	private static final String ERROR_EMPTY_STATUS = "Order status cannot be empty";
+	private static final String ERROR_DB_CONNECTION = "Database connection error";
+	private static final String ERROR_CREATE_ORDER = "Creating order failed, no rows affected.";
+	private static final String ERROR_NO_ID = "Creating order failed, no ID obtained.";
+	private static final String ERROR_NULL_BOOK_MODEL = "Cart item has null book model";
 
 	// Structure information for order_book table
 	private static boolean hasQuantityColumn = false;
 	private static boolean hasUnitPriceColumn = false;
 	private static String quantityColumnName = "quantity";
 	private static String unitPriceColumnName = "unit_price";
+	private static String SQL_CREATE_ORDER_ITEM = null;
+	private static String SQL_GET_ORDER_ITEMS = null;
 
 	/**
 	 * Constructor that initializes service and detects database structure
@@ -218,7 +214,7 @@ public class OrderServiceImpl implements OrderService {
 			BigDecimal shippingCost, BigDecimal discount, BigDecimal totalAmount) throws SQLException {
 
 		if (cartItems == null || cartItems.isEmpty()) {
-			throw new IllegalArgumentException("Cannot create order with empty cart");
+			throw new IllegalArgumentException(ERROR_EMPTY_CART);
 		}
 
 		// Format the shipping address to store in standardized format
@@ -255,8 +251,8 @@ public class OrderServiceImpl implements OrderService {
 						}
 
 						// Use "in progress" if available, otherwise use the first value
-						if (enumValues.contains("in progress")) {
-							statusToUse = "in progress";
+						if (enumValues.contains(STATUS_IN_PROGRESS)) {
+							statusToUse = STATUS_IN_PROGRESS;
 						} else if (!enumValues.isEmpty()) {
 							statusToUse = enumValues.get(0);
 						}
@@ -266,24 +262,25 @@ public class OrderServiceImpl implements OrderService {
 				// Continue with default status
 			}
 
-			try (PreparedStatement psOrder = conn.prepareStatement(SQL_CREATE_ORDER, Statement.RETURN_GENERATED_KEYS)) {
+			String createOrderSql = "INSERT INTO orders (userID, order_date, shipping_address, total_amount, order_status) "
+					+ "VALUES (?, NOW(), ?, ?, ?)";
+
+			try (PreparedStatement psOrder = conn.prepareStatement(createOrderSql, Statement.RETURN_GENERATED_KEYS)) {
 				psOrder.setInt(1, userId);
 				psOrder.setString(2, formattedAddress); // Use formatted address
 				psOrder.setBigDecimal(3, totalAmount); // Only total_amount is stored
-
-				// Use the full enum value, not just a single character
 				psOrder.setString(4, statusToUse);
 
 				int affectedRows = psOrder.executeUpdate();
 				if (affectedRows == 0) {
-					throw new SQLException("Creating order failed, no rows affected.");
+					throw new SQLException(ERROR_CREATE_ORDER);
 				}
 
 				try (ResultSet generatedKeys = psOrder.getGeneratedKeys()) {
 					if (generatedKeys.next()) {
 						generatedOrderId = generatedKeys.getInt(1);
 					} else {
-						throw new SQLException("Creating order failed, no ID obtained.");
+						throw new SQLException(ERROR_NO_ID);
 					}
 				}
 			}
@@ -297,7 +294,7 @@ public class OrderServiceImpl implements OrderService {
 			try (PreparedStatement psItem = conn.prepareStatement(SQL_CREATE_ORDER_ITEM)) {
 				for (CartItem item : cartItems) {
 					if (item.getBookModel() == null) {
-						throw new IllegalArgumentException("Cart item has null book model");
+						throw new IllegalArgumentException(ERROR_NULL_BOOK_MODEL);
 					}
 
 					// All queries will have at least orderID and bookID
@@ -321,7 +318,8 @@ public class OrderServiceImpl implements OrderService {
 			}
 
 			// Clear the user's cart
-			try (PreparedStatement psClearCart = conn.prepareStatement(SQL_CLEAR_CART)) {
+			String clearCartSql = "DELETE FROM cart_item WHERE userID = ?";
+			try (PreparedStatement psClearCart = conn.prepareStatement(clearCartSql)) {
 				psClearCart.setInt(1, userId);
 				psClearCart.executeUpdate();
 			}
@@ -341,7 +339,7 @@ public class OrderServiceImpl implements OrderService {
 			if (e instanceof SQLException) {
 				throw (SQLException) e;
 			} else {
-				throw new SQLException("Database connection error", e);
+				throw new SQLException(ERROR_DB_CONNECTION, e);
 			}
 		} finally {
 			// Reset auto-commit and close connection
@@ -367,16 +365,16 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	public boolean updateShippingAddress(int orderId, String newAddress) throws SQLException {
 		if (newAddress == null) {
-			throw new IllegalArgumentException("Address cannot be null");
+			throw new IllegalArgumentException(ERROR_NULL_ADDRESS);
 		}
 
 		// Format the address before updating
 		String formattedAddress = formatShippingAddress(newAddress);
-
 		int rowsUpdated = 0;
 
+		String updateAddressSql = "UPDATE orders SET shipping_address = ? WHERE orderID = ?";
 		try (Connection conn = DbConfiguration.getDbConnection();
-				PreparedStatement ps = conn.prepareStatement(SQL_UPDATE_SHIPPING_ADDRESS)) {
+				PreparedStatement ps = conn.prepareStatement(updateAddressSql)) {
 
 			ps.setString(1, formattedAddress);
 			ps.setInt(2, orderId);
@@ -387,7 +385,7 @@ public class OrderServiceImpl implements OrderService {
 			if (e instanceof SQLException) {
 				throw (SQLException) e;
 			} else {
-				throw new SQLException("Database connection error", e);
+				throw new SQLException(ERROR_DB_CONNECTION, e);
 			}
 		}
 
@@ -404,8 +402,9 @@ public class OrderServiceImpl implements OrderService {
 	public OrderModel getOrderById(int orderId) throws SQLException {
 		OrderModel order = null;
 
+		String getOrderSql = "SELECT * FROM orders WHERE orderID = ?";
 		try (Connection conn = DbConfiguration.getDbConnection();
-				PreparedStatement ps = conn.prepareStatement(SQL_GET_ORDER_BY_ID)) {
+				PreparedStatement ps = conn.prepareStatement(getOrderSql)) {
 
 			ps.setInt(1, orderId);
 
@@ -422,7 +421,7 @@ public class OrderServiceImpl implements OrderService {
 			if (e instanceof SQLException) {
 				throw (SQLException) e;
 			} else {
-				throw new SQLException("Database connection error", e);
+				throw new SQLException(ERROR_DB_CONNECTION, e);
 			}
 		}
 
@@ -504,7 +503,7 @@ public class OrderServiceImpl implements OrderService {
 			if (e instanceof SQLException) {
 				throw (SQLException) e;
 			} else {
-				throw new SQLException("Database connection error", e);
+				throw new SQLException(ERROR_DB_CONNECTION, e);
 			}
 		}
 
@@ -521,23 +520,24 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public boolean updateOrderStatus(int orderId, String newStatus) throws SQLException {
 		if (newStatus == null || newStatus.trim().isEmpty()) {
-			throw new IllegalArgumentException("Order status cannot be empty");
+			throw new IllegalArgumentException(ERROR_EMPTY_STATUS);
 		}
 
 		// Make sure we're using a valid status from the enum
 		// Valid values: 'completed','cancelled','in progress'
 		String validStatus = newStatus.trim().toLowerCase();
-		if (!validStatus.equals("completed") && !validStatus.equals("cancelled")
-				&& !validStatus.equals("in progress")) {
+		if (!validStatus.equals(STATUS_COMPLETED) && !validStatus.equals(STATUS_CANCELLED)
+				&& !validStatus.equals(STATUS_IN_PROGRESS)) {
 
 			// Default to "in progress" if the provided status is invalid
-			validStatus = "in progress";
+			validStatus = STATUS_IN_PROGRESS;
 		}
 
 		int rowsUpdated = 0;
 
+		String updateStatusSql = "UPDATE orders SET order_status = ? WHERE orderID = ?";
 		try (Connection conn = DbConfiguration.getDbConnection();
-				PreparedStatement ps = conn.prepareStatement(SQL_UPDATE_ORDER_STATUS)) {
+				PreparedStatement ps = conn.prepareStatement(updateStatusSql)) {
 
 			ps.setString(1, validStatus);
 			ps.setInt(2, orderId);
@@ -548,7 +548,7 @@ public class OrderServiceImpl implements OrderService {
 			if (e instanceof SQLException) {
 				throw (SQLException) e;
 			} else {
-				throw new SQLException("Database connection error", e);
+				throw new SQLException(ERROR_DB_CONNECTION, e);
 			}
 		}
 
@@ -565,8 +565,9 @@ public class OrderServiceImpl implements OrderService {
 	public List<OrderModel> getOrdersByUserId(int userId) throws SQLException {
 		List<OrderModel> orders = new ArrayList<>();
 
+		String getUserOrdersSql = "SELECT * FROM orders WHERE userID = ? ORDER BY order_date DESC";
 		try (Connection conn = DbConfiguration.getDbConnection();
-				PreparedStatement ps = conn.prepareStatement(SQL_GET_ORDERS_BY_USER_ID)) {
+				PreparedStatement ps = conn.prepareStatement(getUserOrdersSql)) {
 
 			ps.setInt(1, userId);
 
@@ -580,7 +581,7 @@ public class OrderServiceImpl implements OrderService {
 			if (e instanceof SQLException) {
 				throw (SQLException) e;
 			} else {
-				throw new SQLException("Database connection error", e);
+				throw new SQLException(ERROR_DB_CONNECTION, e);
 			}
 		}
 
@@ -588,28 +589,28 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	/**
-	 * Maps a database result set to an order model
-	 * 
-	 * @param rs Result set to map
-	 * @return Populated OrderModel
-	 */
-	private OrderModel mapResultSetToOrder(ResultSet rs) throws SQLException {
-		OrderModel order = new OrderModel();
+     * Maps a database result set to an order model
+     * 
+     * @param rs Result set to map
+     * @return Populated OrderModel
+     */
+    private OrderModel mapResultSetToOrder(ResultSet rs) throws SQLException {
+        OrderModel order = new OrderModel();
 
-		order.setOrderID(rs.getInt("orderID"));
-		order.setUserID(rs.getInt("userID"));
-		order.setOrderDate(rs.getTimestamp("order_date"));
-		order.setShippingAddress(rs.getString("shipping_address"));
+        order.setOrderID(rs.getInt("orderID"));
+        order.setUserID(rs.getInt("userID"));
+        order.setOrderDate(rs.getTimestamp("order_date"));
+        order.setShippingAddress(rs.getString("shipping_address"));
 
-		// Set the required totalAmount
-		order.setTotalAmount(rs.getBigDecimal("total_amount"));
-		order.setOrderStatus(rs.getString("order_status"));
+        // Set the required totalAmount
+        order.setTotalAmount(rs.getBigDecimal("total_amount"));
+        order.setOrderStatus(rs.getString("order_status"));
 
-		// Set defaults for columns that might not exist
-		order.setSubtotal(BigDecimal.ZERO);
-		order.setShippingCost(BigDecimal.ZERO);
-		order.setDiscount(BigDecimal.ZERO);
+        // Set defaults for columns that might not exist
+        order.setSubtotal(BigDecimal.ZERO);
+        order.setShippingCost(BigDecimal.ZERO);
+        order.setDiscount(BigDecimal.ZERO);
 
-		return order;
-	}
+        return order;
+    }
 }

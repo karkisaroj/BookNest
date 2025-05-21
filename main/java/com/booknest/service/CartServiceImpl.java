@@ -16,6 +16,24 @@ public class CartServiceImpl implements CartService {
 
 	private final BookService bookService;
 
+	// Error message constants
+	private static final String ERROR_BOOK_NOT_FOUND = "Book with ID %d not found.";
+	private static final String ERROR_CANNOT_ADD_ITEM = "Cannot add item: %s";
+	private static final String ERROR_UPDATE_EXISTING_QUANTITY = "Failed to update quantity for existing cart item.";
+	private static final String ERROR_INSERT_CART_ITEM = "Failed to insert new cart item.";
+	private static final String ERROR_UPDATE_NEW_QUANTITY = "Failed to update quantity after inserting new cart item.";
+	private static final String ERROR_DB_ADDING_ITEM = "Database error while adding item to cart.";
+	private static final String ERROR_UNEXPECTED_ADDING_ITEM = "An unexpected error occurred while adding item to cart.";
+	private static final String ERROR_DB_UPDATING_QUANTITY = "Database error while updating cart item quantity.";
+	private static final String ERROR_DB_REMOVING_ITEM = "Database error while removing item from cart.";
+	private static final String ERROR_DB_RETRIEVING_CONTENTS = "Database error retrieving cart contents.";
+	private static final String ERROR_DB_DRIVER_CONFIG = "Database driver configuration error.";
+	private static final String ERROR_CLEAR_CART_NULL_USER = "Cannot clear cart: User ID is null";
+	private static final String ERROR_DB_CLEARING_CART = "Database error while clearing cart.";
+	private static final String ERROR_DB_DRIVER = "DB Driver error";
+	private static final String ERROR_INSERT_NO_ID = "Insert failed, no ID obtained.";
+	private static final String ERROR_INSERT_NO_ROWS = "Insert failed, no rows affected.";
+
 	/**
 	 * Default constructor that initializes with a new BookServiceImpl.
 	 */
@@ -49,10 +67,10 @@ public class CartServiceImpl implements CartService {
 			try {
 				book = bookService.getBookById(bId);
 				if (book == null) {
-					throw new CartServiceException("Book with ID " + bId + " not found.");
+					throw new CartServiceException(String.format(ERROR_BOOK_NOT_FOUND, bId));
 				}
 			} catch (Exception e) {
-				throw new CartServiceException("Cannot add item: " + e.getMessage(), e);
+				throw new CartServiceException(String.format(ERROR_CANNOT_ADD_ITEM, e.getMessage()), e);
 			}
 
 			// Check if item already exists in cart
@@ -64,7 +82,7 @@ public class CartServiceImpl implements CartService {
 				int nq = existing.get().getQuantity() + q;
 				boolean upd = updateCartItemQuantityInternal(existing.get().getCartItemId(), nq);
 				if (!upd) {
-					throw new CartServiceException("Failed to update quantity for existing cart item.");
+					throw new CartServiceException(ERROR_UPDATE_EXISTING_QUANTITY);
 				}
 				existing.get().setQuantity(nq);
 				result = existing.get();
@@ -72,12 +90,12 @@ public class CartServiceImpl implements CartService {
 				// Insert new cart item
 				result = insertCartItem(uId, bId);
 				if (result == null) {
-					throw new CartServiceException("Failed to insert new cart item.");
+					throw new CartServiceException(ERROR_INSERT_CART_ITEM);
 				}
 				if (q > 1) {
 					boolean upd = updateCartItemQuantityInternal(result.getCartItemId(), q);
 					if (!upd) {
-						throw new CartServiceException("Failed to update quantity after inserting new cart item.");
+						throw new CartServiceException(ERROR_UPDATE_NEW_QUANTITY);
 					}
 					result.setQuantity(q);
 				}
@@ -86,11 +104,11 @@ public class CartServiceImpl implements CartService {
 			result.setBookModel(book);
 			return result;
 		} catch (SQLException e) {
-			throw new CartServiceException("Database error while adding item to cart.", e);
+			throw new CartServiceException(ERROR_DB_ADDING_ITEM, e);
 		} catch (CartServiceException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new CartServiceException("An unexpected error occurred while adding item to cart.", e);
+			throw new CartServiceException(ERROR_UNEXPECTED_ADDING_ITEM, e);
 		}
 	}
 
@@ -113,7 +131,7 @@ public class CartServiceImpl implements CartService {
 		try {
 			return updateCartItemQuantityInternal(cId, nq);
 		} catch (SQLException e) {
-			throw new CartServiceException("Database error while updating cart item quantity.", e);
+			throw new CartServiceException(ERROR_DB_UPDATING_QUANTITY, e);
 		}
 	}
 
@@ -130,7 +148,7 @@ public class CartServiceImpl implements CartService {
 		try {
 			return deleteCartItemInternal(cId);
 		} catch (SQLException e) {
-			throw new CartServiceException("Database error while removing item from cart.", e);
+			throw new CartServiceException(ERROR_DB_REMOVING_ITEM, e);
 		}
 	}
 
@@ -180,9 +198,9 @@ public class CartServiceImpl implements CartService {
 				items.add(cartItem);
 			}
 		} catch (SQLException e) {
-			throw new CartServiceException("Database error retrieving cart contents.", e);
+			throw new CartServiceException(ERROR_DB_RETRIEVING_CONTENTS, e);
 		} catch (ClassNotFoundException e) {
-			throw new CartServiceException("Database driver configuration error.", e);
+			throw new CartServiceException(ERROR_DB_DRIVER_CONFIG, e);
 		} finally {
 			close(rs);
 			close(ps);
@@ -200,7 +218,7 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public void clearCart(Integer userId) throws CartServiceException {
 		if (userId == null) {
-			throw new CartServiceException("Cannot clear cart: User ID is null");
+			throw new CartServiceException(ERROR_CLEAR_CART_NULL_USER);
 		}
 
 		String sql = "DELETE FROM cart_item WHERE userID = ?";
@@ -213,9 +231,9 @@ public class CartServiceImpl implements CartService {
 			ps.setInt(1, userId);
 			ps.executeUpdate();
 		} catch (SQLException e) {
-			throw new CartServiceException("Database error while clearing cart.", e);
+			throw new CartServiceException(ERROR_DB_CLEARING_CART, e);
 		} catch (ClassNotFoundException e) {
-			throw new CartServiceException("Database driver configuration error.", e);
+			throw new CartServiceException(ERROR_DB_DRIVER_CONFIG, e);
 		} finally {
 			close(ps);
 			close(conn);
@@ -240,7 +258,7 @@ public class CartServiceImpl implements CartService {
 					return Optional.of(mapRowToCartItemBasic(rs));
 			}
 		} catch (ClassNotFoundException e) {
-			throw new SQLException("DB Driver error", e);
+			throw new SQLException(ERROR_DB_DRIVER, e);
 		}
 		return Optional.empty();
 	}
@@ -274,11 +292,11 @@ public class CartServiceImpl implements CartService {
 					newItem.setBookId(bookId);
 					newItem.setQuantity(1);
 				} else
-					throw new SQLException("Insert failed, no ID obtained.");
+					throw new SQLException(ERROR_INSERT_NO_ID);
 			} else
-				throw new SQLException("Insert failed, no rows affected.");
+				throw new SQLException(ERROR_INSERT_NO_ROWS);
 		} catch (ClassNotFoundException e) {
-			throw new SQLException("DB Driver error", e);
+			throw new SQLException(ERROR_DB_DRIVER, e);
 		} finally {
 			close(keys);
 			close(ps);
@@ -302,7 +320,7 @@ public class CartServiceImpl implements CartService {
 			ps.setInt(2, cartItemId);
 			return ps.executeUpdate() > 0;
 		} catch (ClassNotFoundException e) {
-			throw new SQLException("DB Driver error", e);
+			throw new SQLException(ERROR_DB_DRIVER, e);
 		}
 	}
 
@@ -319,7 +337,7 @@ public class CartServiceImpl implements CartService {
 			ps.setInt(1, cartItemId);
 			return ps.executeUpdate() > 0;
 		} catch (ClassNotFoundException e) {
-			throw new SQLException("DB Driver error", e);
+			throw new SQLException(ERROR_DB_DRIVER, e);
 		}
 	}
 

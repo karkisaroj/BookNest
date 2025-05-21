@@ -18,6 +18,22 @@ import java.util.List;
  */
 public class CategoryServiceImpl implements CategoryService {
 
+	// SQL query constants
+	private static final String SQL_GET_ALL_CATEGORIES = "SELECT categoryID, category_name, category_description FROM categories";
+	private static final String SQL_GET_CATEGORY_BY_ID = "SELECT categoryID, category_name, category_description FROM categories WHERE categoryID = ?";
+
+	// Column name constants
+	private static final String COLUMN_CATEGORY_ID = "categoryID";
+	private static final String COLUMN_CATEGORY_NAME = "category_name";
+	private static final String COLUMN_CATEGORY_DESCRIPTION = "category_description";
+
+	// Error message constants
+	private static final String ERROR_DB_GET_CATEGORIES = "Failed to retrieve categories from database.";
+	private static final String ERROR_DB_GET_CATEGORY = "Failed to retrieve category with ID: ";
+	private static final String ERROR_DB_ADD_CATEGORY = "Failed to add new category.";
+	private static final String ERROR_DB_UPDATE_CATEGORY = "Failed to update category.";
+	private static final String ERROR_DB_DELETE_CATEGORY = "Failed to delete category.";
+
 	/**
 	 * Retrieves all categories from the database.
 	 * 
@@ -31,19 +47,17 @@ public class CategoryServiceImpl implements CategoryService {
 
 		// FIXED: Changed 'description' to 'category_description' to match your database
 		// column
-		String sql = "SELECT categoryID, category_name, category_description FROM categories";
-
 		try (Connection conn = DbConfiguration.getDbConnection();
-				PreparedStatement stmt = conn.prepareStatement(sql);
+				PreparedStatement stmt = conn.prepareStatement(SQL_GET_ALL_CATEGORIES);
 				ResultSet rs = stmt.executeQuery()) {
 
 			while (rs.next()) {
 				Category category = new Category();
-				category.setCategoryId(rs.getInt("categoryID"));
-				category.setCategoryName(rs.getString("category_name"));
+				category.setCategoryId(rs.getInt(COLUMN_CATEGORY_ID));
+				category.setCategoryName(rs.getString(COLUMN_CATEGORY_NAME));
 
 				// FIXED: Map 'category_description' column to description field
-				category.setDescription(rs.getString("category_description"));
+				category.setDescription(rs.getString(COLUMN_CATEGORY_DESCRIPTION));
 
 				categories.add(category);
 			}
@@ -63,20 +77,19 @@ public class CategoryServiceImpl implements CategoryService {
 	public Category getCategoryById(int id) throws SQLException, ClassNotFoundException {
 		// FIXED: Changed 'description' to 'category_description' to match your database
 		// column
-		String sql = "SELECT categoryID, category_name, category_description FROM categories WHERE categoryID = ?";
-
-		try (Connection conn = DbConfiguration.getDbConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+		try (Connection conn = DbConfiguration.getDbConnection();
+				PreparedStatement stmt = conn.prepareStatement(SQL_GET_CATEGORY_BY_ID)) {
 
 			stmt.setInt(1, id);
 
 			try (ResultSet rs = stmt.executeQuery()) {
 				if (rs.next()) {
 					Category category = new Category();
-					category.setCategoryId(rs.getInt("categoryID"));
-					category.setCategoryName(rs.getString("category_name"));
+					category.setCategoryId(rs.getInt(COLUMN_CATEGORY_ID));
+					category.setCategoryName(rs.getString(COLUMN_CATEGORY_NAME));
 
 					// FIXED: Map 'category_description' column to description field
-					category.setDescription(rs.getString("category_description"));
+					category.setDescription(rs.getString(COLUMN_CATEGORY_DESCRIPTION));
 
 					return category;
 				}

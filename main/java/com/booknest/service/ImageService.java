@@ -13,7 +13,21 @@ import java.io.IOException;
  */
 public class ImageService {
 
+	// Configuration constants
 	private static final long MAX_FILE_SIZE = 3 * 1024 * 1024; // 3MB
+	private static final String MEGABYTE_SUFFIX = " MB";
+	private static final String IMAGE_CONTENT_TYPE_PREFIX = "image/";
+
+	// Path constants
+	private static final String PROFILE_SAVE_FOLDER = "/profilePicture";
+	private static final String PROFILE_IMAGE_PATH_PREFIX = "resources/images/system/profilePicture/";
+	private static final String EMPTY_SUBFOLDER = "";
+
+	// Validation messages
+	private static final String ERROR_NULL_OR_EMPTY = "File is null or empty";
+	private static final String ERROR_FILE_TOO_LARGE = "File exceeds maximum size limit";
+	private static final String ERROR_NOT_AN_IMAGE = "File is not an image";
+
 	private final imageUtil util;
 
 	/**
@@ -41,7 +55,7 @@ public class ImageService {
 		}
 
 		String contentType = filePart.getContentType();
-		return contentType != null && contentType.startsWith("image/");
+		return contentType != null && contentType.startsWith(IMAGE_CONTENT_TYPE_PREFIX);
 	}
 
 	/**
@@ -56,12 +70,11 @@ public class ImageService {
 			return null;
 		}
 
-		String saveFolder = "/profilePicture";
-		boolean uploaded = util.uploadImage(filePart, "", saveFolder);
+		boolean uploaded = util.uploadImage(filePart, EMPTY_SUBFOLDER, PROFILE_SAVE_FOLDER);
 
 		if (uploaded) {
 			String imageName = util.getImageNameFromPart(filePart);
-			return "resources/images/system/profilePicture/" + imageName;
+			return PROFILE_IMAGE_PATH_PREFIX + imageName;
 		}
 
 		return null;
@@ -82,6 +95,6 @@ public class ImageService {
 	 * @return The maximum file size as a formatted string (e.g. "3 MB")
 	 */
 	public String getFormattedMaxFileSize() {
-		return (MAX_FILE_SIZE / (1024 * 1024)) + " MB";
+		return (MAX_FILE_SIZE / (1024 * 1024)) + MEGABYTE_SUFFIX;
 	}
 }

@@ -14,18 +14,35 @@ import com.booknest.model.CartItem;
  */
 public class CheckoutServiceImpl implements CheckoutService {
 
-	// Define this as a static final constant
-	private static final BigDecimal DEFAULT_SHIPPING_COST = new BigDecimal("100.00");
+	// Service instances
 	private final OrderService orderService;
 	private final CartService cartService;
 	private final PaymentService paymentService;
+
+	// Cost constants
+	private static final BigDecimal DEFAULT_SHIPPING_COST = new BigDecimal("100.00");
+	private static final BigDecimal ZERO_DISCOUNT = BigDecimal.ZERO;
 
 	// Payment method constants
 	private static final String PAYMENT_METHOD_COD = "Cash on Delivery";
 	private static final String PAYMENT_METHOD_ONLINE = "Online Payment";
 
+	// Payment parameters
+	private static final String PARAM_COD = "cod";
+	private static final String PARAM_ONLINE = "online";
+
 	// Payment status constant
 	private static final String PAYMENT_STATUS_COMPLETED = "Completed";
+
+	// Error message constants
+	private static final String ERROR_CHECKOUT_FAILED = "Checkout failed: Invalid input parameters.";
+	private static final String ERROR_CART_CLEAR_FAILED = "Failed to clear cart: %s";
+	private static final String ERROR_PAYMENT_CREATION_FAILED = "Failed to create payment record: %s";
+
+	// Log message constants
+	private static final String LOG_CART_CLEARED = "Cart cleared for user ID: %d";
+	private static final String LOG_CREATING_PAYMENT = "Creating payment record for order ID: %d with amount: %s, method: %s, status: %s";
+	private static final String LOG_PAYMENT_CREATED = "Payment record created with ID: %d";
 
 	/**
 	 * Default constructor that initializes required services.
@@ -69,6 +86,7 @@ public class CheckoutServiceImpl implements CheckoutService {
 		// Validate inputs
 		if (userId == null || cartItems == null || cartItems.isEmpty()
 				|| !validateAddressInfo(streetAddress, city, state, zipCode, phone)) {
+			System.err.println(ERROR_CHECKOUT_FAILED);
 			return -1;
 		}
 
@@ -77,8 +95,8 @@ public class CheckoutServiceImpl implements CheckoutService {
 
 		// Calculate costs
 		BigDecimal subtotal = calculateSubtotal(cartItems);
-		BigDecimal shippingCost = DEFAULT_SHIPPING_COST; // Use constant directly to avoid potential recursion
-		BigDecimal discount = BigDecimal.ZERO; // Implement discount logic if needed
+		BigDecimal shippingCost = DEFAULT_SHIPPING_COST;
+		BigDecimal discount = ZERO_DISCOUNT; // Implement discount logic if needed
 		BigDecimal totalAmount = subtotal.add(shippingCost).subtract(discount);
 
 		// Create the order
@@ -89,9 +107,8 @@ public class CheckoutServiceImpl implements CheckoutService {
 		if (orderId > 0) {
 			try {
 				cartService.clearCart(userId);
-				System.out.println("Cart cleared for user ID: " + userId);
 			} catch (CartServiceException e) {
-				System.err.println("Failed to clear cart: " + e.getMessage());
+				System.err.println(String.format(ERROR_CART_CLEAR_FAILED, e.getMessage()));
 				// Don't fail the checkout process if cart clearing fails
 			}
 		}
@@ -125,10 +142,8 @@ public class CheckoutServiceImpl implements CheckoutService {
 	@Override
 	public BigDecimal calculateOrderTotal(List<CartItem> cartItems) {
 		BigDecimal subtotal = calculateSubtotal(cartItems);
-		// Use the constant directly instead of calling getShippingCost() to avoid
-		// potential recursion
 		BigDecimal shippingCost = DEFAULT_SHIPPING_COST;
-		BigDecimal discount = BigDecimal.ZERO;
+		BigDecimal discount = ZERO_DISCOUNT;
 
 		return subtotal.add(shippingCost).subtract(discount);
 	}
@@ -161,7 +176,6 @@ public class CheckoutServiceImpl implements CheckoutService {
 	 */
 	@Override
 	public BigDecimal getShippingCost() {
-		// Simply return the constant, do not call this method recursively!
 		return DEFAULT_SHIPPING_COST;
 	}
 
@@ -194,17 +208,14 @@ public class CheckoutServiceImpl implements CheckoutService {
 		// Always use Completed status
 		String paymentStatus = PAYMENT_STATUS_COMPLETED;
 
-		System.out.println("Creating payment record for order ID: " + orderId + " with amount: " + amount + ", method: "
-				+ paymentMethod + ", status: " + paymentStatus);
 
 		try {
 			// Create payment using the payment service
 			int paymentId = paymentService.createPayment(orderId, amount, paymentMethod, paymentStatus);
 
-			System.out.println("Payment record created with ID: " + paymentId);
 			return paymentId;
 		} catch (SQLException e) {
-			System.err.println("Failed to create payment record: " + e.getMessage());
+			System.err.println(String.format(ERROR_PAYMENT_CREATION_FAILED, e.getMessage()));
 			e.printStackTrace();
 			throw e;
 		}
@@ -223,9 +234,9 @@ public class CheckoutServiceImpl implements CheckoutService {
 		}
 
 		switch (paymentMethodParam.toLowerCase()) {
-		case "cod":
+		case PARAM_COD:
 			return PAYMENT_METHOD_COD;
-		case "online":
+		case PARAM_ONLINE:
 			return PAYMENT_METHOD_ONLINE;
 		default:
 			return paymentMethodParam;

@@ -16,11 +16,38 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller for handling book search functionality. Supports searching by text
+ * query and category filtering.
+ * 
+ * @author Saroj Karki 23047612
+ */
 @WebServlet("/search")
 public class SearchController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private BookService bookService;
 	private CategoryService categoryService;
+
+	// Path constants
+	private static final String BOOKS_PAGE_PATH = "/books";
+	private static final String SEARCH_RESULTS_JSP_PATH = "/WEB-INF/pages/search-result.jsp";
+
+	// Parameter constants
+	private static final String QUERY_PARAM = "query";
+	private static final String CATEGORY_ID_PARAM = "categoryId";
+	private static final String CATEGORIES_ATTR = "categories";
+	private static final String SELECTED_CATEGORY_ID_ATTR = "selectedCategoryId";
+	private static final String SELECTED_CATEGORY_NAME_ATTR = "selectedCategoryName";
+	private static final String SEARCH_QUERY_ATTR = "searchQuery";
+	private static final String SEARCH_RESULTS_ATTR = "searchResults";
+	private static final String ERROR_ATTR = "error";
+
+	// Message constants
+	private static final String CATEGORIES_LOAD_ERROR_PREFIX = "Failed to load categories: ";
+	private static final String CATEGORY_NAME_ERROR_PREFIX = "Failed to get category name: ";
+	private static final String INVALID_CATEGORY_ID_PREFIX = "Invalid category ID: ";
+	private static final String SEARCH_FAILED_PREFIX = "Search failed: ";
+	private static final String CONTROLLER_ERROR_PREFIX = "CONTROLLER ERROR: ";
 
 	public SearchController() {
 		super();
@@ -31,16 +58,16 @@ public class SearchController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String query = request.getParameter("query");
-		String categoryIdStr = request.getParameter("categoryId");
+		String query = request.getParameter(QUERY_PARAM);
+		String categoryIdStr = request.getParameter(CATEGORY_ID_PARAM);
 		Integer categoryId = null;
 
 		// Load categories for the filter buttons
 		try {
 			List<Category> categories = categoryService.getAllCategories();
-			request.setAttribute("categories", categories);
+			request.setAttribute(CATEGORIES_ATTR, categories);
 		} catch (Exception e) {
-			System.err.println("CONTROLLER ERROR: Failed to load categories: " + e.getMessage());
+			System.err.println(CONTROLLER_ERROR_PREFIX + CATEGORIES_LOAD_ERROR_PREFIX + e.getMessage());
 			// Continue with the search even if categories fail to load
 		}
 
@@ -48,19 +75,19 @@ public class SearchController extends HttpServlet {
 		if (categoryIdStr != null && !categoryIdStr.isEmpty()) {
 			try {
 				categoryId = Integer.parseInt(categoryIdStr);
-				request.setAttribute("selectedCategoryId", categoryId);
+				request.setAttribute(SELECTED_CATEGORY_ID_ATTR, categoryId);
 
 				// Get category name for display
 				try {
 					Category category = categoryService.getCategoryById(categoryId);
 					if (category != null) {
-						request.setAttribute("selectedCategoryName", category.getCategoryName());
+						request.setAttribute(SELECTED_CATEGORY_NAME_ATTR, category.getCategoryName());
 					}
 				} catch (Exception e) {
-					System.err.println("CONTROLLER ERROR: Failed to get category name: " + e.getMessage());
+					System.err.println(CONTROLLER_ERROR_PREFIX + CATEGORY_NAME_ERROR_PREFIX + e.getMessage());
 				}
 			} catch (NumberFormatException e) {
-				System.err.println("CONTROLLER ERROR: Invalid category ID: " + categoryIdStr);
+				System.err.println(CONTROLLER_ERROR_PREFIX + INVALID_CATEGORY_ID_PREFIX + categoryIdStr);
 			}
 		}
 
@@ -71,7 +98,7 @@ public class SearchController extends HttpServlet {
 			// Search by text query if provided
 			if (query != null && !query.isEmpty()) {
 				results = bookService.searchBooksByTitle(query);
-				request.setAttribute("searchQuery", query);
+				request.setAttribute(SEARCH_QUERY_ATTR, query);
 				hasSearchCriteria = true;
 			}
 
@@ -83,26 +110,25 @@ public class SearchController extends HttpServlet {
 
 			// No search criteria provided
 			if (!hasSearchCriteria) {
-				response.sendRedirect(request.getContextPath() + "/books");
+				response.sendRedirect(request.getContextPath() + BOOKS_PAGE_PATH);
 				return;
 			}
-
 
 			// Always use an empty list if null
 			if (results == null) {
 				results = new ArrayList<>();
 			}
 
-			request.setAttribute("searchResults", results);
-			request.getRequestDispatcher("/WEB-INF/pages/search-result.jsp").forward(request, response);
+			request.setAttribute(SEARCH_RESULTS_ATTR, results);
+			request.getRequestDispatcher(SEARCH_RESULTS_JSP_PATH).forward(request, response);
 
 		} catch (Exception e) {
-			System.err.println("CONTROLLER ERROR: " + e.getMessage());
+			System.err.println(CONTROLLER_ERROR_PREFIX + e.getMessage());
 			e.printStackTrace();
 
-			request.setAttribute("error", "Search failed: " + e.getMessage());
-			request.setAttribute("searchResults", new ArrayList<>());
-			request.getRequestDispatcher("/WEB-INF/pages/search-result.jsp").forward(request, response);
+			request.setAttribute(ERROR_ATTR, SEARCH_FAILED_PREFIX + e.getMessage());
+			request.setAttribute(SEARCH_RESULTS_ATTR, new ArrayList<>());
+			request.getRequestDispatcher(SEARCH_RESULTS_JSP_PATH).forward(request, response);
 		}
 	}
 

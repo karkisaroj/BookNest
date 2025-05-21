@@ -26,7 +26,43 @@ import java.io.IOException;
 public class MyAccountController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final UserService userService = new UserServiceImpl();
+
+	// Session attribute constants
 	private static final String USERNAME_SESSION_KEY = "userName";
+	private static final String FIRST_NAME_SESSION_KEY = "firstName";
+	private static final String LAST_NAME_SESSION_KEY = "lastName";
+	private static final String EMAIL_SESSION_KEY = "email";
+	private static final String PHONE_SESSION_KEY = "phoneNumber";
+	private static final String ADDRESS_SESSION_KEY = "address";
+	private static final String SUCCESS_MESSAGE_KEY = "successMessage";
+
+	// Request attribute constants
+	private static final String PROFILE_IMAGE_URL_PARAM = "profileImageUrl";
+	private static final String ERROR_MESSAGE_PARAM = "errorMessage";
+
+	// Form parameter constants
+	private static final String IMAGE_PARAM = "image";
+
+	// Path constants
+	private static final String LOGIN_PAGE_PATH = "/login";
+	private static final String MYACCOUNT_PAGE_PATH = "/myaccount";
+	private static final String MYACCOUNT_JSP_PATH = "/WEB-INF/pages/myaccount.jsp";
+
+	// Resource path constants
+	private static final String RESOURCE_PATH = "resources";
+	private static final String PROFILE_IMAGE_DIR = "images/UploadedProfilePicture";
+	private static final String RELATIVE_IMAGE_PATH_PREFIX = "resources/images/UploadedProfilePicture/";
+
+	// Message constants
+	private static final String FILE_SIZE_ERROR_MESSAGE = "File size exceeds the maximum allowed size of 3 MB.";
+	private static final String DB_UPDATE_ERROR_MESSAGE = "Failed to update profile picture information in the database.";
+	private static final String UPLOAD_ERROR_MESSAGE = "Failed to upload the profile picture.";
+	private static final String UNEXPECTED_ERROR_MESSAGE = "An unexpected error occurred while updating your profile.";
+	private static final String PROFILE_UPDATE_SUCCESS_MESSAGE = "Profile picture updated successfully!";
+
+	// Configuration constants
+	private static final int MAX_FILE_SIZE_MB = 3;
+	private static final int MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -34,42 +70,39 @@ public class MyAccountController extends HttpServlet {
 
 		// Check if user is logged in
 		if (!SessionUtil.isLoggedIn(request, USERNAME_SESSION_KEY)) {
-			response.sendRedirect(request.getContextPath() + "/login");
+			response.sendRedirect(request.getContextPath() + LOGIN_PAGE_PATH);
 			return;
 		}
 
 		// Get user attributes from session
 		String userName = SessionUtil.getAttribute(request, USERNAME_SESSION_KEY, String.class);
-		String firstName = SessionUtil.getAttribute(request, "firstName", String.class);
-		String lastName = SessionUtil.getAttribute(request, "lastName", String.class);
-		String email = SessionUtil.getAttribute(request, "email", String.class);
-		String phoneNumber = SessionUtil.getAttribute(request, "phoneNumber", String.class);
-		String address = SessionUtil.getAttribute(request, "address", String.class);
+		String firstName = SessionUtil.getAttribute(request, FIRST_NAME_SESSION_KEY, String.class);
+		String lastName = SessionUtil.getAttribute(request, LAST_NAME_SESSION_KEY, String.class);
+		String email = SessionUtil.getAttribute(request, EMAIL_SESSION_KEY, String.class);
+		String phoneNumber = SessionUtil.getAttribute(request, PHONE_SESSION_KEY, String.class);
+		String address = SessionUtil.getAttribute(request, ADDRESS_SESSION_KEY, String.class);
 
 		// Get profile image URL
 		String profileImageUrl = userService.getProfileImageUrl(userName);
 
 		// Set attributes for the JSP
-		request.setAttribute("userName", userName);
-		request.setAttribute("firstName", firstName);
-		request.setAttribute("lastName", lastName);
-		request.setAttribute("email", email);
-		request.setAttribute("phoneNumber", phoneNumber);
-		request.setAttribute("address", address);
-		request.setAttribute("profileImageUrl", profileImageUrl);
+		request.setAttribute(USERNAME_SESSION_KEY, userName);
+		request.setAttribute(FIRST_NAME_SESSION_KEY, firstName);
+		request.setAttribute(LAST_NAME_SESSION_KEY, lastName);
+		request.setAttribute(EMAIL_SESSION_KEY, email);
+		request.setAttribute(PHONE_SESSION_KEY, phoneNumber);
+		request.setAttribute(ADDRESS_SESSION_KEY, address);
+		request.setAttribute(PROFILE_IMAGE_URL_PARAM, profileImageUrl);
 
 		// Check for flash messages
-		String successMessage = SessionUtil.getAttribute(request, "successMessage", String.class);
+		String successMessage = SessionUtil.getAttribute(request, SUCCESS_MESSAGE_KEY, String.class);
 		if (successMessage != null) {
-			request.setAttribute("successMessage", successMessage);
-			SessionUtil.removeAttribute(request, "successMessage");
+			request.setAttribute(SUCCESS_MESSAGE_KEY, successMessage);
+			SessionUtil.removeAttribute(request, SUCCESS_MESSAGE_KEY);
 		}
 
 		// Forward to the JSP
-		String forwardPath = "/WEB-INF/pages/myaccount.jsp";
-
-		request.getRequestDispatcher(forwardPath).forward(request, response);
-
+		request.getRequestDispatcher(MYACCOUNT_JSP_PATH).forward(request, response);
 	}
 
 	@Override
@@ -79,7 +112,7 @@ public class MyAccountController extends HttpServlet {
 		// Check if user is logged in
 		String userName = SessionUtil.getAttribute(request, USERNAME_SESSION_KEY, String.class);
 		if (userName == null) {
-			response.sendRedirect(request.getContextPath() + "/login");
+			response.sendRedirect(request.getContextPath() + LOGIN_PAGE_PATH);
 			return;
 		}
 
@@ -88,54 +121,50 @@ public class MyAccountController extends HttpServlet {
 
 		try {
 			// Get uploaded file
-			Part filePart = request.getPart("image");
+			Part filePart = request.getPart(IMAGE_PARAM);
 
 			// Validate file size (3MB limit)
-			if (filePart.getSize() > 3 * 1024 * 1024) {
-				errorMessage = "File size exceeds the maximum allowed size of 3 MB.";
-				request.setAttribute("errorMessage", errorMessage);
+			if (filePart.getSize() > MAX_FILE_SIZE_BYTES) {
+				errorMessage = FILE_SIZE_ERROR_MESSAGE;
+				request.setAttribute(ERROR_MESSAGE_PARAM, errorMessage);
 				doGet(request, response);
 				return;
 			}
 
 			// Save the profile image to UploadedProfilePicture folder
 			imageUtil util = new imageUtil();
-			String saveFolder = "images/UploadedProfilePicture";
-			boolean uploaded = util.uploadImage(filePart, getServletContext().getRealPath("resources"), saveFolder);
+			boolean uploaded = util.uploadImage(filePart, getServletContext().getRealPath(RESOURCE_PATH),
+					PROFILE_IMAGE_DIR);
 
 			if (uploaded) {
 				String imageName = util.getImageNameFromPart(filePart);
 				// The path to store in database
-				String relativePath = "resources/images/UploadedProfilePicture/" + imageName;
+				String relativePath = RELATIVE_IMAGE_PATH_PREFIX + imageName;
 
 				// Update database with new image URL
 				boolean updated = userService.updateProfileImageUrl(userName, relativePath);
 
 				if (updated) {
-					successFlashMessage = "Profile picture updated successfully!";
+					successFlashMessage = PROFILE_UPDATE_SUCCESS_MESSAGE;
 				} else {
-					errorMessage = "Failed to update profile picture information in the database.";
+					errorMessage = DB_UPDATE_ERROR_MESSAGE;
 				}
 			} else {
-				errorMessage = "Failed to upload the profile picture.";
+				errorMessage = UPLOAD_ERROR_MESSAGE;
 			}
 
 		} catch (Exception e) {
-
 			e.printStackTrace();
-			errorMessage = "An unexpected error occurred while updating your profile.";
+			errorMessage = UNEXPECTED_ERROR_MESSAGE;
 		}
 
 		// Handle response based on outcome
 		if (errorMessage != null) {
-
-			request.setAttribute("errorMessage", errorMessage);
+			request.setAttribute(ERROR_MESSAGE_PARAM, errorMessage);
 			doGet(request, response);
 		} else {
-
-			SessionUtil.setAttribute(request, "successMessage", successFlashMessage);
-			response.sendRedirect(request.getContextPath() + "/myaccount");
+			SessionUtil.setAttribute(request, SUCCESS_MESSAGE_KEY, successFlashMessage);
+			response.sendRedirect(request.getContextPath() + MYACCOUNT_PAGE_PATH);
 		}
-
 	}
 }
