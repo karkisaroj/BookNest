@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import com.booknest.config.DbConfiguration;
 import com.booknest.util.imageUtil;
 import jakarta.servlet.http.Part;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -21,23 +22,15 @@ public class MyAccountService {
 	// File size constants
 	private static final int MAX_FILE_SIZE = 3 * 1024 * 1024; // 3 MB
 
-	// SQL query constants
-	private static final String SQL_GET_PROFILE_IMAGE = "SELECT user_img_url FROM user WHERE user_name = ?";
-	private static final String SQL_UPDATE_PROFILE_IMAGE = "UPDATE user SET user_img_url = ? WHERE user_name = ?";
-
 	// File path constants
 	private static final String PROFILE_SAVE_FOLDER = "/profile";
 	private static final String PROFILE_IMAGE_PATH_PREFIX = "resources/images/system/profile/";
 	private static final String DEFAULT_PROFILE_IMAGE_PATH = "resources/images/system/default.png";
 	private static final String EMPTY_SUBFOLDER = "";
 
-	// Database column constants
-	private static final String COLUMN_USER_IMG_URL = "user_img_url";
-
 	// Error message constants
 	private static final String ERROR_GET_PROFILE_IMAGE = "Error retrieving profile image for user: ";
 	private static final String ERROR_UPDATE_PROFILE_IMAGE = "Error updating profile image for user: ";
-	
 
 	/**
 	 * Default constructor that initializes the image utility.
@@ -59,12 +52,13 @@ public class MyAccountService {
 
 		try {
 			conn = DbConfiguration.getDbConnection();
-			ps = conn.prepareStatement(SQL_GET_PROFILE_IMAGE);
+			String sql = "SELECT user_img_url FROM user WHERE user_name = ?";
+			ps = conn.prepareStatement(sql);
 			ps.setString(1, userName);
 			ResultSet rs = ps.executeQuery();
 
 			if (rs.next()) {
-				profileImageUrl = rs.getString(COLUMN_USER_IMG_URL);
+				profileImageUrl = rs.getString("user_img_url");
 			}
 		} catch (Exception e) {
 			System.err.println(ERROR_GET_PROFILE_IMAGE + userName);
@@ -90,11 +84,16 @@ public class MyAccountService {
 
 		try {
 			conn = DbConfiguration.getDbConnection();
-			ps = conn.prepareStatement(SQL_UPDATE_PROFILE_IMAGE);
+			String sql = "UPDATE user SET user_img_url = ? WHERE user_name = ?";
+			ps = conn.prepareStatement(sql);
 			ps.setString(1, imagePath);
 			ps.setString(2, userName);
 			int rowsAffected = ps.executeUpdate();
 			success = (rowsAffected > 0);
+
+			// Debug logging
+			System.out
+					.println("Updated profile image URL for " + userName + ": " + imagePath + " - Success: " + success);
 		} catch (Exception e) {
 			System.err.println(ERROR_UPDATE_PROFILE_IMAGE + userName);
 			e.printStackTrace();
@@ -112,6 +111,8 @@ public class MyAccountService {
 	 * @return true if file size is valid, false otherwise
 	 */
 	public boolean isValidFileSize(Part filePart) {
+		if (filePart == null)
+			return false;
 		return filePart.getSize() <= MAX_FILE_SIZE;
 	}
 
@@ -123,14 +124,42 @@ public class MyAccountService {
 	 * @throws IOException if an I/O error occurs during file processing
 	 */
 	public String uploadProfileImage(Part filePart) throws IOException {
-		boolean uploaded = imageUtil.uploadImage(filePart, EMPTY_SUBFOLDER, PROFILE_SAVE_FOLDER);
+		try {
+			// Ensure file exists and has content
+			if (filePart == null || filePart.getSize() == 0) {
+				System.err.println("Empty or null file part provided");
+				return null;
+			}
 
-		if (uploaded) {
-			String imageName = imageUtil.getImageNameFromPart(filePart);
-			return PROFILE_IMAGE_PATH_PREFIX + imageName;
+			// Get file name and check if it's valid
+			String fileName = filePart.getSubmittedFileName();
+			if (fileName == null || fileName.trim().isEmpty()) {
+				System.err.println("Invalid filename: " + fileName);
+				return null;
+			}
+
+			// Log upload attempt
+			System.out.println("Attempting to upload file: " + fileName + " (Size: " + filePart.getSize() + " bytes)");
+
+			// Create a dummy empty file to ensure target directory exists
+			new File(System.getProperty("user.dir") + "/target/classes/static" + PROFILE_SAVE_FOLDER).mkdirs();
+
+			// Upload the image using imageUtil
+			boolean uploaded = imageUtil.uploadImage(filePart, EMPTY_SUBFOLDER, PROFILE_SAVE_FOLDER);
+
+			if (uploaded) {
+				String imageName = imageUtil.getImageNameFromPart(filePart);
+				System.out.println("Upload successful. Image name: " + imageName);
+				return PROFILE_IMAGE_PATH_PREFIX + imageName;
+			} else {
+				System.err.println("Image upload failed");
+				return null;
+			}
+		} catch (Exception e) {
+			System.err.println("Error during image upload: " + e.getMessage());
+			e.printStackTrace();
+			throw new IOException("Failed to upload profile image: " + e.getMessage(), e);
 		}
-
-		return null;
 	}
 
 	/**

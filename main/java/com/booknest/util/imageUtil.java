@@ -1,6 +1,7 @@
 package com.booknest.util;
 
 import java.io.File;
+import java.io.IOException;
 import jakarta.servlet.http.Part;
 
 /**
@@ -29,27 +30,68 @@ public class imageUtil {
 	public boolean uploadImage(Part part, String realPath, String saveFolder) {
 		try {
 			if (part == null || part.getSize() == 0) {
-				System.out.println("No file uploaded or empty file");
+				System.err.println("No file uploaded or empty file");
 				return false;
 			}
 
 			String imageName = getImageNameFromPart(part);
 			String normalizedFolder = saveFolder.replace('\\', '/');
 
-			// Direct path to project directory
-			String projectPath = "C:\\Users\\noble\\NewWorkSpaceCoursework\\BookNest\\src\\main\\webapp\\resources\\" + normalizedFolder;
-			File projectDir = new File(projectPath);
-			if (!projectDir.exists()) {
-				projectDir.mkdirs();
+			// Try multiple possible paths to handle different deployment scenarios
+			String[] possiblePaths = {
+					// Original hardcoded path
+					"C:\\Users\\noble\\NewWorkSpaceCoursework\\BookNest\\src\\main\\webapp\\resources\\"
+							+ normalizedFolder,
+
+					// Path from servlet context (if running in server)
+					realPath + File.separator + normalizedFolder,
+
+					// Relative path from current directory
+					System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" + File.separator
+							+ "webapp" + File.separator + "resources" + File.separator + normalizedFolder,
+
+					// Fallback path directly in resources
+					"resources/" + normalizedFolder };
+
+			// Try each path until one works
+			for (String projectPath : possiblePaths) {
+				try {
+					System.out.println("Attempting to use path: " + projectPath);
+
+					// Create directory if needed
+					File projectDir = new File(projectPath);
+					if (!projectDir.exists()) {
+						boolean created = projectDir.mkdirs();
+						System.out.println("Created directory: " + created);
+					}
+
+					// Check if directory exists and is writable
+					if (!projectDir.exists() || !projectDir.canWrite()) {
+						System.err.println("Directory doesn't exist or isn't writable: " + projectPath);
+						continue;
+					}
+
+					String filePath = projectPath + File.separator + imageName;
+					System.out.println("Writing file to: " + filePath);
+
+					// Try to write the file
+					part.write(filePath);
+					System.out.println("File successfully written to: " + filePath);
+					return true;
+
+				} catch (IOException e) {
+					System.err.println("Error writing to path " + projectPath + ": " + e.getMessage());
+					// Continue to next path
+				}
 			}
 
-			String filePath = projectPath + "/" + imageName;
-
-			// Write directly to the project directory
-			part.write(filePath);
-			return true;
+			// If we get here, all paths failed
+			System.err.println("All attempted paths failed for file upload");
+			return false;
 
 		} catch (Exception e) {
+			System.err.println("Unexpected error during upload: " + e.getMessage());
+			e.printStackTrace();
 			return false;
 		}
 	}
