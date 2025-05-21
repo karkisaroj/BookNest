@@ -14,7 +14,7 @@ public class SessionUtil {
 
 	// Default session timeout in seconds (e.g., 30 minutes)
 	// Adjust as needed, or configure globally in web.xml
-	private static final int DEFAULT_SESSION_TIMEOUT = 30 * 60;
+	private static final int DEFAULT_SESSION_TIMEOUT = 30 * 60 * 60;
 
 	/**
 	 * Sets an attribute in the session with a default timeout. Creates a session if

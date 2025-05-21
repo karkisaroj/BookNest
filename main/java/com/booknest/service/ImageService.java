@@ -23,11 +23,6 @@ public class ImageService {
 	private static final String PROFILE_IMAGE_PATH_PREFIX = "resources/images/system/profilePicture/";
 	private static final String EMPTY_SUBFOLDER = "";
 
-	// Validation messages
-	private static final String ERROR_NULL_OR_EMPTY = "File is null or empty";
-	private static final String ERROR_FILE_TOO_LARGE = "File exceeds maximum size limit";
-	private static final String ERROR_NOT_AN_IMAGE = "File is not an image";
-
 	private final imageUtil util;
 
 	/**

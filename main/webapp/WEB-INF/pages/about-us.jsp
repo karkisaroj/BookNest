@@ -75,7 +75,7 @@
     			<div class="member-info">
         			<h3 class="member-name">Saroj Pratap Karki</h3>
         			<p class="member-role">Leader & Backend developer</p>
-        			<p class="member-bio">Chief Technology Officer & Lead Backend Developer Oversees technical strategy, backend architecture, and system security. Leads API development and cross-functional integration.</p>
+        			<p class="member-bio">Chief Technology Officer & Lead Backend Developer Oversees technical strategy, back end architecture, and system security. Leads API development and cross-functional integration.</p>
     			</div>
 				</div>
                 

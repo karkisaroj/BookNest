@@ -27,13 +27,6 @@ public class CategoryServiceImpl implements CategoryService {
 	private static final String COLUMN_CATEGORY_NAME = "category_name";
 	private static final String COLUMN_CATEGORY_DESCRIPTION = "category_description";
 
-	// Error message constants
-	private static final String ERROR_DB_GET_CATEGORIES = "Failed to retrieve categories from database.";
-	private static final String ERROR_DB_GET_CATEGORY = "Failed to retrieve category with ID: ";
-	private static final String ERROR_DB_ADD_CATEGORY = "Failed to add new category.";
-	private static final String ERROR_DB_UPDATE_CATEGORY = "Failed to update category.";
-	private static final String ERROR_DB_DELETE_CATEGORY = "Failed to delete category.";
-
 	/**
 	 * Retrieves all categories from the database.
 	 * 

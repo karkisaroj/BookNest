@@ -64,9 +64,7 @@ public class BookServiceImpl implements BookService {
 
 			rs = stmt.executeQuery();
 
-			int count = 0;
 			while (rs.next()) {
-				count++;
 				BookCartModel book = new BookCartModel();
 				book.setBookID(rs.getInt("bookID"));
 				book.setBookTitle(rs.getString("book_title"));
@@ -343,9 +341,7 @@ public class BookServiceImpl implements BookService {
 
 			rs = stmt.executeQuery();
 
-			int count = 0;
 			while (rs.next()) {
-				count++;
 				BookCartModel book = new BookCartModel();
 				book.setBookID(rs.getInt("bookID"));
 				book.setBookTitle(rs.getString("book_title"));
@@ -503,7 +499,6 @@ public class BookServiceImpl implements BookService {
 	 */
 	@Override
 	public List<BookCartModel> searchBooksByCategories(String[] categories) throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

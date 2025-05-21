@@ -32,8 +32,6 @@ public class HomeController extends HttpServlet {
 	private final String randomBooksParam = "randomBooks";
 	private final String popularBooksParam = "popularBooks";
 	private final String errorMessageParam = "homeErrorMessage";
-	private final String bookCountParam = "bookCount";
-
 	// Message constants
 	private final String loadSectionErrorMessage = "Could not load some book sections.";
 	private final String popularBooksErrorMessage = "Could not load popular books section.";
