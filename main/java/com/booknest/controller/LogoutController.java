@@ -10,40 +10,48 @@ import java.io.IOException;
 import com.booknest.util.SessionUtil;
 
 /**
- * Servlet implementation class LogoutController
+ * Controller for handling user logout functionality.
+ * Invalidates the user's session and redirects to the login page.
+ * Supports POST requests for secure logout operations.
+ * 
+ * @author 23047591 Noble-Nepal
  */
 @WebServlet(asyncSupported = true, urlPatterns = { "/logout" })
 public class LogoutController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    
+    // Path constants
+    private final String LOGIN_PATH = "/login";
        
     /**
-     * @see HttpServlet#HttpServlet()
-     * @author Noble Nepal 23047591
+     * Handles POST requests for logout operations.
+     * This method is used for secure logout with form submission.
+     * 
+     * @param request  The HttpServletRequest object containing client request
+     * @param response The HttpServletResponse object for sending the response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs during response handling
      */
-	
-
-
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		processLogout(request, response);
-	}
-	   /**
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        processLogout(request, response);
+    }
+    
+    /**
      * Common method to process logout for both GET and POST requests.
      * Invalidates the current session and redirects to the login page.
+     * 
+     * @param request  The HttpServletRequest object from which to get the session
+     * @param response The HttpServletResponse object for redirection
+     * @throws IOException if an I/O error occurs during redirection
      */
     private void processLogout(HttpServletRequest request, HttpServletResponse response) 
             throws IOException {
-
-    	
-        
         // Invalidate the session, which removes all session attributes
         SessionUtil.invalidateSession(request);
         
         // Redirect to login page
-        response.sendRedirect(request.getContextPath() + "/login");
+        response.sendRedirect(request.getContextPath() + LOGIN_PATH);
     }
-
 }

@@ -56,82 +56,102 @@
             <div class="team-header">
                 <span class="section-label">Our Team</span>
                 <h2 class="team-title">Meet the Bookworms</h2>
-                <p class="team-subtitle">The passionate minds behind BookNest who curate extraordinary literary experiences.</p>
+                <p class="team-subtitle">The passionate creators of BookNest who built and shaped an exceptional online haven for book lovers.</p> 
             </div>
             
             <div class="team-grid">
+            
+            <!-- Team member 1 -->
+                <div class="team-member">
+    				<div class="member-image">
+        				<div class="member-avatar">
+            			<img src="${pageContext.request.contextPath}/resources/images/memberImage/saroj.jpeg" alt="Saroj Pratap Karki">
+       	 				</div>
+       		 		<div class="member-book">
+            			<div class="book-spine"></div>
+            			<div class="book-cover"></div>
+        			</div>
+    			</div>
+    			<div class="member-info">
+        			<h3 class="member-name">Saroj Pratap Karki</h3>
+        			<p class="member-role">Leader & Backend developer</p>
+        			<p class="member-bio">Chief Technology Officer & Lead Backend Developer Oversees technical strategy, backend architecture, and system security. Leads API development and cross-functional integration.</p>
+    			</div>
+				</div>
+                
+                <!-- Team member 2 -->
+                <div class="team-member">
+    				<div class="member-image">
+        				<div class="member-avatar">
+            				<img src="${pageContext.request.contextPath}/resources/images/memberImage/noble.jpg" alt="Noble Nepal">
+        				</div>
+        				<div class="member-book">
+            				<div class="book-spine"></div>
+            				<div class="book-cover"></div>
+        				</div>
+    				</div>
+    				<div class="member-info">
+        				<h3 class="member-name">Noble Nepal</h3>
+        				<p class="member-role">Backend developer & database designer</p>
+        				<p class="member-bio">Senior Backend Developer & Database Architecture Specialist
+							Designs database systems powering recommendations and inventory. Optimizes data models and query performance for reliability.</p>
+    				</div>
+				</div>
+                
+                
+                <!-- Team member 3 -->
                 <div class="team-member">
                     <div class="member-image">
-                        <div class="member-avatar"></div>
+                        <div class="member-avatar">
+                        	<img src="${pageContext.request.contextPath}/resources/images/memberImage/piyush.jpg" alt="Piyush Chand">
+                        </div>
                         <div class="member-book">
                             <div class="book-spine"></div>
                             <div class="book-cover"></div>
                         </div>
                     </div>
                     <div class="member-info">
-                        <h3 class="member-name">Alex Morgan</h3>
-                        <p class="member-role">Founder & Lead Curator</p>
-                        <p class="member-bio">Literary enthusiast with a passion for connecting readers with life-changing stories. Specializes in contemporary fiction and literary classics.</p>
+                        <h3 class="member-name">Piyush Chand</h3>
+                        <p class="member-role">Database designer</p>
+                        <p class="member-bio">Database Administrator & Manages database operations, security, and children's content classification. Creates reporting tools and ensures data compliance.</p>
                     </div>
                 </div>
                 
+                
+                <!-- Team member 4 -->
                 <div class="team-member">
                     <div class="member-image">
-                        <div class="member-avatar"></div>
+                        <div class="member-avatar">
+                        	<img src="${pageContext.request.contextPath}/resources/images/memberImage/abin.jpg" alt="Abin Napit">
+                        </div>
                         <div class="member-book">
                             <div class="book-spine"></div>
                             <div class="book-cover"></div>
                         </div>
                     </div>
                     <div class="member-info">
-                        <h3 class="member-name">Jordan Chen</h3>
-                        <p class="member-role">Non-Fiction Specialist</p>
-                        <p class="member-bio">History buff and science enthusiast who curates our non-fiction collection. Believes knowledge is the greatest adventure of all.</p>
+                        <h3 class="member-name">Abin Napit</h3>
+                        <p class="member-role">System Designer</p>
+                        <p class="member-bio">Systems Architecture Designer maintains technical infrastructure, monitoring systems, and user friendly design.</p>
                     </div>
                 </div>
                 
-                <div class="team-member">
-                    <div class="member-image">
-                        <div class="member-avatar"></div>
-                        <div class="member-book">
-                            <div class="book-spine"></div>
-                            <div class="book-cover"></div>
-                        </div>
-                    </div>
-                    <div class="member-info">
-                        <h3 class="member-name">Taylor Reynolds</h3>
-                        <p class="member-role">Children's Literature Expert</p>
-                        <p class="member-bio">Former elementary teacher who knows how to spark the joy of reading in young minds. Curates our enchanting children's section.</p>
-                    </div>
-                </div>
                 
+                <!-- Team member 5 -->
                 <div class="team-member">
                     <div class="member-image">
-                        <div class="member-avatar"></div>
+                        <div class="member-avatar">
+                        	<img src="${pageContext.request.contextPath}/resources/images/memberImage/hrita.png" alt="Hrita Dutta">
+                        </div>
                         <div class="member-book">
                             <div class="book-spine"></div>
                             <div class="book-cover"></div>
                         </div>
                     </div>
                     <div class="member-info">
-                        <h3 class="member-name">Sam Patel</h3>
-                        <p class="member-role">Rare Books Collector</p>
-                        <p class="member-bio">Treasure hunter for literary gems with an eye for first editions and signed copies. Creates our special collections section.</p>
-                    </div>
-                </div>
-                
-                <div class="team-member">
-                    <div class="member-image">
-                        <div class="member-avatar"></div>
-                        <div class="member-book">
-                            <div class="book-spine"></div>
-                            <div class="book-cover"></div>
-                        </div>
-                    </div>
-                    <div class="member-info">
-                        <h3 class="member-name">Casey Williams</h3>
-                        <p class="member-role">Community Manager</p>
-                        <p class="member-bio">The heart of our bookish community who organizes reading groups, author events, and makes everyone feel welcome at BookNest.</p>
+                        <h3 class="member-name">Hrita Dutta</h3>
+                        <p class="member-role">Frontend developer</p>
+                        <p class="member-bio">Lead Frontend Developer builds responsive interfaces. Manages frontend workflows and user experience improvements.</p>
                     </div>
                 </div>
             </div>
