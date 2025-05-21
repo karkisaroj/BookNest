@@ -10,12 +10,6 @@
 </head>
 <body>
 
-<<<<<<< HEAD
-
-
-=======
-	
->>>>>>> 4ae6260175dfc53f827bdf02ae62e5ea7b4a8b40
         <!-- Admin Sidebar -->
 <div class="admin-sidebar">
     <div class="sidebar-brand">

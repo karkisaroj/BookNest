@@ -44,7 +44,6 @@ public class imageUtil {
 			}
 
 			String filePath = projectPath + "/" + imageName;
-			System.out.println("Writing directly to: " + filePath);
 
 			// Write directly to the project directory
 			part.write(filePath);
