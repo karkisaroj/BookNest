@@ -193,31 +193,40 @@
 	</div>
 
 	<jsp:include page="footer.jsp" />
+<<<<<<< HEAD
 
 	<script>
         // Display the file name and preview the image when a new file is chosen
         const fileInput = document.getElementById('book_img_url');
         const fileNameDisplay = document.getElementById('file-name');
         const imagePreview = document.getElementById('image-preview');
+=======
+>>>>>>> 4ae6260175dfc53f827bdf02ae62e5ea7b4a8b40
 
-        fileInput.addEventListener('change', function () {
-            // If a file is selected, show its name and preview
-            if (fileInput.files.length > 0) {
-                const file = fileInput.files[0];
-                fileNameDisplay.textContent = ⁠ Selected file: ${file.name} ⁠;
+	<script>
+		// Display the file name and preview the image when a new file is chosen
+		const fileInput = document.getElementById('book_img_url');
+		const fileNameDisplay = document.getElementById('file-name');
+		const imagePreview = document.getElementById('image-preview');
 
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    imagePreview.src = e.target.result;
-                    imagePreview.style.display = "block"; // Show the preview
-                };
-                reader.readAsDataURL(file);
-            } else {
-                fileNameDisplay.textContent = ''; // Clear text if no file is selected
-                imagePreview.style.display = "none"; // Hide the preview
-            }
-        });
-    </script>
+		fileInput.addEventListener('change', function() {
+			// If a file is selected, show its name and preview
+			if (fileInput.files.length > 0) {
+				const file = fileInput.files[0];
+				fileNameDisplay.textContent = 'Selected file: ' + file.name;
+
+				const reader = new FileReader();
+				reader.onload = function(e) {
+					imagePreview.src = e.target.result;
+					imagePreview.style.display = "block"; // Show the preview
+				};
+				reader.readAsDataURL(file);
+			} else {
+				fileNameDisplay.textContent = ''; // Clear text if no file is selected
+				imagePreview.style.display = "none"; // Hide the preview
+			}
+		});
+	</script>
 </body>
 
 </html>
