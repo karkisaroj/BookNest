@@ -8,34 +8,33 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Servlet implementation class AboutUs
+ * AboutUs controller servlet that handles requests to the about us page.
+ * Provides information about the company, vision, mission, and team.
+ * 
+ * @author Noble-Nepal
+ * 
  */
 @WebServlet(asyncSupported = true, urlPatterns = { "/aboutus" })
 public class AboutUs extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
+    private static final long serialVersionUID = 1L;
+    
+    // Path constant
+    private final String aboutUsPagePath = "/WEB-INF/pages/about-us.jsp";
+    
     /**
-     * @see HttpServlet#HttpServlet()
+     * Handles GET requests to the about us page.
+     * Forwards the request to the about-us.jsp view for rendering.
+     * This method does not require any data processing as the page
+     * displays static content.
+     * 
+     * @param request  The HttpServletRequest object containing client request
+     * @param response The HttpServletResponse object for sending the response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs during response handling
      */
-    public AboutUs() {
-        super();
-        // TODO Auto-generated constructor stub
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        request.getRequestDispatcher(aboutUsPagePath).forward(request, response);
     }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		request.getRequestDispatcher("/WEB-INF/pages/about-us.jsp").forward(request, response);
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
-
 }
