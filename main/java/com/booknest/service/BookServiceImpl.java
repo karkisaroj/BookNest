@@ -292,7 +292,6 @@ public class BookServiceImpl implements BookService {
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, limit);
 
-
 			rs = ps.executeQuery();
 
 			while (rs.next()) {

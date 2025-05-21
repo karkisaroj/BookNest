@@ -11,31 +11,31 @@ import com.booknest.util.PasswordUtil;
  * Service class for account settings functionality.
  * Handles database operations for updating user information.
  * 
- * @author Noble-Nepal
- * @version 1.0
- * @since 2025-05-05
+ * @author 23047591 Noble-Nepal
  */
 public class AccountSettingService {
+
     
-    private Connection dbConn;
+    // Database connection properties
     private boolean isConnectionError = false;
+    private Connection dbConn;
     private PasswordUtil passwordUtil;
 
     /**
-     * Constructor that initializes database connection.
+     * Constructor initializes the database connection and password utility.
+     * Sets the connection error flag if the connection fails.
      */
     public AccountSettingService() {
         try {
             dbConn = DbConfiguration.getDbConnection();
             passwordUtil = new PasswordUtil();
         } catch (SQLException | ClassNotFoundException ex) {
-            ex.printStackTrace();
             isConnectionError = true;
         }
     }
 
     /**
-     * Updates personal information for a user
+     * Updates personal information for a user.
      * 
      * @param userName    The username of the user
      * @param firstName   The new first name
@@ -45,7 +45,6 @@ public class AccountSettingService {
      */
     public boolean updatePersonalInfo(String userName, String firstName, String lastName, String phoneNumber) {
         if (isConnectionError) {
-            System.err.println("Database connection error. Unable to update personal information.");
             return false;
         }
         
@@ -60,14 +59,12 @@ public class AccountSettingService {
             int rowsUpdated = stmt.executeUpdate();
             return rowsUpdated > 0;
         } catch (SQLException ex) {
-            System.err.println("Error updating personal information for user: " + userName);
-            ex.printStackTrace();
             return false;
         }
     }
     
     /**
-     * Updates email address for a user
+     * Updates email address for a user.
      * 
      * @param userName  The username of the user
      * @param email     The new email address
@@ -75,7 +72,6 @@ public class AccountSettingService {
      */
     public boolean updateEmail(String userName, String email) {
         if (isConnectionError) {
-            System.err.println("Database connection error. Unable to update email.");
             return false;
         }
         
@@ -88,14 +84,12 @@ public class AccountSettingService {
             int rowsUpdated = stmt.executeUpdate();
             return rowsUpdated > 0;
         } catch (SQLException ex) {
-            System.err.println("Error updating email for user: " + userName);
-            ex.printStackTrace();
             return false;
         }
     }
     
     /**
-     * Updates password for a user with secure hashing using PBKDF2
+     * Updates password for a user with secure hashing using PBKDF2.
      * 
      * @param userName     The username of the user
      * @param newPassword  The new password (will be hashed before storing)
@@ -103,14 +97,12 @@ public class AccountSettingService {
      */
     public boolean updatePassword(String userName, String newPassword) {
         if (isConnectionError) {
-            System.err.println("Database connection error. Unable to update password.");
             return false;
         }
         
         // Hash the password using PBKDF2WithHmacSHA256
         String hashedPassword = passwordUtil.hashPassword(newPassword);
         if (hashedPassword == null) {
-            System.err.println("Error hashing password for user: " + userName);
             return false;
         }
         
@@ -123,14 +115,12 @@ public class AccountSettingService {
             int rowsUpdated = stmt.executeUpdate();
             return rowsUpdated > 0;
         } catch (SQLException ex) {
-            System.err.println("Error updating password for user: " + userName);
-            ex.printStackTrace();
             return false;
         }
     }
     
     /**
-     * Checks if an email is already taken by another user
+     * Checks if an email is already taken by another user.
      * 
      * @param email    The email to check
      * @param userName The current user's username (to exclude from check)
@@ -138,7 +128,6 @@ public class AccountSettingService {
      */
     public boolean isEmailTaken(String email, String userName) {
         if (isConnectionError) {
-            System.err.println("Database connection error. Unable to check email availability.");
             return false;
         }
         
@@ -155,14 +144,12 @@ public class AccountSettingService {
             }
             return false;
         } catch (SQLException ex) {
-            System.err.println("Error checking if email is taken: " + email);
-            ex.printStackTrace();
             return false;
         }
     }
     
     /**
-     * Verify if the current password is correct for the user using secure verification with PBKDF2
+     * Verify if the current password is correct for the user.
      * 
      * @param userName The username of the user
      * @param password The password to verify
@@ -170,7 +157,6 @@ public class AccountSettingService {
      */
     public boolean verifyCurrentPassword(String userName, String password) {
         if (isConnectionError) {
-            System.err.println("Database connection error. Unable to verify password.");
             return false;
         }
         
@@ -182,28 +168,23 @@ public class AccountSettingService {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     String storedHashedPassword = rs.getString("password");
-                    
-                    // Use PasswordUtil to verify the password against the stored hash
                     return passwordUtil.verifyPassword(password, storedHashedPassword);
                 }
             }
             return false;
         } catch (SQLException ex) {
-            System.err.println("Error verifying password for user: " + userName);
-            ex.printStackTrace();
             return false;
         }
     }
     
     /**
-     * Get user details by username
+     * Get user details by username.
      * 
      * @param userName The username of the user
      * @return Object array containing first name, last name, phone number, and email
      */
     public Object[] getUserDetails(String userName) {
         if (isConnectionError) {
-            System.err.println("Database connection error. Unable to get user details.");
             return null;
         }
         
@@ -224,24 +205,20 @@ public class AccountSettingService {
             }
             return null;
         } catch (SQLException ex) {
-            System.err.println("Error retrieving user details for: " + userName);
-            ex.printStackTrace();
             return null;
         }
     }
     
     /**
-     * Closes the database connection
+     * Closes the database connection.
      */
     public void closeConnection() {
         try {
             if (dbConn != null && !dbConn.isClosed()) {
                 dbConn.close();
-                System.out.println("Database connection closed successfully.");
             }
         } catch (SQLException ex) {
-            System.err.println("Error closing database connection.");
-            ex.printStackTrace();
+            // Silent handling of close errors
         }
     }
 }

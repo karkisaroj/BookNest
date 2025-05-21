@@ -12,88 +12,147 @@ import com.booknest.model.PublisherModel;
 import com.booknest.model.AuthorModel;
 import com.booknest.model.CategoryModel;
 
+/**
+ * Service class for retrieving dropdown data from the database. Provides
+ * methods to fetch publishers, authors, and categories for use in select menus.
+ * 
+ * @author 23047591 Noble-Nepal
+ */
 public class DropdownService {
-    private Connection dbConn;
+	// Database connection properties
+	private boolean isConnectionError = false;
+	private Connection dbConn;
 
-    public DropdownService() {
-        try {
-            dbConn = DbConfiguration.getDbConnection();
-        } catch (SQLException | ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }
-    }
+	/**
+	 * Constructor initializes the database connection. Sets the connection error
+	 * flag if the connection fails.
+	 */
+	public DropdownService() {
+		try {
+			dbConn = DbConfiguration.getDbConnection();
+		} catch (SQLException | ClassNotFoundException ex) {
+			isConnectionError = true;
+		}
+	}
 
-    public List<PublisherModel> getPublishers() {
-        List<PublisherModel> publishers = new ArrayList<>();
-        String query = "SELECT publisherID, publisher_name FROM publisher";
+	/**
+	 * Retrieves all publishers from the database.
+	 * 
+	 * @return List of PublisherModel objects representing all publishers
+	 */
+	public List<PublisherModel> getPublishers() {
+		List<PublisherModel> publishers = new ArrayList<>();
+		if (isConnectionError) {
+			return publishers;
+		}
 
-        try (PreparedStatement stmt = dbConn.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
+		String query = "SELECT publisherID, publisher_name FROM publisher";
 
-            while (rs.next()) {
-                // Use the parameterized constructor
-                PublisherModel publisher = new PublisherModel(rs.getInt("publisherID"), rs.getString("publisher_name"));
-                publishers.add(publisher);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+		try (PreparedStatement stmt = dbConn.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
 
-        return publishers;
-    }
+			while (rs.next()) {
+				PublisherModel publisher = new PublisherModel(rs.getInt("publisherID"), rs.getString("publisher_name"));
+				publishers.add(publisher);
+			}
+		} catch (SQLException e) {
+			// Silent handling with empty list return
+		}
 
-    public List<AuthorModel> getAuthors() {
-        List<AuthorModel> authors = new ArrayList<>();
-        String query = "SELECT authorID, author_name FROM author";
+		return publishers;
+	}
 
-        try (PreparedStatement stmt = dbConn.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
+	/**
+	 * Retrieves all authors from the database.
+	 * 
+	 * @return List of AuthorModel objects representing all authors
+	 */
+	public List<AuthorModel> getAuthors() {
+		List<AuthorModel> authors = new ArrayList<>();
+		if (isConnectionError) {
+			return authors;
+		}
 
-            while (rs.next()) {
-                // Use the parameterized constructor
-                AuthorModel author = new AuthorModel(rs.getInt("authorID"), rs.getString("author_name"));
-                authors.add(author);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+		String query = "SELECT authorID, author_name FROM author";
 
-        return authors;
-    }
+		try (PreparedStatement stmt = dbConn.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
 
-    public List<CategoryModel> getCategories() {
-        List<CategoryModel> categories = new ArrayList<>();
-        String query = "SELECT categoryID, category_name, category_description FROM categories";
+			while (rs.next()) {
+				AuthorModel author = new AuthorModel(rs.getInt("authorID"), rs.getString("author_name"));
+				authors.add(author);
+			}
+		} catch (SQLException e) {
+			// Silent handling with empty list return
+		}
 
-        try (PreparedStatement stmt = dbConn.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
+		return authors;
+	}
 
-            while (rs.next()) {
-                // Use the parameterized constructor
-                CategoryModel category = new CategoryModel(rs.getInt("categoryID"), rs.getString("category_name"),
-                        rs.getString("category_description"));
-                categories.add(category);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+	/**
+	 * Retrieves all categories from the database.
+	 * 
+	 * @return List of CategoryModel objects representing all categories
+	 */
+	public List<CategoryModel> getCategories() {
+		List<CategoryModel> categories = new ArrayList<>();
+		if (isConnectionError) {
+			return categories;
+		}
 
-        return categories;
-    }
+		String query = "SELECT categoryID, category_name, category_description FROM categories";
 
-    public PublisherModel getPublisherById(int publisherID) {
-        String query = "SELECT publisherID, publisher_name FROM publisher WHERE publisherID = ?";
-        PublisherModel publisher = null;
+		try (PreparedStatement stmt = dbConn.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
 
-        try (PreparedStatement stmt = dbConn.prepareStatement(query)) {
-            stmt.setInt(1, publisherID);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    // Use the parameterized constructor
-                    publisher = new PublisherModel(rs.getInt("publisherID"), rs.getString("publisher_name"));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+			while (rs.next()) {
+				CategoryModel category = new CategoryModel(rs.getInt("categoryID"), rs.getString("category_name"),
+						rs.getString("category_description"));
+				categories.add(category);
+			}
+		} catch (SQLException e) {
+			// Silent handling with empty list return
+		}
 
-        return publisher;
-    }
+		return categories;
+	}
+
+	/**
+	 * Retrieves a specific publisher by ID.
+	 * 
+	 * @param publisherID The ID of the publisher to retrieve
+	 * @return The PublisherModel object if found, null otherwise
+	 */
+	public PublisherModel getPublisherById(int publisherID) {
+		if (isConnectionError) {
+			return null;
+		}
+
+		String query = "SELECT publisherID, publisher_name FROM publisher WHERE publisherID = ?";
+		PublisherModel publisher = null;
+
+		try (PreparedStatement stmt = dbConn.prepareStatement(query)) {
+			stmt.setInt(1, publisherID);
+			try (ResultSet rs = stmt.executeQuery()) {
+				if (rs.next()) {
+					publisher = new PublisherModel(rs.getInt("publisherID"), rs.getString("publisher_name"));
+				}
+			}
+		} catch (SQLException e) {
+			// Silent handling with null return
+		}
+
+		return publisher;
+	}
+
+	/**
+	 * Closes the database connection when the service is no longer needed. Should
+	 * be called explicitly when done with this service.
+	 */
+	public void closeConnection() {
+		try {
+			if (dbConn != null && !dbConn.isClosed()) {
+				dbConn.close();
+			}
+		} catch (SQLException ex) {
+			// Silent handling of close errors
+		}
+	}
 }
